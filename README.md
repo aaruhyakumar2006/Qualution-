@@ -1,12 +1,12 @@
 <div align="center">
-![Uploading image.png…]()
 
+<img src="assets/banner.png" alt="QUALUTION: Learn, Build, Understand Quantum" width="100%">
 
-# ⚛️ QUALUTION
-
-### Learn. Build. Predict. Execute. Prove.
+<br/>
 
 **An interactive, AI-assisted quantum learning and simulation platform where the lesson happens *inside* the workbench.**
+
+*Learn. Build. Predict. Execute. Prove.*
 
 ![SIH 2026](https://img.shields.io/badge/Smart%20India%20Hackathon-2026-orange?style=for-the-badge)
 ![PS ID](https://img.shields.io/badge/Problem%20Statement-26140-blue?style=for-the-badge)
@@ -29,7 +29,7 @@
 | **Theme** | Smart Education |
 | **Category** | Software |
 | **Team Name** | DADBODS |
-| **Team ID** | 126917 |
+
 
 ---
 
@@ -514,8 +514,6 @@ Open **http://localhost:3000** in your browser.
 
 ---
 
-
-<div align="center">
 
 **Learn the concept. Build the circuit. Predict the result. Execute the computation. Analyze the evidence. Collaborate with others. Prove mastery.**
 
