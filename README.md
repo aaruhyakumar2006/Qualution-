@@ -486,22 +486,20 @@ Open **http://localhost:3000** in your browser.
 
 ---
 
-## 🧰 Tech Stack
+🧰 Tech Stack
 
-> Confirm and edit this to match your actual implementation.
+Confirm and edit this to match your actual implementation.
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | `[e.g. React / Next.js, TypeScript]` |
-| **Workbench and visualisation** | `[e.g. canvas library, Three.js for Bloch / Q-sphere]` |
-| **Local execution** | WebAssembly, Web Workers |
-| **Offline and persistence** | PWA, IndexedDB |
-| **Quantum simulation** | Statevector, Stabilizer, MPS, cloud backend, OpenQASM |
-| **AI and learning** | Erwin (Socratic tutor), misconception engine, `[LLM provider]` |
-| **Backend and database** | `[e.g. FastAPI, Supabase / PostgreSQL]` |
-| **Deployment** | `[e.g. Vercel, Docker]` |
-
----
+Layer	Technology
+Frontend	[e.g. React / Next.js, TypeScript]
+Workbench and visualisation	[e.g. canvas library, Three.js for Bloch / Q-sphere]
+Local execution	WebAssembly, Web Workers
+Offline and persistence	PWA, IndexedDB via Dexie.js
+Animation and UI motion	Anime.js
+Quantum simulation	Statevector, Stabilizer, MPS, cloud backend, OpenQASM
+AI and learning	Erwin (Socratic tutor), misconception engine, [LLM provider]
+Backend and database	[e.g. FastAPI, Supabase / PostgreSQL]
+Deployment	[e.g. Vercel, Docker]
 
 
 
