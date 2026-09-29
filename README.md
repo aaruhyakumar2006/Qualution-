@@ -1,6 +1,7 @@
 <div align="center">
 
-<img src="assets/banner.png" alt="QUALUTION: Learn, Build, Understand Quantum" width="100%">
+<img width="2170" height="725" alt="bc886629-8b50-45be-bec8-98a9973207d4" src="https://github.com/user-attachments/assets/d9da0c6f-4723-40b3-a750-f9960dcadb48" />
+
 
 <br/>
 
