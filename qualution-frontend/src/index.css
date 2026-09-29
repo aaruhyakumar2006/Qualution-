@@ -1,0 +1,558 @@
+/* Non-blocking font load: browser renders in system-ui immediately, swaps to web fonts when ready */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+
+/* ═══════════════════════════════════════════════════════════════
+   QUALUTION "QUANTUM STUDIO" SCIENTIFIC DESIGN SYSTEM & THEMES
+   ═══════════════════════════════════════════════════════════════ */
+
+:root,
+[data-theme="dark"] {
+  /* ── 1. Semantic Design Tokens (Dark Theme) ─────────────────── */
+  --qs-bg:                 #0b0d10;
+  --qs-surface:            #111418;
+  --qs-surface-elevated:   #171b21;
+  --qs-surface-hover:      #1c2128;
+  --qs-surface-active:     #242b35;
+
+  --qs-border:             #2a3038;
+  --qs-border-subtle:      #20252c;
+  --qs-border-strong:      #3f4752;
+
+  --qs-text:               #f2f4f7;
+  --qs-text-secondary:     #a7afba;
+  --qs-text-muted:         #727b87;
+  --qs-text-disabled:      #3f4752;
+
+  --qs-accent:             #9b7cf4;
+  --qs-accent-hover:       #a78bfa;
+  --qs-accent-text:        #b9a4ff;
+  --qs-accent-muted:       rgba(155, 124, 244, 0.12);
+  --qs-accent-border:      rgba(155, 124, 244, 0.35);
+
+  /* ── Workbench Laboratory Design Tokens (Dark Theme) ───────── */
+  --wb-status-cyan:        #1192e8;
+  --wb-status-cyan-glow:   rgba(17, 146, 232, 0.35);
+  --wb-status-cyan-bg:     rgba(17, 146, 232, 0.14);
+  --wb-status-success:     var(--qs-teal, #21c79a);
+  --wb-status-warning:     var(--qs-warning, #e7a93b);
+  --wb-status-danger:      var(--qs-error, #e05252);
+
+  --wb-accent:             #0f62fe;
+  --wb-accent-hover:       #0353e9;
+  --wb-accent-subtle:      rgba(15, 98, 254, 0.12);
+  --wb-accent-border:      rgba(15, 98, 254, 0.35);
+
+  --wb-bg-app:             #090c10;
+  --wb-bg-canvas:          #0e1117;
+  --wb-bg-panel:           #161a22;
+  --wb-bg-elevated:        #1e232d;
+  --wb-bg-surface-elevated: var(--wb-bg-elevated, #1e232d);
+  --wb-bg-surface-hover:   #262c38;
+  --wb-bg-active:          #2d3442;
+
+  --wb-border:             #262c36;
+  --wb-border-subtle:      rgba(255, 255, 255, 0.08);
+  --wb-border-strong:      #3b4452;
+
+  --wb-text-primary:       #f4f7fa;
+  --wb-text-secondary:     #9aa5b5;
+  --wb-text-muted:         #677487;
+  --wb-text-disabled:      #414b58;
+
+  --wb-header-height:      64px;
+  --wb-panel-header-height: 40px;
+  --wb-radius-sm:          4px;
+  --wb-radius-card:        6px;
+  --wb-radius-lg:          8px;
+
+  --qs-teal:               #21c79a;
+  --qs-teal-hover:         #34d399;
+  --qs-teal-text:          #4eedbe;
+  --qs-teal-muted:         rgba(33, 199, 154, 0.12);
+  --qs-teal-border:        rgba(33, 199, 154, 0.35);
+
+  --qs-warning:            #e7a93b;
+  --qs-warning-text:       #f6cb7d;
+  --qs-warning-muted:      rgba(231, 169, 59, 0.12);
+  --qs-warning-border:     rgba(231, 169, 59, 0.35);
+
+  --qs-error:              #e05252;
+  --qs-error-text:         #f89898;
+  --qs-error-muted:        rgba(224, 82, 82, 0.12);
+  --qs-error-border:       rgba(224, 82, 82, 0.35);
+
+  --qs-info:               #3b82f6;
+  --qs-info-text:          #93c5fd;
+  --qs-info-muted:         rgba(59, 130, 246, 0.12);
+  --qs-info-border:        rgba(59, 130, 246, 0.35);
+
+  --qs-shadow-sm:          0 1px 3px rgba(0, 0, 0, 0.4);
+  --qs-shadow-md:          0 4px 12px rgba(0, 0, 0, 0.5);
+  --qs-shadow-lg:          0 8px 24px rgba(0, 0, 0, 0.6);
+  --qs-shadow-xl:          0 16px 48px rgba(0, 0, 0, 0.7);
+
+  --qs-grid-line:          rgba(255, 255, 255, 0.05);
+  --qs-grid-slot-hover:    rgba(255, 255, 255, 0.04);
+  --qs-code-bg:            #0b0d10;
+
+  /* ── 2. Backward-Compatible Aliases ─────────────────────────── */
+  --lab-bg:                var(--qs-bg);
+  --lab-surface:           var(--qs-surface);
+  --lab-surface-raised:    var(--qs-surface-elevated);
+  --lab-surface-hover:     var(--qs-surface-hover);
+  --lab-surface-active:    var(--qs-surface-active);
+
+  --lab-border:            var(--qs-border);
+  --lab-border-subtle:     var(--qs-border-subtle);
+  --lab-border-focus:      var(--qs-accent);
+  --lab-border-active:     var(--qs-teal);
+
+  --lab-text:              var(--qs-text);
+  --lab-text-secondary:    var(--qs-text-secondary);
+  --lab-text-muted:        var(--qs-text-muted);
+  --lab-text-disabled:     var(--qs-text-disabled);
+
+  --quantum-violet:        var(--qs-accent);
+  --quantum-violet-text:   var(--qs-accent-text);
+  --quantum-violet-light:  #d0c2ff;
+  --quantum-violet-dark:   #7952db;
+  --quantum-violet-muted:  var(--qs-accent-muted);
+  --quantum-violet-border: var(--qs-accent-border);
+
+  --quantum-teal:          var(--qs-teal);
+  --quantum-teal-text:     var(--qs-teal-text);
+  --quantum-teal-light:    #85f5d5;
+  --quantum-teal-dark:     #129b76;
+  --quantum-teal-muted:    var(--qs-teal-muted);
+  --quantum-teal-border:   var(--qs-teal-border);
+
+  --quantum-green:         var(--qs-teal);
+  --quantum-green-text:    var(--qs-teal-text);
+  --quantum-green-muted:   var(--qs-teal-muted);
+  --quantum-green-border:  var(--qs-teal-border);
+
+  --semantic-warning:        var(--qs-warning);
+  --semantic-warning-text:   var(--qs-warning-text);
+  --semantic-warning-muted:  var(--qs-warning-muted);
+  --semantic-warning-border: var(--qs-warning-border);
+
+  --semantic-error:          var(--qs-error);
+  --semantic-error-text:     var(--qs-error-text);
+  --semantic-error-muted:    var(--qs-error-muted);
+  --semantic-error-border:   var(--qs-error-border);
+
+  --bg-canvas:      var(--qs-bg);
+  --bg-primary:     var(--qs-surface);
+  --bg-secondary:   var(--qs-surface-elevated);
+  --bg-tertiary:    var(--qs-surface-hover);
+  --bg-elevated:    var(--qs-surface-active);
+  --bg-overlay:     var(--qs-surface-elevated);
+  --bg-card:        var(--bg-secondary);
+
+  --border-subtle:  var(--qs-border-subtle);
+  --border-color:   var(--qs-border);
+  --border-focus:   var(--qs-accent);
+  --border-active:  var(--qs-teal);
+
+  --text-primary:   var(--qs-text);
+  --text-secondary: var(--qs-text-secondary);
+  --text-muted:     var(--qs-text-muted);
+  --text-disabled:  var(--qs-text-disabled);
+  --text-link:      var(--qs-teal);
+
+  --color-success:  var(--qs-teal);
+  --color-warning:  var(--qs-warning);
+  --color-error:    var(--qs-error);
+  --color-info:     var(--qs-info);
+
+  --accent-primary: var(--qs-accent);
+  --accent-cyan:    var(--qs-teal);
+  --accent-purple:  var(--qs-accent);
+  --accent-emerald: var(--qs-teal);
+  --accent-amber:   var(--qs-warning);
+  --accent-rose:    var(--qs-error);
+  --accent-blue:    var(--qs-info);
+  --accent-indigo:  var(--qs-accent);
+
+  --gate-basic:      var(--qs-accent);
+  --gate-rotation:   #a855f7;
+  --gate-controlled: #7952db;
+  --gate-measure:    var(--qs-teal);
+  --gate-utility:    #555f6d;
+
+  --shadow-sm:          var(--qs-shadow-sm);
+  --shadow-md:          var(--qs-shadow-md);
+  --shadow-lg:          var(--qs-shadow-lg);
+  --shadow-xl:          var(--qs-shadow-xl);
+}
+
+[data-theme="light"] {
+  /* ── 1. Semantic Design Tokens (Light Theme) ────────────────── */
+  --qs-bg:                 #f1f5f9;
+  --qs-surface:            #ffffff;
+  --qs-surface-elevated:   #f8fafc;
+  --qs-surface-hover:      #f1f5f9;
+  --qs-surface-active:     #e2e8f0;
+
+  --qs-border:             #cbd5e1;
+  --qs-border-subtle:      #e2e8f0;
+  --qs-border-strong:      #94a3b8;
+
+  --qs-text:               #0f172a;
+  --qs-text-secondary:     #334155;
+  --qs-text-muted:         #64748b;
+  --qs-text-disabled:      #94a3b8;
+
+  --qs-accent:             #7c3aed;
+  --qs-accent-hover:       #6d28d9;
+  --qs-accent-text:        #6d28d9;
+  --qs-accent-muted:       rgba(124, 58, 237, 0.08);
+  --qs-accent-border:      rgba(124, 58, 237, 0.28);
+
+  /* ── Workbench Laboratory Design Tokens (Light Theme) ──────── */
+  --wb-status-cyan:        #0072c3;
+  --wb-status-cyan-glow:   rgba(0, 114, 195, 0.25);
+  --wb-status-cyan-bg:     rgba(0, 114, 195, 0.1);
+  --wb-status-success:     var(--qs-teal, #0d9488);
+  --wb-status-warning:     var(--qs-warning, #d97706);
+  --wb-status-danger:      var(--qs-error, #e05252);
+
+  --wb-accent:             #0f62fe;
+  --wb-accent-hover:       #0043ce;
+  --wb-accent-subtle:      rgba(15, 98, 254, 0.08);
+  --wb-accent-border:      rgba(15, 98, 254, 0.25);
+
+  --wb-bg-app:             #f4f4f4;
+  --wb-bg-canvas:          #ffffff;
+  --wb-bg-panel:           #ffffff;
+  --wb-bg-elevated:        #f4f4f4;
+  --wb-bg-surface-elevated: var(--wb-bg-elevated, #f4f4f4);
+  --wb-bg-surface-hover:   #e8e8e8;
+  --wb-bg-active:          #dcdcdc;
+
+  --wb-border:             #e0e0e0;
+  --wb-border-subtle:      #eeeeee;
+  --wb-border-strong:      #c6c6c6;
+
+  --wb-text-primary:       #161616;
+  --wb-text-secondary:     #525252;
+  --wb-text-muted:         #8d8d8d;
+  --wb-text-disabled:      #c6c6c6;
+
+  --wb-header-height:      64px;
+  --wb-panel-header-height: 40px;
+  --wb-radius-sm:          4px;
+  --wb-radius-card:        6px;
+  --wb-radius-lg:          8px;
+
+  --qs-teal:               #0d9488;
+  --qs-teal-hover:         #0f766e;
+  --qs-teal-text:          #0f766e;
+  --qs-teal-muted:         rgba(13, 148, 136, 0.08);
+  --qs-teal-border:        rgba(13, 148, 136, 0.28);
+
+  --qs-warning:            #d97706;
+  --qs-warning-text:       #b45309;
+  --qs-warning-muted:      rgba(217, 119, 6, 0.08);
+  --qs-warning-border:     rgba(217, 119, 6, 0.28);
+
+  --qs-error:              #dc2626;
+  --qs-error-text:         #b91c1c;
+  --qs-error-muted:        rgba(220, 38, 38, 0.08);
+  --qs-error-border:       rgba(220, 38, 38, 0.28);
+
+  --qs-info:               #2563eb;
+  --qs-info-text:          #1d4ed8;
+  --qs-info-muted:         rgba(37, 99, 235, 0.08);
+  --qs-info-border:        rgba(37, 99, 235, 0.28);
+
+  --qs-shadow-sm:          0 1px 3px rgba(0, 0, 0, 0.08);
+  --qs-shadow-md:          0 4px 12px rgba(0, 0, 0, 0.08);
+  --qs-shadow-lg:          0 8px 24px rgba(0, 0, 0, 0.12);
+  --qs-shadow-xl:          0 16px 48px rgba(0, 0, 0, 0.16);
+
+  --qs-grid-line:          rgba(0, 0, 0, 0.06);
+  --qs-grid-slot-hover:    rgba(0, 0, 0, 0.03);
+  --qs-code-bg:            #ffffff;
+
+  /* ── 2. Backward-Compatible Aliases ─────────────────────────── */
+  --lab-bg:                var(--qs-bg);
+  --lab-surface:           var(--qs-surface);
+  --lab-surface-raised:    var(--qs-surface-elevated);
+  --lab-surface-hover:     var(--qs-surface-hover);
+  --lab-surface-active:    var(--qs-surface-active);
+
+  --lab-border:            var(--qs-border);
+  --lab-border-subtle:     var(--qs-border-subtle);
+  --lab-border-focus:      var(--qs-accent);
+  --lab-border-active:     var(--qs-teal);
+
+  --lab-text:              var(--qs-text);
+  --lab-text-secondary:    var(--qs-text-secondary);
+  --lab-text-muted:        var(--qs-text-muted);
+  --lab-text-disabled:     var(--qs-text-disabled);
+
+  --quantum-violet:        var(--qs-accent);
+  --quantum-violet-text:   var(--qs-accent-text);
+  --quantum-violet-light:  #8b5cf6;
+  --quantum-violet-dark:   #5b21b6;
+  --quantum-violet-muted:  var(--qs-accent-muted);
+  --quantum-violet-border: var(--qs-accent-border);
+
+  --quantum-teal:          var(--qs-teal);
+  --quantum-teal-text:     var(--qs-teal-text);
+  --quantum-teal-light:    #14b8a6;
+  --quantum-teal-dark:     #115e59;
+  --quantum-teal-muted:    var(--qs-teal-muted);
+  --quantum-teal-border:   var(--qs-teal-border);
+
+  --quantum-green:         var(--qs-teal);
+  --quantum-green-text:    var(--qs-teal-text);
+  --quantum-green-muted:   var(--qs-teal-muted);
+  --quantum-green-border:  var(--qs-teal-border);
+
+  --semantic-warning:        var(--qs-warning);
+  --semantic-warning-text:   var(--qs-warning-text);
+  --semantic-warning-muted:  var(--qs-warning-muted);
+  --semantic-warning-border: var(--qs-warning-border);
+
+  --semantic-error:          var(--qs-error);
+  --semantic-error-text:     var(--qs-error-text);
+  --semantic-error-muted:    var(--qs-error-muted);
+  --semantic-error-border:   var(--qs-error-border);
+
+  --bg-canvas:      var(--qs-bg);
+  --bg-primary:     var(--qs-surface);
+  --bg-secondary:   var(--qs-surface-elevated);
+  --bg-tertiary:    var(--qs-surface-hover);
+  --bg-elevated:    var(--qs-surface-active);
+  --bg-overlay:     var(--qs-surface-elevated);
+  --bg-card:        var(--bg-secondary);
+
+  --border-subtle:  var(--qs-border-subtle);
+  --border-color:   var(--qs-border);
+  --border-focus:   var(--qs-accent);
+  --border-active:  var(--qs-teal);
+
+  --text-primary:   var(--qs-text);
+  --text-secondary: var(--qs-text-secondary);
+  --text-muted:     var(--qs-text-muted);
+  --text-disabled:  var(--qs-text-disabled);
+  --text-link:      var(--qs-teal);
+
+  --color-success:  var(--qs-teal);
+  --color-warning:  var(--qs-warning);
+  --color-error:    var(--qs-error);
+  --color-info:     var(--qs-info);
+
+  --accent-primary: var(--qs-accent);
+  --accent-cyan:    var(--qs-teal);
+  --accent-purple:  var(--qs-accent);
+  --accent-emerald: var(--qs-teal);
+  --accent-amber:   var(--qs-warning);
+  --accent-rose:    var(--qs-error);
+  --accent-blue:    var(--qs-info);
+  --accent-indigo:  var(--qs-accent);
+
+  --gate-basic:      var(--qs-accent);
+  --gate-rotation:   #9333ea;
+  --gate-controlled: #6d28d9;
+  --gate-measure:    var(--qs-teal);
+  --gate-utility:    #64748b;
+
+  --shadow-sm:          var(--qs-shadow-sm);
+  --shadow-md:          var(--qs-shadow-md);
+  --shadow-lg:          var(--qs-shadow-lg);
+  --shadow-xl:          var(--qs-shadow-xl);
+}
+
+:root {
+  /* ── 3. Typography & Sizing (Shared) ────────────────────────── */
+  --font-sans: 'Inter', system-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+
+
+  /* Typography Scale */
+  --text-xs:   11px;
+  --text-sm:   12px;
+  --text-base: 13px;
+  --text-md:   14px;
+  --text-lg:   15px;
+  --text-xl:   18px;
+
+  --weight-normal:    400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+  --weight-extrabold: 800;
+
+  /* Spacing */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Radius */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   10px;
+  --radius-xl:   14px;
+  --radius-full: 9999px;
+
+  /* Motion */
+  --motion-instant: 0ms;
+  --motion-fast:    100ms;
+  --motion-normal:  180ms;
+  --motion-slow:    320ms;
+  --motion-ease:    cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --motion-out:     cubic-bezier(0, 0, 0.2, 1);
+
+  /* Layout Dimensions */
+  --header-height:          38px;
+  --workspace-nav-width:    64px;
+  --right-panel-width:      340px;
+  --bottom-bar-height:      26px;
+
+  /* Z-index */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-panel:   20;
+  --z-sticky:  30;
+  --z-overlay: 40;
+  --z-modal:   50;
+  --z-toast:   60;
+  --z-tooltip: 70;
+}
+
+/* ── Global Reset ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.4;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Scrollbars ───────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── Focus ────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Button Reset ─────────────────────────────────────────── */
+button {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* ── Keyframe Animations ──────────────────────────────────── */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(8px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-up {
+  from { transform: translateY(6px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Reduced Motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Lazy Panel Loading Placeholder ──────────────────────── */
+/* Shown while a React.lazy chunk downloads */
+.panel-lazy-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 80px;
+  color: var(--qs-text-muted);
+  font-size: var(--text-sm);
+  opacity: 0.7;
+  /* No animation — minimal CPU cost */
+}
+
+/* ── GPU Compositing hints (only where transforms actually animate) */
+/* Only apply will-change on elements the browser will animate — never globally */
+.splitter-handle:hover,
+.splitter-handle:active {
+  will-change: transform;
+}

@@ -1,0 +1,15 @@
+DRAG AND DROP TEST - UPDATED AT $(date)
+
+If you can see this file timestamp in your browser's network tab,
+the server is serving fresh files.
+
+All code changes are confirmed:
+- CircuitRenderer.tsx: Click handlers disabled ✓
+- CircuitCanvas.tsx: Slot click disabled ✓
+- Sidebar.tsx: onClick/onDoubleClick removed ✓
+
+If drag-drop still not working:
+1. Hard refresh (Ctrl+Shift+R)
+2. Clear browser cache completely
+3. Close all browser tabs and reopen
+4. Check browser console for errors (F12)

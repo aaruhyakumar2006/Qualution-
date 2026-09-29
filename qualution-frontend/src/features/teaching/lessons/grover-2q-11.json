@@ -1,0 +1,319 @@
+{
+  "lessonId": "grover-2q-11",
+  "title": "Grover's Algorithm (2-Qubit Target |11⟩)",
+  "version": 1,
+  "mode": "LIVE",
+  "initialState": "00",
+  "qubits": 2,
+  "classicalBits": 2,
+  "sprint": 2,
+  "difficulty": "Advanced",
+  "estimatedMinutes": 8,
+  "xpReward": 300,
+  "curriculumModuleId": "lesson-9-grover-search",
+  "summary": "Master Grover's search algorithm on 2 qubits to locate target state |11⟩ in a single quantum query with 100% probability via Oracle phase marking and Diffuser amplitude amplification.",
+  "learningObjectives": [
+    "Prepare equal superposition across 4 basis states using Hadamard gates",
+    "Construct the Quantum Oracle to invert the phase of target state |11⟩",
+    "Understand why phase inversion alone leaves measurement probabilities unchanged at 25%",
+    "Construct the Grover Diffuser to reflect probability amplitudes about the mean",
+    "Observe constructive interference amplifying target |11⟩ to 100% probability in a single query"
+  ],
+  "prerequisites": ["Hadamard Superposition", "Phase Kickback", "Controlled Gates"],
+  "conceptTags": ["Grover's Algorithm", "Oracle", "Diffuser", "Amplitude Amplification", "Quantum Search"],
+  "completionMessage": "Congratulations! You mastered Grover's Search Algorithm on 2 qubits, verifying quadratic speedup O(√N) and 100% deterministic identification of target state |11⟩.",
+  "segments": [
+    {
+      "id": "segment-1-initialization",
+      "title": "1. Ground State Initialization (|00⟩)",
+      "explanation": "We begin with two qubits initialized to the ground state |00⟩. In a 4-item unsorted database, our marked target item is |11⟩.",
+      "narrationText": "Welcome to the Grover's Algorithm live demonstration. In this masterclass, we search an unsorted four-item database to locate the marked target state 11. We begin with both qubits in the ground state 00.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "grover-workspace", "duration": 400 },
+        { "type": "SHOW_STATE" },
+        {
+          "type": "SHOW_MATH",
+          "formula": "|\\psi_0\\rangle = |00\\rangle = \\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\\\ 0 \\end{pmatrix}",
+          "label": "Ground State Initialization"
+        },
+        { "type": "HIGHLIGHT", "target": "qubit-q0" },
+        { "type": "HIGHLIGHT", "target": "qubit-q1" },
+        { "type": "PAUSE", "duration": 600 }
+      ]
+    },
+    {
+      "id": "segment-2-problem-definition",
+      "title": "2. Database Representation & Target State",
+      "explanation": "With 2 qubits, N = 2² = 4 possible database entries: |00⟩, |01⟩, |10⟩, and target |11⟩. Classical search requires up to 4 queries; quantum search needs only 1 query.",
+      "narrationText": "Let's inspect the search space. Four possible entries exist: 00, 01, 10, and our marked target item 11. Classical search must test entries one by one, taking up to four checks. Grover's algorithm will isolate it in a single query.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "target-state", "duration": 450 },
+        { "type": "HIGHLIGHT", "target": "target-state" },
+        {
+          "type": "EXPLAIN",
+          "title": "Search Space N = 4",
+          "message": "Unsorted entries: {|00⟩, |01⟩, |10⟩, |11⟩}. Classical average: 2.25 queries; Grover quantum search: exactly 1 query."
+        },
+        { "type": "PAUSE", "duration": 500 }
+      ]
+    },
+    {
+      "id": "segment-3-cursor-to-h",
+      "title": "3. Selecting Hadamard Gate",
+      "explanation": "To search all database items simultaneously, we must create an equal superposition across all basis states.",
+      "narrationText": "To evaluate all entries simultaneously, we must prepare an equal superposition. Watch the teaching cursor select the Hadamard gate from the operations palette.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "gate-H", "duration": 600 },
+        { "type": "FOCUS", "target": "gate-H" },
+        { "type": "PAUSE", "duration": 400 }
+      ]
+    },
+    {
+      "id": "segment-4-place-h0",
+      "title": "4. Placing H Gate on Qubit 0",
+      "explanation": "Placing a Hadamard gate on qubit 0 puts it into superposition (|0⟩ + |1⟩)/√2.",
+      "narrationText": "First, we place a Hadamard gate on qubit zero, putting it into a superposition of zero and one.",
+      "actions": [
+        { "type": "DRAG", "target": "gate-H" },
+        { "type": "MOVE_CURSOR", "target": "qubit-q0", "duration": 700 },
+        { "type": "DROP", "target": "qubit-q0" },
+        { "type": "ADD_GATE", "gate": "h", "targets": [0], "column": 0, "gateId": "grover-h0" },
+        { "type": "PAUSE", "duration": 400 }
+      ]
+    },
+    {
+      "id": "segment-5-explain-h0",
+      "title": "5. Single Qubit Superposition",
+      "explanation": "Qubit 0 is now in equal superposition while qubit 1 remains in |0⟩, creating state (|00⟩ + |10⟩)/√2.",
+      "narrationText": "Qubit zero is now in superposition. Now let's do the same for qubit one to establish full two-qubit superposition.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "gate-H", "duration": 500 },
+        { "type": "FOCUS", "target": "gate-H" },
+        { "type": "PAUSE", "duration": 300 }
+      ]
+    },
+    {
+      "id": "segment-6-place-h1",
+      "title": "6. Placing H Gate on Qubit 1",
+      "explanation": "Placing a Hadamard gate on qubit 1 completes the tensor product H ⊗ H, preparing equal superposition |s⟩.",
+      "narrationText": "We place a Hadamard gate on qubit one. Together, H tensored with H creates a uniform quantum superposition across all four computational basis states.",
+      "actions": [
+        { "type": "DRAG", "target": "gate-H" },
+        { "type": "MOVE_CURSOR", "target": "qubit-q1", "duration": 700 },
+        { "type": "DROP", "target": "qubit-q1" },
+        { "type": "ADD_GATE", "gate": "h", "targets": [1], "column": 0, "gateId": "grover-h1" },
+        { "type": "PAUSE", "duration": 400 }
+      ]
+    },
+    {
+      "id": "segment-7-show-superposition",
+      "title": "7. Equal Superposition State |s⟩",
+      "explanation": "State |s⟩ = 1/2 (|00⟩ + |01⟩ + |10⟩ + |11⟩). Every state has probability amplitude +1/2.",
+      "narrationText": "Notice the state formula on screen. All four basis states have an identical positive amplitude of one-half.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "math-display", "duration": 400 },
+        {
+          "type": "SHOW_MATH",
+          "formula": "|s\\rangle = H^{\\otimes 2}|00\\rangle = \\frac{1}{2}(|00\\rangle + |01\\rangle + |10\\rangle + |11\\rangle) = \\begin{pmatrix} 1/2 \\\\ 1/2 \\\\ 1/2 \\\\ 1/2 \\end{pmatrix}",
+          "label": "Equal Superposition Prepared"
+        },
+        { "type": "PAUSE", "duration": 600 }
+      ]
+    },
+    {
+      "id": "segment-8-show-probabilities-25",
+      "title": "8. Uniform 25% Probability Distribution",
+      "explanation": "Because |1/2|² = 1/4 = 25%, each state has an equal 25% probability of being measured.",
+      "narrationText": "Looking at the probability panel, each of the four states has an equal twenty-five percent probability. At this stage, measuring the circuit would simply yield a random state.",
+      "actions": [
+        { "type": "SHOW_PROBABILITY" },
+        { "type": "MOVE_CURSOR", "target": "probability-panel", "duration": 500 },
+        { "type": "HIGHLIGHT", "target": "probability-panel" },
+        { "type": "PAUSE", "duration": 600 }
+      ]
+    },
+    {
+      "id": "segment-9-introduce-oracle",
+      "title": "9. Introducing the Quantum Oracle",
+      "explanation": "The Oracle U_ω recognizes the marked item and flips its phase: U_ω|x⟩ = -|x⟩ if x = ω, and +|x⟩ otherwise.",
+      "narrationText": "Now we introduce the Quantum Oracle. Instead of checking entries classically, the oracle marks our target item 11 by inverting its quantum phase.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "gate-CZ", "duration": 500 },
+        { "type": "FOCUS", "target": "gate-CZ" },
+        {
+          "type": "SHOW_MATH",
+          "formula": "U_\\omega = I - 2|11\\rangle\\langle 11|, \\quad U_\\omega|x\\rangle = (-1)^{f(x)}|x\\rangle",
+          "label": "Quantum Phase Oracle"
+        },
+        { "type": "PAUSE", "duration": 500 }
+      ]
+    },
+    {
+      "id": "segment-10-build-oracle",
+      "title": "10. Building the Oracle (Controlled-Z Gate)",
+      "explanation": "A Controlled-Z (CZ) gate acts as the exact Oracle for target |11⟩, applying a π phase shift exclusively to |11⟩.",
+      "narrationText": "Watch as we place a Controlled-Z gate across qubit zero and qubit one. This gate leaves states 00, 01, and 10 unchanged, but flips the sign of state 11.",
+      "actions": [
+        { "type": "DRAG", "target": "gate-CZ" },
+        { "type": "MOVE_CURSOR", "target": "oracle-region", "duration": 700 },
+        { "type": "DROP", "target": "oracle-region" },
+        { "type": "ADD_GATE", "gate": "cz", "targets": [0, 1], "column": 1, "gateId": "grover-oracle-cz" },
+        { "type": "HIGHLIGHT", "target": "oracle-region" },
+        { "type": "PAUSE", "duration": 500 }
+      ]
+    },
+    {
+      "id": "segment-11-explain-phase-marking",
+      "title": "11. Phase Marking: Inverting Target Amplitude",
+      "explanation": "The state is now: 1/2 (|00⟩ + |01⟩ + |10⟩ - |11⟩). Target |11⟩ has amplitude -1/2.",
+      "narrationText": "Target state 11 is now phase-marked. Its amplitude has flipped from positive one-half to negative one-half. However, because probability is the square of amplitude, its measurement probability is still twenty-five percent.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "math-display", "duration": 400 },
+        {
+          "type": "SHOW_MATH",
+          "formula": "|\\psi_2\\rangle = U_\\omega|s\\rangle = \\frac{1}{2}(|00\\rangle + |01\\rangle + |10\\rangle - |11\\rangle) = \\begin{pmatrix} 1/2 \\\\ 1/2 \\\\ 1/2 \\\\ -1/2 \\end{pmatrix}",
+          "label": "Target Phase Inverted"
+        },
+        { "type": "PAUSE", "duration": 600 }
+      ]
+    },
+    {
+      "id": "segment-12-show-qsphere-state",
+      "title": "12. Q-Sphere Statevector Inspection",
+      "explanation": "On the Q-Sphere, observe how the state amplitudes have changed. Target |11⟩ now points in the opposite phase direction (180° / π phase).",
+      "narrationText": "Switching to the Q-Sphere visualization, notice how the state amplitudes have changed. The vector for target 11 has rotated to a negative phase, distinguished by its phase color shift.",
+      "actions": [
+        { "type": "SHOW_QSPHERE" },
+        { "type": "MOVE_CURSOR", "target": "qsphere-panel", "duration": 500 },
+        { "type": "HIGHLIGHT", "target": "qsphere-panel" },
+        { "type": "PAUSE", "duration": 800 }
+      ]
+    },
+    {
+      "id": "segment-13-build-diffuser",
+      "title": "13. Constructing the Grover Diffuser",
+      "explanation": "The Grover Diffuser D = 2|s⟩⟨s| - I is implemented via H, X, CZ, X, H gates. It inverts all amplitudes about their mean.",
+      "narrationText": "Now we construct the Grover Diffuser operator. Built from Hadamard, Pauli-X, and Controlled-Z gates, this operator performs an inversion about the mean, transforming phase differences into detectable amplitude differences.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "diffuser-region", "duration": 400 },
+        { "type": "ADD_GATE", "gate": "h", "targets": [0], "column": 2, "gateId": "diff-h0-1" },
+        { "type": "ADD_GATE", "gate": "h", "targets": [1], "column": 2, "gateId": "diff-h1-1" },
+        { "type": "ADD_GATE", "gate": "x", "targets": [0], "column": 3, "gateId": "diff-x0-1" },
+        { "type": "ADD_GATE", "gate": "x", "targets": [1], "column": 3, "gateId": "diff-x1-1" },
+        { "type": "ADD_GATE", "gate": "cz", "targets": [0, 1], "column": 4, "gateId": "diff-cz" },
+        { "type": "ADD_GATE", "gate": "x", "targets": [0], "column": 5, "gateId": "diff-x0-2" },
+        { "type": "ADD_GATE", "gate": "x", "targets": [1], "column": 5, "gateId": "diff-x1-2" },
+        { "type": "ADD_GATE", "gate": "h", "targets": [0], "column": 6, "gateId": "diff-h0-2" },
+        { "type": "ADD_GATE", "gate": "h", "targets": [1], "column": 6, "gateId": "diff-h1-2" },
+        { "type": "HIGHLIGHT", "target": "diffuser-region" },
+        { "type": "PAUSE", "duration": 700 }
+      ]
+    },
+    {
+      "id": "segment-14-amplitude-amplification-math",
+      "title": "14. Amplitude Amplification (Inversion About Mean)",
+      "explanation": "Mean amplitude μ = (1/2 + 1/2 + 1/2 - 1/2)/4 = 1/4. Non-targets: 2(1/4) - 1/2 = 0. Target |11⟩: 2(1/4) - (-1/2) = 1.0!",
+      "narrationText": "Look closely at the mathematics. The average mean amplitude before reflection was one-fourth. Reflecting about the mean: two times one-fourth minus one-half gives zero for non-target states, while two times one-fourth minus negative one-half equals exactly one for target state 11!",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "math-display", "duration": 400 },
+        {
+          "type": "SHOW_MATH",
+          "formula": "D = 2|s\\rangle\\langle s| - I, \\quad \\mu = \\frac{1}{4}, \\quad \\alpha_{11} = 2\\left(\\frac{1}{4}\\right) - \\left(-\\frac{1}{2}\\right) = 1.0, \\quad \\alpha_{other} = 0",
+          "label": "Inversion About the Mean"
+        },
+        { "type": "PAUSE", "duration": 800 }
+      ]
+    },
+    {
+      "id": "segment-15-socratic-question",
+      "title": "15. Socratic Prediction: Final Measurement",
+      "explanation": "Before we simulate and measure the circuit, predict the physical measurement outcome based on amplitude amplification.",
+      "narrationText": "Before we run the quantum simulation and measure the circuit, test your understanding: what do you predict will happen when we measure the circuit?",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "grover-workspace", "duration": 300 }
+      ],
+      "checkpoint": {
+        "id": "pred-grover-final-measurement",
+        "prompt": "Socratic Prediction Checkpoint",
+        "question": "What do you predict will happen when we measure the 2-qubit Grover circuit?",
+        "options": [
+          {
+            "id": "opt-random-equal",
+            "label": "All 4 states will still be measured with equal 25% probability",
+            "description": "Misconception: Diffuser does not change measurement statistics",
+            "isCorrect": false
+          },
+          {
+            "id": "opt-deterministic-11",
+            "label": "Target state |11⟩ will be measured with 100% probability (0% for others)",
+            "description": "Constructive interference amplifies target to amplitude 1.0",
+            "isCorrect": true
+          },
+          {
+            "id": "opt-negative-prob",
+            "label": "Target state |11⟩ cannot be measured because it has a negative probability",
+            "description": "Misconception: Confusing negative phase with negative probability",
+            "isCorrect": false
+          }
+        ],
+        "correctOptionIndex": 1,
+        "explanation": "Constructive interference boosts target |11⟩ amplitude to exactly 1.0 (|1.0|² = 100%), while destructive interference cancels out non-target states |00⟩, |01⟩, |10⟩ to 0!"
+      }
+    },
+    {
+      "id": "segment-16-run-simulation",
+      "title": "16. Quantum Simulation Execution",
+      "explanation": "Executing quantum simulation across 1000 shots using the real simulation engine.",
+      "narrationText": "Now, let's execute the quantum simulation across one thousand shots to physically test our prediction.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "simulation-button", "duration": 400 },
+        { "type": "CLICK", "target": "simulation-button" },
+        { "type": "SIMULATE", "shots": 1000 },
+        { "type": "WAIT_FOR_STATE", "targetState": "11" },
+        { "type": "PAUSE", "duration": 400 }
+      ]
+    },
+    {
+      "id": "segment-17-measurement-histogram",
+      "title": "17. Measurement Histogram: 100% Collapse",
+      "explanation": "All 1000 shots collapsed into target marked state |11⟩ with 100% probability. Non-target states have 0 counts.",
+      "narrationText": "Look at the measurement histogram! Every single one of the one thousand experimental trials collapsed into our target state 11. States 00, 01, and 10 have zero counts.",
+      "actions": [
+        { "type": "SHOW_PROBABILITY" },
+        { "type": "MOVE_CURSOR", "target": "histogram", "duration": 500 },
+        { "type": "HIGHLIGHT", "target": "measurement-result" },
+        {
+          "type": "SHOW_MATH",
+          "formula": "P(|11\\rangle) = |1.0|^2 = 1.0 \\quad (1000/1000 \\text{ shots}), \\quad P(|00\\rangle) = P(|01\\rangle) = P(|10\\rangle) = 0",
+          "label": "Experimental Measurement Collapse"
+        },
+        { "type": "PAUSE", "duration": 700 }
+      ]
+    },
+    {
+      "id": "segment-18-explain-interference",
+      "title": "18. Interference Mechanism Explained",
+      "explanation": "Destructive interference cancelled out non-targets, while constructive interference amplified marked target |11⟩.",
+      "narrationText": "Through destructive interference, non-target states cancelled out completely. Constructive interference amplified target item 11 from twenty-five percent to one hundred percent in a single query.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "grover-workspace", "duration": 400 },
+        {
+          "type": "EXPLAIN",
+          "title": "Quantum Speedup Verified",
+          "message": "Oracle phase inversion + Diffuser inversion about the mean converted a 25% uniform distribution into 100% deterministic isolation of target |11⟩ in 1 query."
+        },
+        { "type": "PAUSE", "duration": 500 }
+      ]
+    },
+    {
+      "id": "segment-19-mastery-complete",
+      "title": "19. Grover Algorithm Mastered",
+      "explanation": "Grover's Algorithm live demonstration completed! Quadratic quantum search speedup O(√N) successfully demonstrated.",
+      "narrationText": "Congratulations! You have completed the Grover Algorithm Masterclass. You have seen how superposition, phase marking, and amplitude amplification work together to achieve quadratic quantum search speedup.",
+      "actions": [
+        { "type": "MOVE_CURSOR", "target": "grover-workspace", "duration": 300 },
+        { "type": "COMPLETE" }
+      ]
+    }
+  ]
+}

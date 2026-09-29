@@ -1,0 +1,846 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-what-is-quantum",
+  "lessonTitle": "What Is Quantum Computing?",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 248,
+  "fps": 30,
+  "totalFrames": 7440,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Explain at a high level what quantum computing is.",
+    "Distinguish a classical bit from a qubit.",
+    "Identify |0⟩ and |1⟩ as the computational basis states.",
+    "Recognize |ψ⟩ as notation for a quantum state.",
+    "Understand at an introductory level that quantum computing manipulates quantum states using quantum gates and circuits.",
+    "Recognize that later lessons will explain superposition, measurement, amplitudes, phase, and gates in greater depth."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Classical bit definition (0 or 1)",
+      "Qubit as basic quantum unit",
+      "Basis states |0⟩ and |1⟩ introduction",
+      "Quantum state notation |ψ⟩ and introductory linear combination |ψ⟩ = α|0⟩ + β|1⟩",
+      "Concept of quantum gates as state transformations",
+      "Circuit wire and time progression overview",
+      "Sprint 1 roadmap preview"
+    ],
+    "topicsDeferred": [
+      "Superposition mechanics (Lesson 4)",
+      "Born rule and probability amplitude calculations (Lesson 5 & 6)",
+      "Quantum phase and interference (Lesson 7)",
+      "Detailed gate matrices (Lessons 8, 9, 10)",
+      "Multi-qubit operations and entanglement (Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Hook",
+      "durationSeconds": 18,
+      "startFrame": 1,
+      "endFrame": 540,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Classical computers have transformed our world, powering everything from smartphones to supercomputers. But what happens when we design computers that operate directly by the fundamental rules of quantum mechanics?",
+        "tone": "Engaging, inquisitive",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Classical computers have transformed our world, powering everything from smartphones to supercomputers.",
+          "startFrame": 15,
+          "endFrame": 240
+        },
+        {
+          "text": "But what happens when we design computers that operate directly by the rules of quantum mechanics?",
+          "startFrame": 255,
+          "endFrame": 510
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_cat",
+          "text": "QUALUTION — LESSON 1",
+          "role": "header",
+          "position": [-6.4, 3.9, 0.1]
+        },
+        {
+          "id": "txt_title",
+          "text": "What Is Quantum Computing?",
+          "role": "header",
+          "position": [-6.4, 3.4, 0.1]
+        },
+        {
+          "id": "txt_hook",
+          "text": "COMPUTING WITH THE LAWS OF NATURE",
+          "role": "callout",
+          "position": [0.0, 1.8, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "ClassicalDataStream",
+          "type": "text_stream",
+          "description": "Binary bit stream (0 1 1 0 1) moving horizontally across canvas",
+          "coordinates": [0.0, 0.0, 0.0]
+        },
+        {
+          "name": "QuantumEnergyCore",
+          "type": "geometric_node",
+          "description": "Glowing cyan energy sphere converging from binary data",
+          "coordinates": [0.0, 0.0, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "txt_title",
+          "action": "slide_in_top_left",
+          "startFrame": 1,
+          "endFrame": 30,
+          "easing": "ease_out"
+        },
+        {
+          "target": "ClassicalDataStream",
+          "action": "horizontal_flow",
+          "startFrame": 45,
+          "endFrame": 180,
+          "easing": "linear"
+        },
+        {
+          "target": "QuantumEnergyCore",
+          "action": "scale_in_pulse",
+          "startFrame": 185,
+          "endFrame": 360,
+          "easing": "ease_out_back"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_Camera", "QUALUTION_BackgroundPlane", "QUALUTION_TransitionPlate"],
+      "educationalPurpose": "Establish the foundational contrast between classical binary logic and quantum physical laws.",
+      "transitionOut": { "type": "crossfade", "durationFrames": 30 }
+    },
+    {
+      "id": "scene-02",
+      "title": "What Is a Classical Bit?",
+      "durationSeconds": 24,
+      "startFrame": 541,
+      "endFrame": 1260,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "At the heart of every classical device is the bit—the basic unit of binary information. A classical bit is strictly deterministic: it can only ever be in one state at any moment: 0 OR 1. To evaluate multiple possibilities, classical computers must process them sequentially, one state at a time.",
+        "tone": "Clear, informative",
+        "pacingWpm": 132
+      },
+      "captions": [
+        {
+          "text": "At the heart of every classical device is the bit—the basic unit of binary information.",
+          "startFrame": 555,
+          "endFrame": 780
+        },
+        {
+          "text": "A classical bit is strictly deterministic: it can only ever be in one state at any moment: 0 or 1.",
+          "startFrame": 795,
+          "endFrame": 1020
+        },
+        {
+          "text": "To evaluate multiple possibilities, classical computers must process them one state at a time.",
+          "startFrame": 1035,
+          "endFrame": 1240
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s2_header",
+          "text": "CLASSICAL BIT",
+          "role": "header",
+          "position": [0.0, 1.8, 0.1]
+        },
+        {
+          "id": "txt_s2_badge",
+          "text": "ONE STATE AT A TIME",
+          "role": "badge",
+          "position": [0.0, 1.8, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "ClassicalBitBox0",
+          "type": "card_container",
+          "description": "State box holding classical value 0 with emerald border",
+          "coordinates": [-2.0, -0.2, 0.0]
+        },
+        {
+          "name": "ClassicalBitBox1",
+          "type": "card_container",
+          "description": "State box holding classical value 1 with amber border",
+          "coordinates": [2.0, -0.2, 0.0]
+        },
+        {
+          "name": "StateIndicatorArrow",
+          "type": "pointer",
+          "description": "Indicator pointing to currently active discrete state",
+          "coordinates": [-2.0, -2.1, 0.05]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "ClassicalBitBoxes",
+          "action": "scale_in",
+          "startFrame": 545,
+          "endFrame": 580,
+          "easing": "ease_out_back"
+        },
+        {
+          "target": "StateIndicatorArrow",
+          "action": "slide_toggle_0_to_1",
+          "startFrame": 620,
+          "endFrame": 720,
+          "easing": "ease_in_out"
+        },
+        {
+          "target": "txt_s2_badge",
+          "action": "pop_in_warning",
+          "startFrame": 790,
+          "endFrame": 840,
+          "easing": "ease_out"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_AnnotationArrow", "QUALUTION_Mat_CardDark"],
+      "educationalPurpose": "Demonstrate the discrete single-state nature of classical bits.",
+      "transitionOut": { "type": "slide_left", "durationFrames": 25 }
+    },
+    {
+      "id": "scene-03",
+      "title": "Introducing the Qubit",
+      "durationSeconds": 28,
+      "startFrame": 1261,
+      "endFrame": 2100,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In quantum computing, the fundamental unit of information is called a qubit. Just like classical bits, a qubit can be measured as 0 or 1, which we write using Dirac notation as |0⟩ and |1⟩. These are known as the computational basis states, and they form the foundation of everything we build.",
+        "tone": "Warm, foundational",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "In quantum computing, the fundamental unit of information is called a qubit.",
+          "startFrame": 1275,
+          "endFrame": 1500
+        },
+        {
+          "text": "Just like classical bits, a qubit can be measured as 0 or 1, which we write as |0⟩ and |1⟩.",
+          "startFrame": 1515,
+          "endFrame": 1780
+        },
+        {
+          "text": "These are known as the computational basis states, forming the foundation of everything we build.",
+          "startFrame": 1795,
+          "endFrame": 2070
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s3_header",
+          "text": "THE QUBIT",
+          "role": "header",
+          "position": [0.0, 2.2, 0.1]
+        },
+        {
+          "id": "txt_s3_sub",
+          "text": "Basic Unit of Quantum Information",
+          "role": "subtext",
+          "position": [0.0, 1.6, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "QUALUTION_Qubit",
+          "type": "quantum_node",
+          "description": "Concentric core disc, halo ring, and rotating orbital point",
+          "coordinates": [0.0, -0.1, 0.0]
+        },
+        {
+          "name": "QUALUTION_Ket0",
+          "type": "basis_badge",
+          "description": "Basis state |0⟩ badge with emerald border",
+          "coordinates": [-3.6, -0.1, 0.0]
+        },
+        {
+          "name": "QUALUTION_Ket1",
+          "type": "basis_badge",
+          "description": "Basis state |1⟩ badge with amber border",
+          "coordinates": [3.6, -0.1, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "QUALUTION_Qubit",
+          "action": "scale_in_pulse",
+          "startFrame": 1265,
+          "endFrame": 1310,
+          "easing": "ease_out_back"
+        },
+        {
+          "target": "QUALUTION_Ket0",
+          "action": "slide_in_left",
+          "startFrame": 1330,
+          "endFrame": 1400,
+          "easing": "ease_out"
+        },
+        {
+          "target": "QUALUTION_Ket1",
+          "action": "slide_in_right",
+          "startFrame": 1340,
+          "endFrame": 1410,
+          "easing": "ease_out"
+        },
+        {
+          "target": "QUALUTION_Qubit.OrbitPivot",
+          "action": "continuous_rotation_360",
+          "startFrame": 1400,
+          "endFrame": 2080,
+          "easing": "linear"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_Qubit", "QUALUTION_Ket0", "QUALUTION_Ket1"],
+      "educationalPurpose": "Introduce the qubit and Dirac ket notation for computational basis states.",
+      "transitionOut": { "type": "scale_out", "durationFrames": 20 }
+    },
+    {
+      "id": "scene-04",
+      "title": "The Quantum State (|ψ⟩)",
+      "durationSeconds": 32,
+      "startFrame": 2101,
+      "endFrame": 3060,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To describe where a qubit is at any given moment, we write its quantum state as |ψ⟩. Mathematically, we express this state as a combination of basis states: |ψ⟩ = α|0⟩ + β|1⟩. Here, alpha and beta are numbers called probability amplitudes. We will explore their exact meaning in dedicated upcoming lessons.",
+        "tone": "Structured, educational",
+        "pacingWpm": 128
+      },
+      "captions": [
+        {
+          "text": "To describe where a qubit is at any given moment, we write its quantum state as |ψ⟩.",
+          "startFrame": 2115,
+          "endFrame": 2340
+        },
+        {
+          "text": "Mathematically, we express this state as a combination of basis states: |ψ⟩ = α|0⟩ + β|1⟩.",
+          "startFrame": 2355,
+          "endFrame": 2660
+        },
+        {
+          "text": "Here, α and β are numbers called probability amplitudes, which we will explore in upcoming lessons.",
+          "startFrame": 2675,
+          "endFrame": 3030
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s4_header",
+          "text": "QUANTUM STATE NOTATION",
+          "role": "header",
+          "position": [0.0, 2.3, 0.1]
+        },
+        {
+          "id": "txt_s4_psi",
+          "text": "|ψ⟩",
+          "role": "math",
+          "position": [0.0, 1.1, 0.1]
+        },
+        {
+          "id": "txt_s4_eq",
+          "text": "|ψ⟩ = α|0⟩ + β|1⟩",
+          "role": "math",
+          "position": [0.0, 0.0, 0.1]
+        },
+        {
+          "id": "txt_s4_sub",
+          "text": "A mathematical description combining basis states",
+          "role": "subtext",
+          "position": [0.0, -0.9, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "QUALUTION_StateVector",
+          "type": "vector_arrow",
+          "description": "Directional arrow illustrating state orientation in 2D space",
+          "coordinates": [-4.4, -0.8, 0.0]
+        },
+        {
+          "name": "QubitStateRefNode",
+          "type": "quantum_node",
+          "description": "Reference visual node complementing vector arrow",
+          "coordinates": [4.4, 0.0, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "txt_s4_psi",
+          "action": "scale_in",
+          "startFrame": 2105,
+          "endFrame": 2150,
+          "easing": "ease_out"
+        },
+        {
+          "target": "txt_s4_eq",
+          "action": "assemble_equation",
+          "startFrame": 2170,
+          "endFrame": 2300,
+          "easing": "ease_out"
+        },
+        {
+          "target": "QUALUTION_StateVector",
+          "action": "rotate_angle",
+          "startFrame": 2360,
+          "endFrame": 2950,
+          "easing": "ease_in_out"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_StateVector", "QUALUTION_Ket0", "QUALUTION_Ket1"],
+      "educationalPurpose": "Present general quantum state notation |ψ⟩ and its introductory linear representation.",
+      "transitionOut": { "type": "crossfade", "durationFrames": 25 }
+    },
+    {
+      "id": "scene-05",
+      "title": "Why Quantum States Are Special",
+      "durationSeconds": 26,
+      "startFrame": 3061,
+      "endFrame": 3840,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Unlike a classical bit that is locked to a single binary value, a quantum state contains a richer geometric structure. This hidden structure allows quantum computers to process information using principles like superposition, phase, and interference.",
+        "tone": "Inspiring, forward-looking",
+        "pacingWpm": 132
+      },
+      "captions": [
+        {
+          "text": "Unlike a classical bit locked to a single value, a quantum state contains a richer geometric structure.",
+          "startFrame": 3075,
+          "endFrame": 3360
+        },
+        {
+          "text": "This structure allows quantum computers to process information using superposition, phase, and interference.",
+          "startFrame": 3375,
+          "endFrame": 3780
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s5_header",
+          "text": "THE POWER OF QUANTUM STATES",
+          "role": "header",
+          "position": [0.0, 2.2, 0.1]
+        },
+        {
+          "id": "txt_s5_chip1",
+          "text": "Superposition Preview",
+          "role": "badge",
+          "position": [-3.5, -1.5, 0.1]
+        },
+        {
+          "id": "txt_s5_chip2",
+          "text": "Quantum Phase",
+          "role": "badge",
+          "position": [0.0, -1.5, 0.1]
+        },
+        {
+          "id": "txt_s5_chip3",
+          "text": "Interference",
+          "role": "badge",
+          "position": [3.5, -1.5, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "RadiatingStateVector",
+          "type": "vector_halo",
+          "description": "State vector arrow emitting subtle geometric harmonic rings",
+          "coordinates": [0.0, 0.2, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "RadiatingStateVector",
+          "action": "continuous_pulse_and_rotate",
+          "startFrame": 3065,
+          "endFrame": 3800,
+          "easing": "linear"
+        },
+        {
+          "target": "ConceptChips",
+          "action": "staggered_pop_in",
+          "startFrame": 3130,
+          "endFrame": 3300,
+          "easing": "ease_out_back"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_StateVector", "QUALUTION_Qubit"],
+      "educationalPurpose": "Preview the mathematical richness of quantum states without over-explaining mechanics.",
+      "transitionOut": { "type": "slide_left", "durationFrames": 25 }
+    },
+    {
+      "id": "scene-06",
+      "title": "Quantum Gates: The Operations",
+      "durationSeconds": 30,
+      "startFrame": 3841,
+      "endFrame": 4740,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Just as classical computers use logic gates like AND and NOT, quantum computers use quantum gates. A quantum gate is an operation that transforms an input quantum state into a new output state. Gates like X, H, and Z are the primary building blocks you will use to construct quantum algorithms.",
+        "tone": "Instructional, precise",
+        "pacingWpm": 134
+      },
+      "captions": [
+        {
+          "text": "Just as classical computers use logic gates, quantum computers use quantum gates.",
+          "startFrame": 3855,
+          "endFrame": 4120
+        },
+        {
+          "text": "A quantum gate is an operation that transforms an input quantum state into a new output state.",
+          "startFrame": 4135,
+          "endFrame": 4420
+        },
+        {
+          "text": "Gates like X, H, and Z are the primary building blocks used to construct quantum algorithms.",
+          "startFrame": 4435,
+          "endFrame": 4710
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s6_header",
+          "text": "QUANTUM GATES",
+          "role": "header",
+          "position": [0.0, 2.2, 0.1]
+        },
+        {
+          "id": "txt_s6_sub",
+          "text": "Operations that Transform Quantum States",
+          "role": "subtext",
+          "position": [0.0, 1.6, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "QUALUTION_Gate_X",
+          "type": "gate_box",
+          "description": "Pauli-X bit-flip gate box with cyan border",
+          "coordinates": [-3.0, 0.0, 0.0]
+        },
+        {
+          "name": "QUALUTION_Gate_H",
+          "type": "gate_box",
+          "description": "Hadamard superposition gate box with violet border",
+          "coordinates": [0.0, 0.0, 0.0]
+        },
+        {
+          "name": "QUALUTION_Gate_Z",
+          "type": "gate_box",
+          "description": "Pauli-Z phase-flip gate box with emerald border",
+          "coordinates": [3.0, 0.0, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "GatesTrio",
+          "action": "staggered_scale_in",
+          "startFrame": 3910,
+          "endFrame": 4050,
+          "easing": "ease_out_back"
+        },
+        {
+          "target": "QUALUTION_Gate_H",
+          "action": "highlight_pulse",
+          "startFrame": 4160,
+          "endFrame": 4400,
+          "easing": "ease_in_out"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_Gate_X", "QUALUTION_Gate_H", "QUALUTION_Gate_Z", "QUALUTION_AnnotationArrow"],
+      "educationalPurpose": "Establish quantum gates as state-transforming operations.",
+      "transitionOut": { "type": "crossfade", "durationFrames": 20 }
+    },
+    {
+      "id": "scene-07",
+      "title": "The Quantum Circuit",
+      "durationSeconds": 32,
+      "startFrame": 4741,
+      "endFrame": 5700,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "When we connect quantum gates along a timeline, we create a quantum circuit. Each horizontal line represents a qubit wire, and gates are applied sequentially from left to right. At the end of the circuit, measurement converts the final quantum state into readable classical bits.",
+        "tone": "Architectural, clear",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "When we connect quantum gates along a timeline, we create a quantum circuit.",
+          "startFrame": 4755,
+          "endFrame": 5020
+        },
+        {
+          "text": "Each horizontal line represents a qubit wire, with gates applied sequentially from left to right.",
+          "startFrame": 5035,
+          "endFrame": 5320
+        },
+        {
+          "text": "At the end of the circuit, measurement converts the final quantum state into readable classical bits.",
+          "startFrame": 5335,
+          "endFrame": 5670
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s7_header",
+          "text": "THE QUANTUM CIRCUIT",
+          "role": "header",
+          "position": [0.0, 2.2, 0.1]
+        },
+        {
+          "id": "txt_s7_timeline",
+          "text": "TIME PROGRESSION (LEFT TO RIGHT) ───►",
+          "role": "callout",
+          "position": [0.0, 1.4, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "QUALUTION_QuantumWire",
+          "type": "circuit_wire",
+          "description": "Horizontal register wire q[0]",
+          "coordinates": [-5.5, 0.0, 0.0]
+        },
+        {
+          "name": "QUALUTION_Gate_H",
+          "type": "gate_box",
+          "description": "Hadamard gate placed on wire",
+          "coordinates": [-1.2, 0.0, 0.0]
+        },
+        {
+          "name": "QUALUTION_Measurement",
+          "type": "meter_box",
+          "description": "Measurement unit placed at end of wire",
+          "coordinates": [2.2, 0.0, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "QUALUTION_QuantumWire",
+          "action": "draw_line_left_to_right",
+          "startFrame": 4745,
+          "endFrame": 4800,
+          "easing": "ease_out"
+        },
+        {
+          "target": "QUALUTION_Gate_H",
+          "action": "slide_down_onto_wire",
+          "startFrame": 4810,
+          "endFrame": 4900,
+          "easing": "ease_out_bounce"
+        },
+        {
+          "target": "QUALUTION_Measurement",
+          "action": "slide_down_onto_wire",
+          "startFrame": 4990,
+          "endFrame": 5080,
+          "easing": "ease_out_bounce"
+        },
+        {
+          "target": "QUALUTION_Measurement.Needle",
+          "action": "needle_deflection_twitch",
+          "startFrame": 5300,
+          "endFrame": 5550,
+          "easing": "ease_in_out"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_QuantumWire", "QUALUTION_Gate_H", "QUALUTION_Measurement", "QUALUTION_AnnotationArrow"],
+      "educationalPurpose": "Explain the circuit layout, left-to-right temporal execution, and measurement role.",
+      "transitionOut": { "type": "slide_left", "durationFrames": 25 }
+    },
+    {
+      "id": "scene-08",
+      "title": "What Makes Quantum Computing Different?",
+      "durationSeconds": 26,
+      "startFrame": 5701,
+      "endFrame": 6480,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Classical computers solve problems using discrete bits and boolean logic gates. Quantum computers operate on quantum states, using quantum gates to explore computational spaces in entirely new ways.",
+        "tone": "Synthesizing, grounded",
+        "pacingWpm": 126
+      },
+      "captions": [
+        {
+          "text": "Classical computers solve problems using discrete bits and boolean logic gates.",
+          "startFrame": 5715,
+          "endFrame": 6020
+        },
+        {
+          "text": "Quantum computers operate on quantum states, using quantum gates to explore computational spaces in new ways.",
+          "startFrame": 6035,
+          "endFrame": 6440
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s8_header",
+          "text": "CLASSICAL VS QUANTUM COMPUTING",
+          "role": "header",
+          "position": [0.0, 2.2, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "ClassicalSummaryPanel",
+          "type": "comparison_card",
+          "description": "Left card: Discrete bits, Boolean logic, Deterministic processing",
+          "coordinates": [-3.4, -0.2, 0.0]
+        },
+        {
+          "name": "QuantumSummaryPanel",
+          "type": "comparison_card",
+          "description": "Right card: Quantum states |ψ⟩, Quantum gates, Quantum algorithms",
+          "coordinates": [3.4, -0.2, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "ComparisonPanels",
+          "action": "slide_in_side_by_side",
+          "startFrame": 5705,
+          "endFrame": 5780,
+          "easing": "ease_out"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_Camera", "QUALUTION_BackgroundPlane", "QUALUTION_Mat_CardDark"],
+      "educationalPurpose": "Deliver an accurate, grounded synthesis between classical and quantum computational models.",
+      "transitionOut": { "type": "crossfade", "durationFrames": 25 }
+    },
+    {
+      "id": "scene-09",
+      "title": "Curriculum Roadmap: What You Will Learn Next",
+      "durationSeconds": 18,
+      "startFrame": 6481,
+      "endFrame": 7020,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Across Sprint 1, we will unpack each of these concepts step-by-step with interactive simulations and visual explanations. You will master quantum states, superposition, phase, and the fundamental single-qubit gates.",
+        "tone": "Encouraging, structured",
+        "pacingWpm": 133
+      },
+      "captions": [
+        {
+          "text": "Across Sprint 1, we will unpack each of these concepts step-by-step with interactive simulations.",
+          "startFrame": 6495,
+          "endFrame": 6760
+        },
+        {
+          "text": "You will master quantum states, superposition, phase, and the fundamental single-qubit gates.",
+          "startFrame": 6775,
+          "endFrame": 7000
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s9_header",
+          "text": "SPRINT 1 — QUANTUM FOUNDATIONS",
+          "role": "header",
+          "position": [0.0, 2.2, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "CurriculumRoadmapTrack",
+          "type": "timeline_track",
+          "description": "Milestone roadmap featuring all 11 theoretical lessons in Sprint 1",
+          "coordinates": [0.0, -0.3, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "CurriculumRoadmapTrack",
+          "action": "sequential_node_illumination",
+          "startFrame": 6485,
+          "endFrame": 6800,
+          "easing": "ease_out"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_Mat_Cyan", "QUALUTION_Mat_Emerald", "QUALUTION_Mat_White"],
+      "educationalPurpose": "Display the structured learning progression across Sprint 1.",
+      "transitionOut": { "type": "crossfade", "durationFrames": 20 }
+    },
+    {
+      "id": "scene-10",
+      "title": "The QUALUTION Bridge",
+      "durationSeconds": 14,
+      "startFrame": 7021,
+      "endFrame": 7440,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Next, we'll dive deeper into how a qubit is represented and what its quantum state really means. Welcome to QUALUTION.",
+        "tone": "Warm, inspiring closing",
+        "pacingWpm": 125
+      },
+      "captions": [
+        {
+          "text": "Next, we'll dive deeper into how a qubit is represented and what its quantum state really means.",
+          "startFrame": 7035,
+          "endFrame": 7280
+        },
+        {
+          "text": "Welcome to QUALUTION.",
+          "startFrame": 7290,
+          "endFrame": 7380
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s10_brand",
+          "text": "QUALUTION ACADEMY",
+          "role": "header",
+          "position": [0.0, 1.4, 0.1]
+        },
+        {
+          "id": "txt_s10_next",
+          "text": "Up Next: Lesson 2 — Qubits & Quantum States",
+          "role": "callout",
+          "position": [0.0, 0.2, 0.1]
+        }
+      ],
+      "visualElements": [
+        {
+          "name": "QUALUTION_Emblem",
+          "type": "brand_emblem",
+          "description": "Central glowing QUALUTION quantum emblem",
+          "coordinates": [0.0, -1.0, 0.0]
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "QUALUTION_Emblem",
+          "action": "scale_in_pulse",
+          "startFrame": 7025,
+          "endFrame": 7100,
+          "easing": "ease_out_back"
+        },
+        {
+          "target": "QUALUTION_TransitionPlate",
+          "action": "fade_to_black",
+          "startFrame": 7330,
+          "endFrame": 7440,
+          "easing": "ease_in"
+        }
+      ],
+      "assetsRequired": ["QUALUTION_Qubit", "QUALUTION_TransitionPlate"],
+      "educationalPurpose": "Conclude Lesson 1 and provide seamless bridge to Lesson 2.",
+      "transitionOut": { "type": "fade_to_black", "durationFrames": 110 }
+    }
+  ]
+}

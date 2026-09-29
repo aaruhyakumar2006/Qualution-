@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QUALUTION — Classical Bits vs. Qubits</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2338bdf8'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css" />
+
+  <style>
+    :root {
+      --bg-dark: #030712;
+      --panel-bg: rgba(15, 23, 42, 0.85);
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --cyan-bright: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.4);
+      --purple-accent: #a78bfa;
+      --purple-glow: rgba(167, 139, 250, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.07) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 60%);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 20px 32px;
+    }
+
+    /* Clean Header */
+    header {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .brand-group:hover {
+      opacity: 0.85;
+    }
+
+    .lp-brand-main {
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .lp-brand-tag {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      line-height: 1;
+    }
+
+    /* Cinema Stage Container */
+    .player-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #stage-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #020408;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--panel-border);
+    }
+
+    #stage-viewport {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1600px;
+      height: 900px;
+      transform-origin: 0 0;
+      background: #040914;
+      background-image: radial-gradient(ellipse 90% 60% at 50% 25%, #07152b 0%, #040914 65%, #020408 100%);
+      overflow: hidden;
+    }
+
+    .bg-canvas {
+      position: absolute;
+      inset: 0;
+      width: 1600px;
+      height: 900px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .stage-svg {
+      position: absolute;
+      inset: 0;
+      width: 1600px;
+      height: 900px;
+      z-index: 1;
+      overflow: visible;
+    }
+
+    /* Math Formulas Layer */
+    .math-layer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 450px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      pointer-events: none;
+      font-size: 34px;
+      color: #f8fafc;
+    }
+
+    .math-item {
+      position: absolute;
+      opacity: 0;
+      text-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Completion Badge */
+    .badge-bar {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .badge-tag {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      padding: 7px 18px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Captions Bar */
+    .caption-container {
+      position: absolute;
+      bottom: 50px;
+      left: 120px;
+      right: 120px;
+      text-align: center;
+      font-size: 28px;
+      line-height: 1.55;
+      color: #94a3b8;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .caption-scene {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .caption-scene.active {
+      opacity: 1;
+    }
+
+    .hl {
+      color: #f8fafc;
+      font-weight: 700;
+      display: inline-block;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    /* Overlay Start Play Button */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 9, 20, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .play-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      display: none;
+    }
+
+    .big-play-btn {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px var(--cyan-glow);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .big-play-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .big-play-btn svg {
+      width: 32px;
+      height: 32px;
+      fill: #ffffff;
+      margin-left: 4px;
+    }
+
+    .play-overlay-title {
+      margin-top: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .play-overlay-sub {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Streamlined Cinema Controls Panel */
+    .controls-panel {
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 10px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Progress & Scrubber Bar */
+    .progress-bar-track {
+      position: relative;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: height 0.15s ease;
+    }
+
+    .progress-bar-track:hover {
+      height: 9px;
+    }
+
+    .progress-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-ctrl {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      color: var(--text-main);
+      padding: 6px 12px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .btn-ctrl:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .btn-ctrl.play-btn {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      background: var(--cyan-bright);
+      color: #040914;
+      border: none;
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+
+    .btn-ctrl.play-btn:hover {
+      transform: scale(1.05);
+      background: #7dd3fc;
+    }
+
+    .btn-ctrl svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .time-readout {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+
+    .time-current {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    #qvec-1, #qvec-2 {
+      transform-origin: 0px 0px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+</head>
+<body>
+  <!-- Clean Header -->
+  <header>
+    <a href="/#learn" class="brand-group" title="Back to Qualution Academy">
+      <span class="lp-brand-main">QUALUTION</span>
+      <span class="lp-brand-tag">ACADEMY</span>
+    </a>
+    <div>
+      <a href="/#learn" class="btn-ctrl" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+        <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span>Back to Academy</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Player Wrapper -->
+  <div class="player-wrapper">
+    <!-- Responsive 16:9 Viewport -->
+    <div id="stage-container">
+      <div id="stage-viewport">
+        <!-- Persistent Background Particles -->
+        <canvas class="bg-canvas" id="bg-canvas"></canvas>
+
+        <!-- Completion Badge -->
+        <div class="badge-bar" id="badge-bar">
+          <div class="badge-tag">FOUNDATION ACQUIRED • BITS VS QUBITS</div>
+        </div>
+
+        <!-- KaTeX Math Expressions Layer -->
+        <div class="math-layer">
+          <div class="math-item" id="math-0"></div>
+          <div class="math-item" id="math-superposition"></div>
+          <div class="math-item" id="math-bell"></div>
+        </div>
+
+        <!-- Master SVG Scene -->
+        <svg class="stage-svg" viewBox="0 0 1600 900">
+          <defs>
+            <radialGradient id="sphere-grad" cx="38%" cy="32%" r="62%">
+              <stop offset="0%" stop-color="#0e2a52" />
+              <stop offset="70%" stop-color="#061226" />
+              <stop offset="100%" stop-color="#030814" />
+            </radialGradient>
+            <linearGradient id="link-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8" />
+              <stop offset="50%" stop-color="#a78bfa" stop-opacity="1" />
+              <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.8" />
+            </linearGradient>
+          </defs>
+
+          <!-- Entanglement Link Beam -->
+          <g id="actor-link-root">
+            <line x1="480" y1="330" x2="1120" y2="330" stroke="url(#link-grad)" stroke-width="6" stroke-linecap="round" opacity="0.4" />
+            <line id="link-beam" x1="480" y1="330" x2="1120" y2="330" stroke="#a78bfa" stroke-width="2.5" stroke-dasharray="10,6" stroke-linecap="round" />
+          </g>
+
+          <!-- Actor 1: Classical Bit / Register Root -->
+          <g id="actor-classical-root">
+            <g id="actor-classical">
+              <!-- Bit 0 -->
+              <g id="bit-unit-0">
+                <rect id="bit-glow-0" x="-68" y="-68" width="136" height="136" rx="26" fill="none" stroke="rgba(56,189,248,0.25)" stroke-width="2" opacity="0.4" />
+                <rect id="bit-rect-0" x="-60" y="-60" width="120" height="120" rx="20" fill="#0f1e35" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+                <text id="bit-text-0" x="0" y="10" text-anchor="middle" dominant-baseline="middle" fill="#38bdf8" font-size="52px" font-family="'JetBrains Mono', monospace" font-weight="700">0</text>
+                <text id="bit-sub-0" x="0" y="85" text-anchor="middle" fill="#475569" font-size="16px" font-family="'Inter', sans-serif">bit[0]</text>
+              </g>
+
+              <!-- Extra Register Bits 1, 2, 3 (Scene 2) -->
+              <g id="actor-extra-bits">
+                <g id="bit-unit-1" transform="translate(220, 0)">
+                  <rect id="bit-glow-1" x="-68" y="-68" width="136" height="136" rx="26" fill="none" stroke="rgba(56,189,248,0.25)" stroke-width="2" opacity="0.4" />
+                  <rect id="bit-rect-1" x="-60" y="-60" width="120" height="120" rx="20" fill="#38bdf8" stroke="#38bdf8" stroke-width="2" />
+                  <text id="bit-text-1" x="0" y="10" text-anchor="middle" dominant-baseline="middle" fill="#040914" font-size="52px" font-family="'JetBrains Mono', monospace" font-weight="700">1</text>
+                  <text x="0" y="85" text-anchor="middle" fill="#475569" font-size="16px" font-family="'Inter', sans-serif">bit[1]</text>
+                </g>
+                <g id="bit-unit-2" transform="translate(440, 0)">
+                  <rect id="bit-glow-2" x="-68" y="-68" width="136" height="136" rx="26" fill="none" stroke="rgba(56,189,248,0.25)" stroke-width="2" opacity="0.4" />
+                  <rect id="bit-rect-2" x="-60" y="-60" width="120" height="120" rx="20" fill="#0f1e35" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+                  <text id="bit-text-2" x="0" y="10" text-anchor="middle" dominant-baseline="middle" fill="#38bdf8" font-size="52px" font-family="'JetBrains Mono', monospace" font-weight="700">0</text>
+                  <text x="0" y="85" text-anchor="middle" fill="#475569" font-size="16px" font-family="'Inter', sans-serif">bit[2]</text>
+                </g>
+                <g id="bit-unit-3" transform="translate(660, 0)">
+                  <rect id="bit-glow-3" x="-68" y="-68" width="136" height="136" rx="26" fill="none" stroke="rgba(56,189,248,0.25)" stroke-width="2" opacity="0.4" />
+                  <rect id="bit-rect-3" x="-60" y="-60" width="120" height="120" rx="20" fill="#38bdf8" stroke="#38bdf8" stroke-width="2" />
+                  <text id="bit-text-3" x="0" y="10" text-anchor="middle" dominant-baseline="middle" fill="#040914" font-size="52px" font-family="'JetBrains Mono', monospace" font-weight="700">1</text>
+                  <text x="0" y="85" text-anchor="middle" fill="#475569" font-size="16px" font-family="'Inter', sans-serif">bit[3]</text>
+                </g>
+              </g>
+            </g>
+          </g>
+
+          <!-- Actor 2: Qubit Sphere 1 Root -->
+          <g id="actor-qubit-1-root">
+            <g id="actor-qubit-1">
+              <circle cx="0" cy="0" r="110" fill="none" stroke="rgba(56,189,248,0.22)" stroke-width="1.5" />
+              <circle cx="0" cy="0" r="95" fill="url(#sphere-grad)" stroke="rgba(56,189,248,0.3)" stroke-width="2" />
+              <ellipse cx="0" cy="0" rx="95" ry="30" fill="none" stroke="rgba(56,189,248,0.25)" stroke-width="1.5" stroke-dasharray="4,4" />
+              <ellipse cx="0" cy="0" rx="30" ry="95" fill="none" stroke="rgba(56,189,248,0.25)" stroke-width="1.5" stroke-dasharray="3,4" />
+              <line x1="0" y1="-115" x2="0" y2="115" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
+              <circle cx="0" cy="-95" r="5" fill="#38bdf8" />
+              <text x="0" y="-126" text-anchor="middle" fill="#38bdf8" font-size="20px" font-family="'JetBrains Mono', monospace" font-weight="700">|0⟩</text>
+              <circle cx="0" cy="95" r="5" fill="#a78bfa" />
+              <text x="0" y="142" text-anchor="middle" fill="#a78bfa" font-size="20px" font-family="'JetBrains Mono', monospace" font-weight="700">|1⟩</text>
+              <!-- State Vector Arrow -->
+              <g id="qvec-1">
+                <line x1="0" y1="0" x2="62" y2="-62" stroke="#f8fafc" stroke-width="3.5" stroke-linecap="round" />
+                <circle id="qdot-1" cx="62" cy="-62" r="8" fill="#00f0ff" stroke="#ffffff" stroke-width="2" />
+              </g>
+              <text id="qubit-1-label" x="0" y="180" text-anchor="middle" fill="#a78bfa" font-size="16px" font-family="'Inter', sans-serif" font-weight="700" letter-spacing="0.05em">QUANTUM QUBIT</text>
+            </g>
+          </g>
+
+          <!-- Actor 3: Qubit Sphere 2 Root (Scene 6 Entanglement) -->
+          <g id="actor-qubit-2-root">
+            <g id="actor-qubit-2">
+              <circle cx="0" cy="0" r="110" fill="none" stroke="rgba(167,139,250,0.3)" stroke-width="1.5" />
+              <circle cx="0" cy="0" r="95" fill="url(#sphere-grad)" stroke="rgba(167,139,250,0.4)" stroke-width="2" />
+              <ellipse cx="0" cy="0" rx="95" ry="30" fill="none" stroke="rgba(167,139,250,0.3)" stroke-width="1.5" stroke-dasharray="4,4" />
+              <ellipse cx="0" cy="0" rx="30" ry="95" fill="none" stroke="rgba(167,139,250,0.3)" stroke-width="1.5" stroke-dasharray="3,4" />
+              <line x1="0" y1="-115" x2="0" y2="115" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
+              <circle cx="0" cy="-95" r="5" fill="#38bdf8" />
+              <text x="0" y="-126" text-anchor="middle" fill="#38bdf8" font-size="20px" font-family="'JetBrains Mono', monospace" font-weight="700">|0⟩</text>
+              <circle cx="0" cy="95" r="5" fill="#a78bfa" />
+              <text x="0" y="142" text-anchor="middle" fill="#a78bfa" font-size="20px" font-family="'JetBrains Mono', monospace" font-weight="700">|1⟩</text>
+              <g id="qvec-2">
+                <line x1="0" y1="0" x2="-62" y2="-62" stroke="#f8fafc" stroke-width="3.5" stroke-linecap="round" />
+                <circle id="qdot-2" cx="-62" cy="-62" r="8" fill="#a78bfa" stroke="#ffffff" stroke-width="2" />
+              </g>
+            </g>
+          </g>
+
+          <!-- Actor 4: Comparison Table HUD Card (Scene 5) -->
+          <g id="actor-cmp-root">
+            <rect x="0" y="0" width="760" height="150" rx="14" fill="#0b172a" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+            <text x="40" y="38" fill="#38bdf8" font-size="14px" font-family="'Inter', sans-serif" font-weight="700" letter-spacing="0.1em">PROPERTY</text>
+            <text x="290" y="38" fill="#38bdf8" font-size="14px" font-family="'Inter', sans-serif" font-weight="700" letter-spacing="0.1em">CLASSICAL BIT</text>
+            <text x="530" y="38" fill="#a78bfa" font-size="14px" font-family="'Inter', sans-serif" font-weight="700" letter-spacing="0.1em">QUANTUM QUBIT</text>
+            <line x1="30" y1="52" x2="730" y2="52" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+            <text x="40" y="84" fill="#64748b" font-size="14px" font-family="'Inter', sans-serif">Possible states</text>
+            <text x="290" y="84" fill="#f8fafc" font-size="15px" font-family="'JetBrains Mono', monospace">0 or 1</text>
+            <text x="530" y="84" fill="#38bdf8" font-size="15px" font-family="'JetBrains Mono', monospace">α|0⟩ + β|1⟩</text>
+            <text x="40" y="120" fill="#64748b" font-size="14px" font-family="'Inter', sans-serif">On measurement</text>
+            <text x="290" y="120" fill="#f8fafc" font-size="15px" font-family="'JetBrains Mono', monospace">Unchanged</text>
+            <text x="530" y="120" fill="#a78bfa" font-size="15px" font-family="'JetBrains Mono', monospace">Collapses to 0 or 1</text>
+          </g>
+        </svg>
+
+        <!-- Captions Bar -->
+        <div class="caption-container">
+          <div class="caption-scene active" id="cap-1">
+            Every computer you have ever touched speaks in <span class="hl" id="hl-bits">bits</span>. At its core, a bit is the simplest <span class="hl" id="hl-switch-1">switch</span> imaginable: it is either completely off, or completely on. Zero, or one. Nothing in between.
+          </div>
+          <div class="caption-scene" id="cap-2">
+            Classical bits are completely <span class="hl" id="hl-deterministic">deterministic</span>. When you inspect a bit, its <span class="hl" id="hl-state">state</span> is never a mystery. Flip the switch, and it moves from zero to one. Flip it again, and it returns to zero. Right now, billions of these tiny switches inside your device are locked into fixed, predictable states.
+          </div>
+          <div class="caption-scene" id="cap-3">
+            For nearly a century, every algorithm and machine we built depended on that rigid rule. But what if a <span class="hl" id="hl-switch-3">switch</span> could be something more than just on or off?
+          </div>
+          <div class="caption-scene" id="cap-4">
+            Meet the <span class="hl" id="hl-qubit-4">qubit</span>. In quantum physics, a qubit does not have to choose zero or one right away. It exists in <span class="hl" id="hl-superposition-4">superposition</span> — a smooth blend of both possibilities at once. It only commits to a single value the moment you perform a <span class="hl" id="hl-measurement-4">measurement</span>.
+          </div>
+          <div class="caption-scene" id="cap-5">
+            Side by side, the contrast is unmistakable. A classical <span class="hl" id="hl-bit-5">bit</span> is a rigid switch, locked to either zero or one. A <span class="hl" id="hl-qubit-5">qubit</span> is a sphere of possibilities — pointing anywhere across a continuous surface until <span class="hl" id="hl-measurement-5">measurement</span> snaps it back to reality.
+          </div>
+          <div class="caption-scene" id="cap-6">
+            And when two <span class="hl" id="hl-qubits-6">qubits</span> interact, they can become <span class="hl" id="hl-entangled-6">entangled</span> — mysteriously linking their fates so measuring one reveals the other across any distance in the universe.
+          </div>
+          <div class="caption-scene" id="cap-7">
+            You now hold the core foundation separating classical computing from the quantum frontier. Next, let's step into the lab and manipulate our very first <span class="hl" id="hl-qubit-7">qubit</span>.
+          </div>
+        </div>
+
+        <!-- Initial Play Overlay -->
+        <div class="play-overlay" id="play-overlay">
+          <div class="big-play-btn" id="big-play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="play-overlay-title">Start Presentation</div>
+          <div class="play-overlay-sub">Continuous 1-minute 40-second animated video</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clean Cinema Controls -->
+    <div class="controls-panel">
+      <!-- Progress Track -->
+      <div class="progress-bar-track" id="progress-track">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+
+      <!-- Button Row -->
+      <div class="controls-bar">
+        <div class="controls-left">
+          <!-- 5s Rewind -->
+          <button class="btn-ctrl" id="rewind-btn" title="Rewind 5s (Left Arrow)">
+            <svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.2 3.16-1.95 5.12-1.95 3.53 0 6.47 2.37 7.39 5.61l2.38-.79C20.68 10.96 16.97 8 12.5 8z"/></svg>
+            <span>-5s</span>
+          </button>
+
+          <!-- Play / Pause -->
+          <button class="btn-ctrl play-btn" id="play-btn" title="Play / Pause (Spacebar)">
+            <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+
+          <!-- 5s Forward Skip -->
+          <button class="btn-ctrl" id="forward-btn" title="Skip Forward 5s (Right Arrow)">
+            <span>+5s</span>
+            <svg viewBox="0 0 24 24"><path d="M11.5 8c2.65 0 5.05.99 6.9 2.6L22 7v9h-9l3.62-3.62c-1.39-1.2-3.16-1.95-5.12-1.95-3.53 0-6.47 2.37-7.39 5.61l-2.38-.79C3.32 10.96 7.03 8 11.5 8z"/></svg>
+          </button>
+
+          <!-- Time Readout -->
+          <div class="time-readout">
+            <span class="time-current" id="time-current">00:00</span> / <span id="time-total">01:40</span>
+          </div>
+        </div>
+
+        <div class="controls-right">
+          <!-- Fullscreen Button -->
+          <button class="btn-ctrl" id="fullscreen-btn" title="Fullscreen (F)">
+            <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Element -->
+  <audio id="lesson-audio" src="audio/lesson_full.mp3" preload="auto"></audio>
+
+  <script type="module" src="/bundle.js"></script>
+  <script type="module">
+    if (!window.__qualutionPlayer) {
+      import('./bundle.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

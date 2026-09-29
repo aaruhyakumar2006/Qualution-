@@ -1,0 +1,10 @@
+{
+  "project_roots": [
+    "qualution-backend"
+  ],
+  "python_interpreter": "qualution-backend/venv/Scripts/python.exe",
+  "search_path": [
+    "qualution-backend",
+    "qualution-backend/venv/Lib/site-packages"
+  ]
+}

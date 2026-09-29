@@ -1,0 +1,175 @@
+{
+  "version": 1,
+  "id": "classical-bit-lesson",
+  "title": "What is a Classical Bit?",
+  "description": "Comprehensive foundation on classical binary states, voltage levels, and determinism.",
+  "concepts": ["classical-bit", "determinism"],
+  "misconceptions": ["superposition-not-mixture"],
+  "defaults": {
+    "duration": 1.5,
+    "color": "#F8FAFC"
+  },
+  "actions": [
+    {
+      "type": "WRITE",
+      "id": "title",
+      "text": "WHAT IS A CLASSICAL BIT?",
+      "x": 340,
+      "y": 90,
+      "duration": 1.5,
+      "style": {
+        "fontSize": 36,
+        "fontWeight": "bold",
+        "color": "#38BDF8"
+      }
+    },
+    {
+      "type": "UNDERLINE",
+      "id": "ul-title",
+      "x": 340,
+      "y": 130,
+      "width": 600,
+      "color": "#0284C7"
+    },
+    {
+      "type": "NARRATE",
+      "text": "Welcome to Qualution Quantum Academy. In classical computation, information is fundamentally stored as binary digits, or bits.",
+      "duration": 5.0
+    },
+    {
+      "type": "CAPTION",
+      "id": "cap-bit-intro",
+      "text": "A classical bit is the basic atomic unit of classical information."
+    },
+    {
+      "type": "WRITE",
+      "id": "state-heading",
+      "text": "1. Distinct Binary States:",
+      "x": 160,
+      "y": 180,
+      "duration": 1.2,
+      "style": {
+        "fontSize": 26,
+        "fontWeight": "600",
+        "color": "#E2E8F0"
+      }
+    },
+    {
+      "type": "DRAW",
+      "id": "box-state-0",
+      "shape": "rect",
+      "x": 160,
+      "y": 230,
+      "w": 180,
+      "h": 100,
+      "filled": true,
+      "duration": 1.0,
+      "style": {
+        "color": "#64748B",
+        "strokeWidth": 2.0
+      }
+    },
+    {
+      "type": "WRITE",
+      "id": "label-state-0",
+      "text": "STATE 0 (OFF)",
+      "x": 180,
+      "y": 270,
+      "duration": 1.0,
+      "style": {
+        "fontSize": 20,
+        "fontWeight": "bold",
+        "color": "#94A3B8"
+      }
+    },
+    {
+      "type": "DRAW",
+      "id": "box-state-1",
+      "shape": "rect",
+      "x": 420,
+      "y": 230,
+      "w": 180,
+      "h": 100,
+      "filled": true,
+      "duration": 1.0,
+      "style": {
+        "color": "#38BDF8",
+        "strokeWidth": 2.5
+      }
+    },
+    {
+      "type": "WRITE",
+      "id": "label-state-1",
+      "text": "STATE 1 (ON)",
+      "x": 445,
+      "y": 270,
+      "duration": 1.0,
+      "style": {
+        "fontSize": 20,
+        "fontWeight": "bold",
+        "color": "#38BDF8"
+      }
+    },
+    {
+      "type": "NARRATE",
+      "text": "At any point in time, a classical bit can exist in only one discrete state: definitively zero, or definitively one.",
+      "duration": 5.2
+    },
+    {
+      "type": "HIGHLIGHT",
+      "id": "hl-state-1",
+      "x": 410,
+      "y": 220,
+      "width": 200,
+      "height": 120,
+      "color": "rgba(56, 189, 248, 0.2)"
+    },
+    {
+      "type": "WRITE",
+      "id": "math-heading",
+      "text": "2. Mathematical Representation:",
+      "x": 160,
+      "y": 380,
+      "duration": 1.2,
+      "style": {
+        "fontSize": 26,
+        "fontWeight": "600",
+        "color": "#E2E8F0"
+      }
+    },
+    {
+      "type": "MATH",
+      "id": "math-classical-bit",
+      "expression": "b \\in \\{0, 1\\} \\quad \\text{where state is mutually exclusive}",
+      "x": 160,
+      "y": 440,
+      "duration": 1.8,
+      "style": {
+        "scale": 1.2,
+        "fontSize": 24,
+        "color": "#F5C842"
+      }
+    },
+    {
+      "type": "NARRATE",
+      "text": "Mathematically, b belongs to the discrete set zero or one. There is no in-between state in a classical transistor.",
+      "duration": 5.0
+    },
+    {
+      "type": "WRITE",
+      "id": "summary-text",
+      "text": "Deterministic • Single Value • Macro Voltage Level",
+      "x": 160,
+      "y": 520,
+      "duration": 1.4,
+      "style": {
+        "fontSize": 24,
+        "color": "#34D399"
+      }
+    },
+    {
+      "type": "PAUSE",
+      "duration": 1.5
+    }
+  ]
+}

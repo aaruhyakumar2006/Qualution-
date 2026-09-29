@@ -1,0 +1,184 @@
+{
+  "id": "s2-grover-interactive",
+  "title": "Understanding Grover's Algorithm",
+  "sprint": 2,
+  "difficulty": "Intermediate",
+  "estimatedMinutes": 10,
+  "xpReward": 250,
+  "learningObjectives": [
+    "Understand the quantum search problem.",
+    "Recognize how superposition creates the search space.",
+    "Understand how the oracle marks a state by changing its phase.",
+    "Understand how the diffuser amplifies the amplitude of the marked state."
+  ],
+  "prerequisites": ["s2-bell-state"],
+  "conceptTags": ["quantum", "algorithm", "grover", "amplitude-amplification"],
+  "summary": "Learn how Grover's Algorithm uses superposition, an oracle, and amplitude amplification to find a marked state.",
+  "starterCircuit": {
+    "qubits": 2,
+    "classical_bits": 2,
+    "gates": []
+  },
+  "steps": [
+    {
+      "id": "intro-problem",
+      "stepNumber": 1,
+      "title": "The Search Problem",
+      "explanation": "Introduction to the search problem with 4 states.",
+      "narrationText": "Suppose we have several possible states, but we only want to find one marked state.",
+      "actions": [
+        { "type": "SHOW_TEXT", "text": "Search Space: |00⟩, |01⟩, |10⟩, |11⟩", "title": "The Problem" },
+        { "type": "wait", "durationMs": 1000 }
+      ]
+    },
+    {
+      "id": "target-state",
+      "stepNumber": 2,
+      "title": "Target State",
+      "explanation": "Identify |11⟩ as the target.",
+      "narrationText": "Our goal is to find the specific state, 1 1.",
+      "actions": [
+        { "type": "SHOW_MATH", "formula": "\\text{Target } = |11\\rangle" },
+        { "type": "wait", "durationMs": 1000 }
+      ]
+    },
+    {
+      "id": "circuit-init",
+      "stepNumber": 3,
+      "title": "Initial State",
+      "explanation": "Start with |00⟩.",
+      "narrationText": "We begin with our quantum computer in the zero state.",
+      "actions": [
+        { "type": "SHOW_CIRCUIT" },
+        { "type": "initialize_qubits", "qubits": 2, "classicalBits": 2 },
+        { "type": "wait", "durationMs": 1000 }
+      ]
+    },
+    {
+      "id": "superposition",
+      "stepNumber": 4,
+      "title": "Creating Superposition",
+      "explanation": "Applying H gates.",
+      "narrationText": "First, we apply a Hadamard gate to both qubits. This creates an equal superposition of all four possible states.",
+      "actions": [
+        { "type": "ADD_GATE", "gate": "h", "targets": [0], "column": 0 },
+        { "type": "wait", "durationMs": 500 },
+        { "type": "ADD_GATE", "gate": "h", "targets": [1], "column": 0 },
+        { "type": "wait", "durationMs": 500 },
+        { "type": "SHOW_MATH", "formula": "|\\psi\\rangle = \\frac{|00\\rangle + |01\\rangle + |10\\rangle + |11\\rangle}{2}" },
+        { "type": "wait", "durationMs": 1000 }
+      ]
+    },
+    {
+      "id": "probabilities",
+      "stepNumber": 5,
+      "title": "Equal Probabilities",
+      "explanation": "Show 25% probabilities.",
+      "narrationText": "Now, all four states have an equal twenty-five percent probability of being measured.",
+      "actions": [
+        { "type": "run_simulation" },
+        { "type": "wait", "durationMs": 500 },
+        { "type": "SHOW_PROBABILITY" },
+        { "type": "wait", "durationMs": 1000 }
+      ]
+    },
+    {
+      "id": "prediction-oracle",
+      "stepNumber": 6,
+      "title": "Prediction Checkpoint",
+      "explanation": "Ask the learner to predict the target.",
+      "narrationText": "Based on our goal, which state do you think Grover's algorithm should amplify?",
+      "actions": [],
+      "checkpoint": {
+        "id": "predict-target",
+        "prompt": "Select the target state",
+        "question": "Which state do you think the algorithm should mark?",
+        "options": [
+          { "id": "00", "label": "|00⟩" },
+          { "id": "01", "label": "|01⟩" },
+          { "id": "10", "label": "|10⟩" },
+          { "id": "11", "label": "|11⟩", "isCorrect": true }
+        ],
+        "correctOptionIndex": 3,
+        "explanation": "Correct! Our target state is |11⟩."
+      }
+    },
+    {
+      "id": "oracle",
+      "stepNumber": 7,
+      "title": "The Oracle",
+      "explanation": "Apply the oracle to mark |11⟩.",
+      "narrationText": "Correct! The next step is the Oracle. The oracle marks our target state, 1 1, by flipping its phase. It marks the state; it does not simply reveal the answer.",
+      "actions": [
+        { "type": "SHOW_TEXT", "text": "Target: |11⟩", "title": "Oracle Marking" },
+        { "type": "ADD_GATE", "gate": "cz", "targets": [0, 1], "column": 1 },
+        { "type": "wait", "durationMs": 1000 },
+        { "type": "run_simulation" },
+        { "type": "SHOW_QSPHERE" }
+      ]
+    },
+    {
+      "id": "diffuser",
+      "stepNumber": 8,
+      "title": "The Diffuser",
+      "explanation": "Apply the diffuser to amplify |11⟩.",
+      "narrationText": "After the oracle, we apply the Diffuser. The diffuser performs amplitude amplification, making the marked state's probability much larger while shrinking the others.",
+      "actions": [
+        { "type": "ADD_GATE", "gate": "h", "targets": [0], "column": 2 },
+        { "type": "ADD_GATE", "gate": "h", "targets": [1], "column": 2 },
+        { "type": "wait", "durationMs": 200 },
+        { "type": "ADD_GATE", "gate": "x", "targets": [0], "column": 3 },
+        { "type": "ADD_GATE", "gate": "x", "targets": [1], "column": 3 },
+        { "type": "wait", "durationMs": 200 },
+        { "type": "ADD_GATE", "gate": "cz", "targets": [0, 1], "column": 4 },
+        { "type": "wait", "durationMs": 200 },
+        { "type": "ADD_GATE", "gate": "x", "targets": [0], "column": 5 },
+        { "type": "ADD_GATE", "gate": "x", "targets": [1], "column": 5 },
+        { "type": "wait", "durationMs": 200 },
+        { "type": "ADD_GATE", "gate": "h", "targets": [0], "column": 6 },
+        { "type": "ADD_GATE", "gate": "h", "targets": [1], "column": 6 },
+        { "type": "wait", "durationMs": 1000 },
+        { "type": "run_simulation" },
+        { "type": "wait", "durationMs": 500 },
+        { "type": "SHOW_PROBABILITY" }
+      ]
+    },
+    {
+      "id": "prediction-measure",
+      "stepNumber": 9,
+      "title": "Measurement Prediction",
+      "explanation": "Predict measurement outcome.",
+      "narrationText": "Look at the new probability distribution. What do you predict will happen when we measure the qubits now?",
+      "actions": [],
+      "checkpoint": {
+        "id": "predict-measure",
+        "prompt": "Predict the measurement",
+        "question": "Which state do you think we are most likely to measure?",
+        "options": [
+          { "id": "00", "label": "|00⟩" },
+          { "id": "01", "label": "|01⟩" },
+          { "id": "10", "label": "|10⟩" },
+          { "id": "11", "label": "|11⟩", "isCorrect": true }
+        ],
+        "correctOptionIndex": 3,
+        "explanation": "Exactly! The amplitude of |11⟩ was amplified to 100%."
+      }
+    },
+    {
+      "id": "measurement",
+      "stepNumber": 10,
+      "title": "Measurement Results",
+      "explanation": "Show histogram of |11⟩.",
+      "narrationText": "Let's measure. As you can see from the histogram, we found our marked state with certainty. Grover's Algorithm uses quantum interference to amplify the state we are searching for.",
+      "actions": [
+        { "type": "ADD_GATE", "gate": "measure", "targets": [0], "column": 7 },
+        { "type": "ADD_GATE", "gate": "measure", "targets": [1], "column": 7 },
+        { "type": "wait", "durationMs": 500 },
+        { "type": "run_simulation" },
+        { "type": "SHOW_RESULT" },
+        { "type": "wait", "durationMs": 1500 },
+        { "type": "SHOW_TEXT", "text": "SUPERPOSITION → ORACLE → DIFFUSER → MEASUREMENT", "title": "Grover's Algorithm" }
+      ]
+    }
+  ]
+}

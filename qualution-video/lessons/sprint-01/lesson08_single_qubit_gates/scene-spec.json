@@ -1,0 +1,592 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-single-qubit-gates",
+  "lessonTitle": "Single-Qubit Quantum Gates",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 210,
+  "fps": 30,
+  "totalFrames": 6300,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Understand quantum gates as unitary matrices acting on state vectors.",
+    "Analyze the Pauli group: X (NOT), Y (bit-and-phase flip), Z (phase flip).",
+    "Understand phase gates S (\u03c0/2) and T (\u03c0/4).",
+    "Analyze continuous rotation gates Rx(\u03b8), Ry(\u03b8), and Rz(\u03b8).",
+    "Prove unitarity U\u2020U = I and probability conservation."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Unitary matrices U (2x2 complex matrices satisfying U\u2020U = I)",
+      "Pauli gates X, Y, Z",
+      "Hadamard gate H",
+      "S gate (Phase) and T gate (\u03c0/8 gate)",
+      "Parametric rotations Rx(\u03b8), Ry(\u03b8), Rz(\u03b8)",
+      "Geometric rotations around the Bloch sphere axes"
+    ],
+    "topicsDeferred": [
+      "Two-qubit gates like CNOT and CZ (Sprint 2)",
+      "Clifford group and universal gate sets (Sprint 2 & 3)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "Quantum Gates as State Rotations",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In classical circuits, logic gates manipulate discrete bits through Boolean algebra: AND, OR, NOT. In quantum circuits, single-qubit gates are continuous geometric rotations of our state vector across the Bloch sphere.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Classical logic gates perform discrete Boolean operations (AND, OR, NOT).",
+          "startFrame": 1,
+          "endFrame": 300
+        },
+        {
+          "text": "Quantum single-qubit gates perform continuous geometric rotations in Hilbert space.",
+          "startFrame": 301,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 8: SINGLE-QUBIT QUANTUM GATES",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "Unitary Operators & The Geometry of Computation",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce quantum gates as geometric rotations on the Bloch sphere.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "The Unitarity Requirement",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Every valid quantum gate must be represented by a unitary matrix U. Unitarity means that U dagger times U equals the identity matrix. This guarantees that total probability is strictly conserved and operations are reversible.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Every quantum gate is a unitary matrix U satisfying U\u2020U = I.",
+          "startFrame": 601,
+          "endFrame": 960
+        },
+        {
+          "text": "Unitarity preserves vector length (||U|\u03c8\u27e9|| = 1) and ensures reversibility.",
+          "startFrame": 961,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_unit_title",
+          "text": "The Unitarity Condition",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_unit_eq",
+          "text": "U\u2020 \u00b7 U = I  (U\u2020 = (U*)\u1d40)",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Define unitary matrices and explain why quantum operations preserve probability.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "The Pauli Gates: X, Y, and Z",
+      "durationSeconds": 35,
+      "startFrame": 1351,
+      "endFrame": 2400,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "The fundamental single-qubit operators are the Pauli matrices. Pauli-X is the quantum NOT gate, rotating 180 degrees around the X-axis. Pauli-Z flips phase by 180 degrees around the Z-axis. And Pauli-Y flips both bit and phase.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Pauli-X flips bit values: X|0\u27e9 = |1\u27e9, X|1\u27e9 = |0\u27e9 (180\u00b0 rotation about X).",
+          "startFrame": 1351,
+          "endFrame": 1830
+        },
+        {
+          "text": "Pauli-Z flips phase: Z|1\u27e9 = -|1\u27e9. Pauli-Y combines bit flip and phase shift.",
+          "startFrame": 1831,
+          "endFrame": 2400
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_paulix",
+          "text": "X = [ [0, 1], [1, 0] ]",
+          "role": "formula",
+          "position": [
+            -4.5,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_pauliy",
+          "text": "Y = [ [0, -i], [i, 0] ]",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_pauliz",
+          "text": "Z = [ [1, 0], [0, -1] ]",
+          "role": "formula",
+          "position": [
+            4.5,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce the three Pauli matrices and their algebraic actions.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "Phase Gates: S and T",
+      "durationSeconds": 30,
+      "startFrame": 2401,
+      "endFrame": 3300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Beyond full 180-degree flips, we need finer phase control. The S gate applies a 90-degree phase shift\u2014it is the square root of Z. The T gate applies a 45-degree phase shift\u2014the fourth root of Z, crucial for universal quantum computation.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "S Gate: applies a 90\u00b0 (\u03c0/2) phase shift. S\u00b2 = Z.",
+          "startFrame": 2401,
+          "endFrame": 2820
+        },
+        {
+          "text": "T Gate: applies a 45\u00b0 (\u03c0/4) phase shift. T\u00b2 = S, T\u2074 = Z. Crucial for universality!",
+          "startFrame": 2821,
+          "endFrame": 3300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sgate",
+          "text": "S = [ [1, 0], [0, i] ]",
+          "role": "formula",
+          "position": [
+            -3.5,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_tgate",
+          "text": "T = [ [1, 0], [0, e^(i\u03c0/4)] ]",
+          "role": "formula",
+          "position": [
+            3.5,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2401,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Explain the S and T phase hierarchy (Z -> S -> T).",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "Continuous Rotation Gates: Rx, Ry, Rz",
+      "durationSeconds": 35,
+      "startFrame": 3301,
+      "endFrame": 4350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To point anywhere on the Bloch sphere, we use continuous rotation gates: Rx(\u03b8), Ry(\u03b8), and Rz(\u03b8). These parametric gates rotate the state vector by any arbitrary angle theta around their respective Cartesian axes.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Parametric rotation gates allow continuous navigation of the Bloch sphere.",
+          "startFrame": 3301,
+          "endFrame": 3780
+        },
+        {
+          "text": "R_x(\u03b8), R_y(\u03b8), and R_z(\u03b8) rotate by angle \u03b8 around X, Y, and Z axes.",
+          "startFrame": 3781,
+          "endFrame": 4350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_rot_title",
+          "text": "Continuous Parametric Rotation Gates",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_rz",
+          "text": "Rz(\u03b8) = [ [e^(-i\u03b8/2), 0], [0, e^(i\u03b8/2)] ]",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3301,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce continuous rotation gates used in quantum algorithms and machine learning.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "Self-Inverse and Cancellation Rules",
+      "durationSeconds": 30,
+      "startFrame": 4351,
+      "endFrame": 5250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Many quantum gates are self-inverse: applying X twice returns the state to identity: X \u00b7 X = I. The same holds for Hadamard: H \u00b7 H = I. In QUALUTION's circuit optimizer, adjacent identical gates are automatically cancelled!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Self-inverse gates: X\u00b2 = I, Y\u00b2 = I, Z\u00b2 = I, and H\u00b2 = I.",
+          "startFrame": 4351,
+          "endFrame": 4770
+        },
+        {
+          "text": "QUALUTION's optimizer detects and cancels redundant self-inverse gates automatically.",
+          "startFrame": 4771,
+          "endFrame": 5250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_canc",
+          "text": "Self-Inverse Cancellation Rules",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_rules",
+          "text": "X \u00b7 X = I   |   H \u00b7 H = I   |   Z \u00b7 Z = I",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Connect linear algebraic gate inverses to compiler circuit optimization.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Summary & Next Steps",
+      "durationSeconds": 35,
+      "startFrame": 5251,
+      "endFrame": 6300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "We now possess the complete single-qubit gate toolkit: Pauli X, Y, Z, Hadamard, S, T, and continuous rotations. In Lesson 9, we assemble these gates into full quantum circuits on a quantum circuit timeline.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Summary: Single-qubit gates are unitary matrices that rotate statevectors.",
+          "startFrame": 5251,
+          "endFrame": 5700
+        },
+        {
+          "text": "Next: Lesson 9 \u2014 Assembling States into Quantum Circuits.",
+          "startFrame": 5701,
+          "endFrame": 6300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 8 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_g1",
+          "text": "1. Unitarity: U\u2020U = I preserves probability length",
+          "role": "body",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_g2",
+          "text": "2. Pauli Gates: X (Bit flip), Z (Phase flip), Y (Both)",
+          "role": "body",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_g3",
+          "text": "3. Phase & Rotations: H (Superposition), S, T, Rx, Ry, Rz",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Consolidate gate taxonomy and preview multi-gate circuit architecture.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

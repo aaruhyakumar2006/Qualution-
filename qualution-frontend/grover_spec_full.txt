@@ -1,0 +1,237 @@
+<USER_REQUEST>
+QUALUTION — LESSON 8: GROVER'S SEARCH — FULL FEATURE BUILD
+Execute phase by phase. STOP at every HUMAN CHECKPOINT and wait for my "continue".
+Each phase has an estimate. If you pass 1.5x the estimate, stop and report. Never silently cut scope.
+
+==================== A. GROUND RULES ====================
+1. Extend the existing Qualution frontend. Reuse teachingController, the Sprint 1 lesson pattern
+   (checkpoints, comparisonRule, completion criteria), validateAndDiagnoseGroverOracle,
+   executionRouter, circuitAnalyzer, groverVerification, the 3-tier TutorPanel, ErwinAvatar,
+   and the Dexie progress DB. Do not build parallel systems.
+2. Architecture: the REAL live Workbench only. Flow per step is Predict -> Build -> Simulate ->
+   Observe -> Explain. The learner places every gate. NO JSON lesson scripting, NO scripted cursor,
+   NO DOM clone/replica, NO rrweb, NO Playwright in product code.
+3. Simulator-derived values (probabilities, amplitudes, metrics, routing reason) must come from a
+   real run of the learner's actual circuit. Never hardcode them. Explanatory constants such as the
+   scaling table may be static. Never write "0ms"; report real measured ms.
+4. Visual quality: --wb-* tokens only, one primary CTA per screen, no new ad-hoc colours,
+   IBM-Composer-level clarity. Tests passing is NOT proof of quality. Wherever a checkpoint says
+   SCREENSHOT, attach real screenshots of the running app.
+5. Edge/offline: local engines make zero network requests. Lazy-load this lesson's code.
+
+==================== B. KNOWN DEFECTS (fix in Phase 1) ====================
+B1. Wrong overshoot number. After a SECOND round (oracle+diffusion) all four outcomes are ~25%
+    (state returns to uniform). The old figure of 6.25% is WRONG. Grep the whole repo, tutor text,
+    fixtures and tests for "6.25" and correct every hit.
+B2. Full-state views vs router. This lesson needs SIGNED amplitudes mid-circuit, but the router
+    sends Clifford circuits to Stabilizer, which returns no statevector. Check how the Statevector
+    and Q-sphere panels get their data. If they read from the routed result, add a
+    requires_full_state flag: when a full-state view is active AND the circuit is under the local
+    statevector memory guard, route to Statevector even if Clifford. A 50-qubit Clifford circuit
+    must still route to Stabilizer (keep that regression test green). The tutor's routing
+    explanation must always quote the ACTUAL method used for that run.
+B3. Global phase. H,X,CZ,X,H implements the reflection with an extra overall -1, so the final state
+    is -|11>, not +|11>. All state comparisons must be up to global phase (compare |<expected|actual>|
+    ~ 1). The tutor must say: "that overall minus sign is a global phase; no measurement can see it."
+B4. Duplicate Grover implementations (lesson-8-grovers-search.ts and s2-grover-search.ts, both with
+    tests). Determine which is canonical and reachable, consolidate to ONE, and delete the other plus
+    its tests only if confirmed unreachable. Report what you found.
+
+==================== C. LESSON SPEC ====================
+Card: id lesson-8-grovers-search | Module 8 | Track 2 Circuit Design & Algorithms |
+badge "Quantum Searcher" | +350 XP | ~14 min.
+Objectives: (1) explain classical ~N vs Grover ~sqrt(N); (2) build Grover for N=4 and predict each
+stage; (3) explain oracle = mark, diffusion = amplify; (4) predict why extra rounds hurt.
+
+Explanation spine (tutor must answer "why does this work?" at three depths on request):
+- Story: the oracle quietly marks the answer with a sign flip; diffusion turns that hidden mark
+  into visible probability; repeat the right number of times.
+- Bars: amplitudes as bars around their average; diffusion mirrors every bar across that average.
+- Compass: axis "wrong boxes" horizontal, "the prize" vertical. Start 30 deg up (1/2 = sin 30).
+  Each round rotates 60 deg. One round = 90 deg = certainty. Two rounds = 150 deg = overshoot.
+
+STAGE 0 (~1:30, no building)
+Tutor: "Four boxes. One hides a prize. You can open one at a time. How many do you have to open to
+be certain where the prize is?"
+PREDICT pred-g-classical: options 1|2|3|4, correct 3.
+ wrong 4 -> "Nearly. After three empty boxes you already know the fourth holds it."
+ wrong 1/2 -> "That's the lucky case. To be certain, plan for the worst case: 3."
+Tutor: "That's classical search. Double the boxes, double the work. A million boxes takes about half
+a million openings on average. Grover needs about the square root of N rounds: roughly 785 for a
+million boxes. For our four boxes, exactly one. Our boxes are the four two-bit outcomes 00, 01,
+10, 11. The prize is in box 11."
+
+STAGE 1 (~2:00) BUILD: H on q0 and H on q1 (column 0).
+Tutor: "Two qubits give four outcomes. Place a Hadamard on each wire."
+PREDICT pred-g-uniform (before showing the histogram): "If we measured now, how likely is each
+box?" options: 0%/0%/0%/100% | 50/50 between two | 25% each | can't say. Correct: 25% each.
+ wrong 50% -> "Four outcomes, all equal, so each gets a quarter. Two qubits at 50/50 each give
+ four combinations."
+OBSERVE: four bars ~25%; statevector +0.50 on every box.
+Tutor: "Each box has an amplitude of 1/2. Probability is amplitude squared, so 1/4. Amplitude first,
+probability second. That order matters in a moment. This is NOT trying every box at once:
+measuring still gives one random box. Superposition is the starting line, not the answer."
+VALIDATE behaviorally: statevector ~ (0.5,0.5,0.5,0.5).
+
+STAGE 2 (~3:00, interactive) BUILD the oracle.
+Tutor: "The prize is in box 11. The oracle must recognise it without moving anything. It flips one
+sign: the amplitude of 11 goes from +1/2 to -1/2. Physicists call that sign the phase. Place the
+connection that flips the sign of 11 only."
+Hint after 1 miss: "You need a gate that acts only when both wires are 1."
+Accepted: CZ (either orientation); H(target)->CX->H(target) (either orientation); CP(pi) if present.
+VALIDATE behaviorally: statevector ~ (0.5,0.5,0.5,-0.5) up to global phase.
+PREDICT pred-g-oracle-prob (after placing, before the histogram): "We've marked 11. If we measured
+now, what is P(11)?" options 0% | 25% unchanged | 50% | 100%. Correct: 25%.
+ wrong 100%/50% -> "A mark isn't a boost. Probability is amplitude squared, and (-1/2)^2 is
+ +1/4. The minus sign vanishes."
+OBSERVE: histogram unchanged; statevector shows -0.50 on 11; Q-sphere dot for 11 changes phase colour.
+Tutor: "The answer is marked but invisible to a direct measurement. We need one more move to turn a
+hidden sign into a visible probability. In a real search the oracle is a circuit that CHECKS a
+candidate, such as 'is this the right password?'. It doesn't know the answer in advance. We
+hard-wire 11 here only so there is something to find."
+DIAGNOSES (tutor names what the learner's circuit actually did; use the real simulated state):
+ CX/CNOT -> state unchanged: "All four amplitudes are equal and CNOT only moves amplitude between
+   boxes. Shuffling equal amplitudes changes nothing. We need to change a sign, not a position."
+ Z on ONE wire -> two boxes flip: "That flipped two boxes. Z looks at one wire, so it can't single
+   out both wires being 1."
+ X or SWAP -> unchanged: same reasoning as CX.
+ H again -> back to 00: "Two Hadamards cancel; that undid the superposition."
+ CZ placed before the H gates -> nothing marked: "At that point the register is 00, so there is no
+   11 to mark. Mark the boxes after they exist."
+After 2 failed attempts offer "Show me": SPOTLIGHT the needed gate and slots (highlight only, using
+--wb-status-cyan). Do NOT auto-place gates for the learner.
+
+STAGE 3 (~3:30) BUILD the diffusion in three guided chunks (columns 2-6).
+Tutor intro: "Now the amplitudes are 1/2, 1/2, 1/2, -1/2. Their average is 1/4. Diffusion mirrors every
+amplitude across that average. The three boxes sitting 1/4 above it land 1/4 below it, at 0. The
+marked box sits 3/4 below the average, so it lands 3/4 above: 1/4 + 3/4 = 1."
+PREDICT pred-g-mirror (before building): "The average is 1/4 and the marked amplitude is -1/2. After
+mirroring across the average, where does it land?" options -1/2 | 0 | 1/2 | 1. Correct 1.
+ wrong 1/2 -> "That's mirroring across zero, not across the average."
+ wrong 0 -> "0 is where the OTHER three land. Distance from the average is what gets mirrored."
+Chunk A (col 2): H on both. "The uniform state becomes 00."
+Chunk B (cols 3-5): X on both, CZ, X on both. "Now box 00 plays the answer's role: the X gates move
+ 00 to 11, CZ marks it, the X gates move it back."
+Chunk C (col 6): H on both. "Return to the original view."
+Tutor: "Diffusion is the oracle's trick on a different target. The oracle marks the ANSWER; diffusion
+marks the AVERAGE STATE. Two mirrors in a row make a rotation, and it points at the prize."
+VALIDATE behaviorally (authoritative): |amp(11)| ~ 1, others ~ 0, up to global phase. Chunk checks
+are guidance only; the stage completes only when the behavior validates.
+OBSERVE: statevector 0 on the wrong boxes, -1 on 11. Add the global-phase line from B3.
+DIAGNOSES: X gates missing (H,CZ,H) -> the simulator gives ~100% on 00: "You found box 00 with
+certainty, which is the wrong box. Without the X gates the mirror is set on the wrong state. The X
+gates are what move it to the average." Any other mismatch: diff the learner's circuit against the
+reference and name the first differing gate and column.
+
+STAGE 4 (~1:30) PREDICT pred-g-rounds (keep existing id checkpoint-grover-iterations if present):
+"How many rounds of oracle + diffusion do four boxes need?" options 1|2|3|4. Correct 1.
+Tutor: "The rule of thumb is (pi/4) x sqrt(N). For N=4 that's about 1.57, and the exact optimum works
+out to one round."
+BUILD: measurement on both wires, run 1000 shots. VALIDATE: P(11) >= 0.99.
+OBSERVE: 11 ~1000/1000. Analyzer panel shows REAL metrics (expected 12 gates, depth 7, 2 two-qubit
+gates = 16.7%, Clifford-compatible); tutor reads the routing reason from real metadata.
+Tutor: "Found in one round. Honest aside: this tiny case is all Clifford gates, so a stabilizer
+simulator handles it easily. It's a teaching case. The advantage shows up on big searches."
+
+STAGE 5 (~1:30) BREAK IT ON PURPOSE.
+PREDICT pred-g-overshoot: "Run oracle + diffusion a second time. What happens to P(11)?"
+options stays 100% | drops to 25% | drops to 0% | rises. Correct: drops to 25%.
+ACTION: a "Grover x2" preset loads the two-round circuit into the SAME Workbench through the
+existing circuit-state loader (no scripted cursor). Learner runs it.
+OBSERVE (real run): all four bars ~25% (tolerance +/-0.05 at 1000 shots).
+Tutor: "Two rounds and the histogram is flat again. Each round rotates the state 60 degrees. One round
+hits the bullseye at 90. A second overshoots to 150. Grover isn't 'more rounds is better'. It's the
+RIGHT number of rounds."
+
+STAGE 6 (~1:30) ZOOM OUT + ASSESSMENT
+Static table (approximate, marked with ~): N=4: classical ~2-3, Grover 1 | N=1,000: ~500, ~25 |
+N=1,000,000: ~500,000, ~785 | N=10^12: ~5x10^11, ~785,000.
+"What Grover is NOT": (a) not "try everything at once and read off the answer"; (b) quadratic, not
+exponential, and proven optimal for unstructured search; (c) needs an oracle that can check
+answers, and building it has its own cost; (d) sorted or structured data lets classical methods such
+as binary search win.
+ASSESSMENT (pass = 3 of 4; award badge and XP):
+ Q1 Why did the histogram look unchanged right after the oracle? (probability = amplitude squared)
+ Q2 With N=16, about how many rounds? (~3, about 96%)
+ Q3 What does diffusion do? (mirrors amplitudes across the average, amplifying the marked one)
+ Q4 True/false: more rounds always make the answer more certain. (False: N=4 with two rounds is 25% each)
+TRANSFER (STRETCH): mark a different box (q0=0, q1=1) and find it. The learner wraps X around the
+oracle CZ on q0. Validate by simulation. The diffusion block is unchanged: only the oracle knows the answer.
+
+==================== D. VALIDATION & DIAGNOSIS DESIGN ====================
+- Validate by SIMULATING the learner's actual circuit (local Statevector engine, 2 qubits) and
+  comparing to expected state up to global phase. Use pattern matching ONLY to choose which
+  diagnosis message to show. Alternate correct builds must pass.
+- Extend validateAndDiagnoseGroverOracle with the Stage 2 table; add a diffusion diagnoser
+  (Stage 3 table plus generic first-differing-gate diff).
+- Every diagnosis message references the learner's real simulated state or real gate, never a
+  generic "try again".
+
+==================== E. SKIP-PROOF LOCK ====================
+Applies to every predict, build and assessment gate.
+L1 (controller): the step-advance function refuses to leave a gate unless the validated flag for that
+   gate is set, and only the real validators can set it. WRITE THIS TEST FIRST: call
+   goToStep(next) / advance while unresolved and assert it is rejected or a no-op, for EVERY gate.
+L2 (UI): Next, Skip and step navigation are truly non-interactive (aria-disabled, no handler firing)
+   while unresolved. No keyboard shortcut, route change or dev shortcut may bypass it. Backward
+   navigation to re-read is allowed, never forward past the furthest validated step.
+L3 (session): reload or resume returns to the SAME unresolved step, never past it. Persist via Dexie.
+Also: no duplicate XP or badge awards on replay.
+
+==================== F. INTEGRATIONS ====================
+- TutorPanel tiers: Tier 1 context/controls, Tier 2 narration + explanations + live telemetry,
+  Tier 3 pinned learner task. Exactly ONE primary CTA visible at a time.
+- Analyzer panel updates live after each stage with real metrics.
+- Erwin (passive observer, never controls flow): thinking during simulation runs and AI reasoning;
+  success on a validated step or correct prediction; warning on a wrong prediction or misconception
+  diagnosis; otherwise idle.
+- Narration: use the existing narration mechanism the Sprint 1 lessons use. Captions always visible,
+  narration toggle available, no runtime network TTS.
+- Progress, XP (+350) and the "Quantum Searcher" badge persist through the existing Dexie DB and
+  work offline.
+
+==================== G. PHASES ====================
+P0 Audit + canonical-file decision (B4), list reusable pieces and gaps. Est 15 min.
+   CHECKPOINT: report plainly before any code.
+P1 Fix B1-B3: 25% correction and its test, requires_full_state flag with the 50-qubit Clifford
+   regression kept green, global-phase comparison utility. Est 40 min.
+   CHECKPOINT: show test output.
+P2 Lesson data model: all stage text, predictions, options and feedback as typed constants
+   following the Sprint 1 structure. Est 35 min.
+P3 Behavioral validators + diagnosers + unit tests for every diagnosis row in Section C. Est 45 min.
+   CHECKPOINT: test output listing each diagnosis case.
+P4 Skip-proof lock, TESTS FIRST, then implementation. Est 30 min.
+   CHECKPOINT: I will personally try every bypass (Next early, Enter, reload mid-step, console calls).
+P5 Stages 0-2 wired end to end with real Workbench interaction. Est 45 min.
+   CHECKPOINT (SCREENSHOTS): each stage, one wrong build with its diagnosis, then the correct build.
+P6 Stage 3 (three chunks + behavioral validation + diagnoses). Est 40 min. CHECKPOINT (SCREENSHOTS).
+P7 Stages 4-5 (measure, run, Analyzer metrics, overshoot preset and real 25% result). Est 35 min.
+   CHECKPOINT (SCREENSHOTS): histogram at 100% and the flat 25% histogram.
+P8 Stage 6, assessment, XP/badge, Dexie persistence, idempotent awards. Est 30 min.
+P9 Erwin, Tutor panel tiers, narration and Analyzer wiring. Est 30 min.
+P10 Visual QA and edge: full playthrough with SCREENSHOTS at every stage; 4-6x CPU throttle
+    playthrough; confirm zero network requests for local engines; resize the window mid-lesson.
+    Est 35 min. Report real observations, not assumptions.
+P11 Full regression suite, dead-code cleanup, final report. Est 20 min.
+STRETCH S1: amplitude bars with a dashed average line (4 bars, transform/opacity animation only). Est 30 min.
+STRETCH S2: transfer challenge. Est 30 min.
+Estimated core total: about 6.5-7 hours of active work.
+
+==================== H. FINAL REPORT (plain, no padding) ====================
+1) Phase-by-phase actual vs estimated time. 2) Screenshots per stage. 3) Real numbers: metrics,
+P(11) at one round, the four values at two rounds, payload size, throttled-run observations.
+4) Test totals. 5) Every rough edge left, by stage. 6) Anything descoped, stated plainly.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-09-28T05:59:41+05:30.
+
+The user's current state is as follows:
+Active Document: e:\SIH140-finals-winner-26\jinkichan\qualution-frontend\src\App.tsx (LANGUAGE_TSX)
+Cursor is on line: 400
+Other open documents:
+- e:\SIH140-finals-winner-26\jinkichan\qualution-frontend\src\App.tsx (LANGUAGE_TSX)
+- e:\SIH140-finals-winner-26\jinkichan\qualution-frontend\public\video-analyzer.html (LANGUAGE_HTML)
+Browser State:
+  Page 7510053BB542355FE63963828923CDDD (Qualution Studio — Quantum Computing IDE) - http://localhost:5173/#learn [ACTIVE]
+    Viewport: 1536x826, Page Height: 825
+</ADDITIONAL_METADATA>

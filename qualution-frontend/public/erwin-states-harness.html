@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Erwin Mascot — Discrete States Test Harness</title>
+  <link rel="stylesheet" href="../src/components/common/ErwinMascot.css">
+  <style>
+    :root {
+      --wb-bg-app: #090c10;
+      --wb-bg-panel: #161a22;
+      --wb-bg-surface-elevated: #1e232d;
+      --wb-border: #262c36;
+      --wb-border-strong: #3b4452;
+      --wb-text-primary: #f4f7fa;
+      --wb-text-muted: #677487;
+      --wb-accent: #0f62fe;
+      --wb-status-cyan: #1192e8;
+      --wb-status-success: #21c79a;
+      --wb-status-warning: #e7a93b;
+      --wb-status-danger: #e05252;
+    }
+
+    [data-theme="light"] {
+      --wb-bg-app: #f4f4f4;
+      --wb-bg-panel: #ffffff;
+      --wb-bg-surface-elevated: #f4f4f4;
+      --wb-border: #e0e0e0;
+      --wb-border-strong: #c6c6c6;
+      --wb-text-primary: #161616;
+      --wb-text-muted: #8d8d8d;
+      --wb-accent: #0f62fe;
+      --wb-status-cyan: #0072c3;
+      --wb-status-success: #0d9488;
+      --wb-status-warning: #d97706;
+      --wb-status-danger: #dc2626;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--wb-bg-app);
+      color: var(--wb-text-primary);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    p.subtitle {
+      color: var(--wb-text-muted);
+      margin-bottom: 28px;
+    }
+
+    .stage-card {
+      background: var(--wb-bg-panel);
+      border: 1px solid var(--wb-border);
+      border-radius: 12px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .viewport {
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--wb-bg-surface-elevated);
+      border: 1px solid var(--wb-border-strong);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .state-badge {
+      font-family: monospace;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--wb-border-strong);
+      padding: 6px 14px;
+      border-radius: 20px;
+      color: var(--wb-text-primary);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background: var(--wb-bg-surface-elevated);
+      border: 1px solid var(--wb-border-strong);
+      color: var(--wb-text-primary);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    button:hover {
+      background: var(--wb-bg-panel);
+      border-color: var(--wb-accent);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button.btn-idle { border-color: var(--wb-status-cyan); }
+    button.btn-correct { border-color: var(--wb-status-success); }
+    button.btn-incorrect { border-color: var(--wb-status-danger); }
+    button.btn-thinking { border-color: var(--wb-accent); }
+
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      width: 100%;
+    }
+
+    .telemetry-card {
+      background: var(--wb-bg-surface-elevated);
+      border: 1px solid var(--wb-border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .telemetry-title {
+      font-size: 12px;
+      color: var(--wb-text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .telemetry-value {
+      font-size: 14px;
+      font-family: monospace;
+      color: var(--wb-text-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Erwin Mascot — Discrete States Test Harness</h1>
+    <p class="subtitle">Phase 2 Verification: Triggering each visual state in isolation (idle, correct, incorrect, thinking) via atomic CSS class swaps with GPU-composited micro-animations.</p>
+
+    <div class="stage-card">
+      <div class="viewport">
+        <!-- Canonical Mascot SVG -->
+        <svg id="erwin-stage-svg" class="erwin-mascot erwin--idle" viewBox="0 0 100 100" width="160" height="160" fill="none">
+          <defs>
+            <radialGradient id="harness-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="var(--erwin-visor-color, var(--wb-status-cyan, #1192e8))" stop-opacity="0.65" />
+              <stop offset="45%" stop-color="var(--erwin-visor-color, var(--wb-status-cyan, #1192e8))" stop-opacity="0.22" />
+              <stop offset="100%" stop-color="var(--erwin-visor-color, var(--wb-status-cyan, #1192e8))" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+
+          <!-- 1. Bust Base -->
+          <path id="erwin-bust" d="M 28 86 C 28 78 36 74 50 74 C 64 74 72 78 72 86 L 80 94 C 80 95 79 96 78 96 L 22 96 C 21 96 20 95 20 94 Z" fill="var(--wb-bg-surface-elevated, #1e232d)" stroke="var(--wb-border-strong, #3b4452)" stroke-width="2" stroke-linejoin="round" />
+
+          <!-- 2 & 3. Outer Ears -->
+          <polygon id="erwin-ear-left" points="22,42 18,14 38,28" fill="var(--wb-bg-surface-elevated, #1e232d)" stroke="var(--wb-border-strong, #3b4452)" stroke-width="2" stroke-linejoin="round" />
+          <polygon id="erwin-ear-right" points="78,42 82,14 62,28" fill="var(--wb-bg-surface-elevated, #1e232d)" stroke="var(--wb-border-strong, #3b4452)" stroke-width="2" stroke-linejoin="round" />
+
+          <!-- 4 & 5. Inner Ear Accents -->
+          <polygon id="erwin-ear-inner-left" points="24,38 21,20 35,28" fill="var(--wb-accent, #0f62fe)" fill-opacity="0.3" />
+          <polygon id="erwin-ear-inner-right" points="76,38 79,20 65,28" fill="var(--wb-accent, #0f62fe)" fill-opacity="0.3" />
+
+          <!-- 6. Head Outline -->
+          <path id="erwin-head" d="M 50 26 C 40 26 32 29 26 34 C 18 42 16 54 22 66 C 27 75 38 78 50 78 C 62 78 73 75 78 66 C 84 54 82 42 74 34 C 68 29 60 26 50 26 Z" fill="var(--wb-bg-surface-elevated, #1e232d)" stroke="var(--wb-border-strong, #3b4452)" stroke-width="2" stroke-linejoin="round" />
+
+          <!-- 7. Visor Glow Behind Flat Visor -->
+          <ellipse id="erwin-visor-glow" cx="50" cy="54" rx="36" ry="16" fill="url(#harness-glow)" />
+
+          <!-- 8. Single Flat Visor Shape -->
+          <path id="erwin-visor" class="erwin-visor" d="M 27 45 L 73 45 C 77 45 80 48 79 52 L 76 58 C 74 61 71 63 67 63 L 33 63 C 29 63 26 61 24 58 L 21 52 C 20 48 23 45 27 45 Z" fill="var(--erwin-visor-color, var(--wb-status-cyan, #1192e8))" />
+
+          <!-- 9 & 10. Eyes -->
+          <rect id="erwin-eye-left" class="erwin-eye" x="32" y="51" width="10" height="4" rx="2" fill="#ffffff" opacity="0.95" />
+          <rect id="erwin-eye-right" class="erwin-eye" x="58" y="51" width="10" height="4" rx="2" fill="#ffffff" opacity="0.95" />
+
+          <!-- 11. Nose -->
+          <polygon id="erwin-nose" points="48,67 52,67 50,70" fill="var(--wb-accent, #0f62fe)" />
+
+          <!-- 12. Muzzle Circuit Accent -->
+          <path id="erwin-muzzle" d="M 46 72 L 50 74 L 54 72" fill="none" stroke="var(--wb-border-strong, #3b4452)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- 13. Inner Orbiting Element for Thinking State -->
+          <g id="erwin-orbit-ring" class="erwin-orbit-ring">
+            <circle id="erwin-orbit-dot" cx="50" cy="38" r="2.2" fill="var(--erwin-visor-color, var(--wb-accent, #0f62fe))" />
+          </g>
+        </svg>
+      </div>
+
+      <div id="active-class-badge" class="state-badge">Active Class: .erwin--idle</div>
+
+      <div class="button-group">
+        <button id="btn-idle" class="btn-idle" onclick="setState('idle')">1. Trigger Idle</button>
+        <button id="btn-correct" class="btn-correct" onclick="setState('correct')">2. Trigger Correct</button>
+        <button id="btn-incorrect" class="btn-incorrect" onclick="setState('incorrect')">3. Trigger Incorrect</button>
+        <button id="btn-thinking" class="btn-thinking" onclick="setState('thinking')">4. Trigger Thinking</button>
+      </div>
+
+      <div class="telemetry-grid">
+        <div class="telemetry-card">
+          <div class="telemetry-title">Visor Color Token</div>
+          <div id="tel-token" class="telemetry-value">--wb-status-cyan (#1192e8)</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telemetry-title">Micro-Animation Spec</div>
+          <div id="tel-anim" class="telemetry-value">Subtle Breathing (2.5% scale, 3.6s loop)</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telemetry-title">Compositor Properties</div>
+          <div class="telemetry-value">transform, opacity (Zero Layout Shift)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const el = document.getElementById('erwin-stage-svg');
+    const badge = document.getElementById('active-class-badge');
+    const telToken = document.getElementById('tel-token');
+    const telAnim = document.getElementById('tel-anim');
+
+    const SPECS = {
+      idle: {
+        token: '--wb-status-cyan (#1192e8)',
+        anim: 'Subtle Breathing (2.5% scale, 3.6s loop)'
+      },
+      correct: {
+        token: '--wb-status-success (#21c79a)',
+        anim: 'Scale Pulse (1.15x, 350ms, inOutQuint)'
+      },
+      incorrect: {
+        token: '--wb-status-danger (#e05252)',
+        anim: 'Horizontal Shake (340ms, 2-3 oscillations)'
+      },
+      thinking: {
+        token: '--wb-accent (#0f62fe)',
+        anim: 'Inner Orbit Dot Spin (2.2s linear infinite, mascot still)'
+      }
+    };
+
+    function setState(state) {
+      el.classList.remove('erwin--idle', 'erwin--correct', 'erwin--incorrect', 'erwin--thinking');
+      // Force DOM reflow to allow re-triggering one-shot animations if same button clicked
+      void el.offsetWidth;
+      el.classList.add('erwin--' + state);
+      badge.textContent = 'Active Class: .erwin--' + state;
+      telToken.textContent = SPECS[state].token;
+      telAnim.textContent = SPECS[state].anim;
+    }
+  </script>
+</body>
+</html>

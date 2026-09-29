@@ -1,0 +1,284 @@
+.theory-viewer-container {
+  padding: 24px;
+  background: var(--surface-card, #ffffff);
+  border-radius: 12px;
+  color: var(--text-primary, #111827);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  max-width: 800px;
+  margin: 0 auto;
+  overflow-y: auto;
+  height: 100%;
+}
+
+[data-theme="dark"] .theory-viewer-container {
+  background: var(--surface-card, #1e1e1e);
+  color: var(--text-primary, #f3f4f6);
+}
+
+.theory-header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 16px;
+}
+
+[data-theme="dark"] .theory-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.theory-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+[data-theme="dark"] .theory-badge {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+
+.theory-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.theory-description {
+  font-size: 15px;
+  color: var(--text-secondary, #4b5563);
+  margin: 0;
+  line-height: 1.5;
+}
+
+[data-theme="dark"] .theory-description {
+  color: var(--text-secondary, #9ca3af);
+}
+
+.theory-objectives {
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 32px;
+}
+
+[data-theme="dark"] .theory-objectives {
+  background: rgba(52, 211, 153, 0.05);
+  border-color: rgba(52, 211, 153, 0.2);
+}
+
+.theory-objectives h4 {
+  margin: 0 0 12px 0;
+  color: #059669;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .theory-objectives h4 {
+  color: #34d399;
+}
+
+.theory-objectives ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.theory-objectives li {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.objective-type {
+  font-weight: 700;
+  color: #059669;
+  font-size: 11px;
+  background: rgba(16, 185, 129, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  height: fit-content;
+}
+
+[data-theme="dark"] .objective-type {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.15);
+}
+
+.theory-section {
+  margin-bottom: 32px;
+}
+
+.theory-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: var(--text-primary, #111827);
+}
+
+[data-theme="dark"] .theory-section-title {
+  color: #f3f4f6;
+}
+
+.theory-content-markdown {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-primary, #1f2937);
+}
+
+[data-theme="dark"] .theory-content-markdown {
+  color: #e5e7eb;
+}
+
+.theory-content-markdown p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.theory-content-markdown strong {
+  font-weight: 700;
+  color: var(--accent-color, #6366f1);
+}
+
+[data-theme="dark"] .theory-content-markdown strong {
+  color: #818cf8;
+}
+
+.theory-math-context {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+[data-theme="dark"] .theory-math-context {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(30, 41, 59, 0.8);
+}
+
+.theory-formula-block {
+  text-align: center;
+  font-size: 1.1em;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .theory-formula-block {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.theory-math-variables {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.theory-variable-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.variable-key {
+  font-family: monospace;
+  font-size: 1.1em;
+}
+
+.variable-desc {
+  color: var(--text-secondary, #4b5563);
+}
+
+[data-theme="dark"] .variable-desc {
+  color: #9ca3af;
+}
+
+.theory-circuit-action {
+  margin-top: 16px;
+}
+
+.btn-show-me {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-show-me:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+}
+
+.theory-misconceptions {
+  margin-top: 40px;
+  background: rgba(245, 158, 11, 0.05);
+  border-left: 4px solid #f59e0b;
+  padding: 20px;
+  border-radius: 0 8px 8px 0;
+}
+
+[data-theme="dark"] .theory-misconceptions {
+  background: rgba(251, 191, 36, 0.05);
+  border-left-color: #fbbf24;
+}
+
+.theory-misconceptions h4 {
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d97706;
+  font-size: 16px;
+}
+
+[data-theme="dark"] .theory-misconceptions h4 {
+  color: #fbbf24;
+}
+
+.misconception-card {
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.misconception-card:last-child {
+  margin-bottom: 0;
+}
+
+.mc-wrong {
+  color: #b91c1c;
+  margin-bottom: 4px;
+}
+
+[data-theme="dark"] .mc-wrong {
+  color: #f87171;
+}
+
+.mc-right {
+  color: #15803d;
+}
+
+[data-theme="dark"] .mc-right {
+  color: #4ade80;
+}

@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grover's Algorithm — QUALUTION Interactive Teaching Video</title>
+<meta name="description" content="An interactive teaching video that live-demonstrates Grover's quantum search algorithm step by step inside a quantum workspace.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   QUALUTION — Grover's Algorithm Interactive Teaching Video
+   Design System: Dark Futuristic Quantum Canvas
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #060a14;
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #0f1628;
+  --bg-card: rgba(15, 22, 40, 0.85);
+  --bg-glass: rgba(15, 22, 45, 0.65);
+  --border-glass: rgba(100, 180, 255, 0.12);
+  --border-glow: rgba(0, 220, 255, 0.25);
+  --text-primary: #f0f4ff;
+  --text-secondary: #8892b0;
+  --text-dim: #5a6480;
+  --cyan: #00dcff;
+  --cyan-dim: rgba(0, 220, 255, 0.15);
+  --cyan-glow: rgba(0, 220, 255, 0.4);
+  --purple: #a855f7;
+  --purple-dim: rgba(168, 85, 247, 0.15);
+  --green: #10b981;
+  --green-dim: rgba(16, 185, 129, 0.15);
+  --red: #ef4444;
+  --orange: #f59e0b;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --shadow-glow: 0 0 30px rgba(0, 220, 255, 0.08);
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Background Layers ─────────────────────────────────────── */
+#bg-canvas {
+  position: fixed; inset: 0; z-index: 0;
+}
+
+.grid-overlay {
+  position: fixed; inset: 0; z-index: 1;
+  background-image:
+    linear-gradient(rgba(0, 220, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 220, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* ── Main Stage ────────────────────────────────────────────── */
+#stage {
+  position: relative; z-index: 10;
+  width: 100%; height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+
+/* ── Title Card ────────────────────────────────────────────── */
+#title-card {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.8s ease;
+  pointer-events: none; z-index: 50;
+}
+#title-card.visible { opacity: 1; }
+#title-card h1 {
+  font-size: 3.2rem; font-weight: 900;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #fff 0%, var(--cyan) 60%, var(--purple) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  margin-bottom: 0.5rem;
+}
+#title-card .subtitle {
+  font-size: 1.05rem; color: var(--text-secondary);
+  font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;
+}
+#title-card .brand-line {
+  margin-top: 2rem; font-size: 0.8rem; color: var(--text-dim);
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+
+/* ── Workspace Container ───────────────────────────────────── */
+#workspace {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  grid-template-rows: auto 1fr auto;
+  gap: 0;
+  opacity: 0; transition: opacity 0.6s ease;
+  padding: 16px;
+}
+#workspace.visible { opacity: 1; }
+
+/* ── Circuit Area ──────────────────────────────────────────── */
+#circuit-area {
+  grid-column: 1; grid-row: 1 / 3;
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  min-height: 300px;
+}
+#circuit-area .area-label {
+  position: absolute; top: 12px; left: 16px;
+  font-size: 0.7rem; font-weight: 600;
+  color: var(--text-dim); text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+#circuit-canvas {
+  width: 100%; height: 100%;
+}
+
+/* ── Right Panel ───────────────────────────────────────────── */
+#right-panel {
+  grid-column: 2; grid-row: 1 / 4;
+  display: flex; flex-direction: column; gap: 10px;
+  padding-left: 10px;
+  overflow: hidden;
+}
+
+/* ── Panel Cards (Math, Probability, Q-Sphere, etc.) ───────── */
+.panel-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(16px);
+  padding: 14px 16px;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s var(--transition-smooth);
+}
+.panel-card.visible {
+  opacity: 1; transform: translateY(0);
+}
+.panel-card .card-title {
+  font-size: 0.65rem; font-weight: 700;
+  color: var(--cyan); text-transform: uppercase;
+  letter-spacing: 0.15em; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.panel-card .card-title::before {
+  content: ''; display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow);
+}
+
+/* ── Math Card ─────────────────────────────────────────────── */
+#math-card { flex: 0 0 auto; }
+#math-card .katex-display {
+  font-size: 0.95rem;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+#math-card .math-label {
+  font-size: 0.72rem; color: var(--text-secondary);
+  margin-top: 8px; font-style: italic;
+}
+
+/* ── State Labels Card ─────────────────────────────────────── */
+#states-card { flex: 0 0 auto; }
+#states-display {
+  display: flex; gap: 10px; justify-content: center;
+  flex-wrap: wrap; padding: 6px 0;
+}
+.state-badge {
+  font-family: var(--font-mono); font-size: 1rem; font-weight: 700;
+  padding: 6px 14px; border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  transition: all 0.4s ease;
+}
+.state-badge.target {
+  border-color: var(--cyan);
+  background: var(--cyan-dim);
+  color: var(--cyan);
+  box-shadow: 0 0 16px var(--cyan-glow);
+}
+.state-badge.dimmed {
+  opacity: 0.3;
+}
+
+/* ── Probability Bars ──────────────────────────────────────── */
+#prob-card { flex: 0 0 auto; }
+.prob-bars { display: flex; flex-direction: column; gap: 6px; }
+.prob-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.prob-label {
+  font-family: var(--font-mono); font-size: 0.75rem;
+  color: var(--text-secondary); width: 32px; text-align: right;
+}
+.prob-track {
+  flex: 1; height: 20px; border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+  overflow: hidden; position: relative;
+}
+.prob-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  transition: width 1.2s var(--transition-smooth);
+  width: 0%;
+  position: relative;
+}
+.prob-fill.target-fill {
+  background: linear-gradient(90deg, var(--cyan), #06ffa5);
+}
+.prob-value {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: var(--text-secondary); width: 40px; text-align: right;
+}
+
+/* ── Q-Sphere ──────────────────────────────────────────────── */
+#qsphere-card { flex: 1 1 auto; min-height: 160px; }
+#qsphere-canvas {
+  width: 100%; height: 140px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Histogram ─────────────────────────────────────────────── */
+#histogram-card { flex: 0 0 auto; }
+.histogram-bars {
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: 16px; height: 100px; padding-top: 10px;
+}
+.hist-col {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  flex: 1;
+}
+.hist-bar-track {
+  width: 100%; height: 80px;
+  display: flex; align-items: flex-end;
+  justify-content: center;
+}
+.hist-bar {
+  width: 100%; border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, var(--cyan), rgba(0,220,255,0.3));
+  transition: height 1s var(--transition-smooth);
+  height: 0%;
+  min-height: 0;
+}
+.hist-bar.winner {
+  background: linear-gradient(180deg, #06ffa5, var(--cyan));
+  box-shadow: 0 0 12px rgba(6, 255, 165, 0.3);
+}
+.hist-count {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--text-primary); font-weight: 700;
+}
+.hist-label {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+/* ── Narration Bar (bottom) ────────────────────────────────── */
+#narration-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, transparent 0%, rgba(6,10,20,0.95) 40%);
+  padding: 24px 40px 20px;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+#narration-bar.visible { opacity: 1; }
+
+#narration-inner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.narrator-avatar {
+  flex-shrink: 0;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 800; color: #fff;
+  box-shadow: 0 0 16px var(--cyan-glow);
+}
+#narration-text {
+  font-size: 0.95rem; line-height: 1.6;
+  color: var(--text-primary); font-weight: 400;
+  min-height: 1.6em;
+}
+.narration-cursor-blink {
+  display: inline-block; width: 2px; height: 1em;
+  background: var(--cyan); margin-left: 2px;
+  animation: blink 0.7s step-end infinite;
+  vertical-align: text-bottom;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; } 50% { opacity: 0; }
+}
+
+/* ── Teaching Cursor ───────────────────────────────────────── */
+#teaching-cursor {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  pointer-events: none;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  filter: drop-shadow(0 2px 6px rgba(0, 220, 255, 0.35));
+}
+#teaching-cursor svg { display: block; }
+#cursor-glow {
+  position: absolute; top: -12px; left: -12px;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,220,255,0.25) 0%, transparent 70%);
+  animation: cursor-pulse 2s ease-in-out infinite;
+}
+@keyframes cursor-pulse {
+  0%, 100% { transform: scale(0.8); opacity: 0.4; }
+  50% { transform: scale(1.3); opacity: 0.8; }
+}
+
+/* ── Socratic Modal ────────────────────────────────────────── */
+#socratic-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(6, 10, 20, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+#socratic-overlay.visible { opacity: 1; pointer-events: auto; }
+
+#socratic-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(24px);
+  padding: 32px 36px;
+  max-width: 560px; width: 90%;
+  box-shadow: var(--shadow-glow), 0 24px 80px rgba(0,0,0,0.5);
+}
+#socratic-card h3 {
+  font-size: 0.7rem; font-weight: 700; color: var(--cyan);
+  text-transform: uppercase; letter-spacing: 0.15em;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+#socratic-card h3::before {
+  content: '?'; display: inline-flex;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--cyan-dim); color: var(--cyan);
+  align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 800;
+}
+#socratic-question {
+  font-size: 1.05rem; font-weight: 500;
+  line-height: 1.5; margin-bottom: 20px;
+  color: var(--text-primary);
+}
+.socratic-option {
+  display: block; width: 100%;
+  padding: 12px 16px; margin-bottom: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-primary); font-size: 0.9rem;
+  font-family: var(--font-body);
+  cursor: pointer; text-align: left;
+  transition: all 0.2s ease;
+}
+.socratic-option:hover {
+  background: var(--cyan-dim);
+  border-color: var(--cyan);
+}
+.socratic-option.selected {
+  background: var(--cyan-dim);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* ── Summary Flow ──────────────────────────────────────────── */
+#summary-overlay {
+  position: fixed; inset: 0; z-index: 150;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(6, 10, 20, 0.92);
+  backdrop-filter: blur(12px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+#summary-overlay.visible { opacity: 1; pointer-events: auto; }
+
+.summary-flow {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0;
+}
+.summary-step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 28px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(12px);
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.4s ease, transform 0.5s var(--transition-smooth);
+  min-width: 240px; justify-content: center;
+}
+.summary-step.visible {
+  opacity: 1; transform: translateY(0);
+}
+.summary-step .step-icon {
+  font-size: 1.1rem;
+}
+.summary-arrow {
+  color: var(--cyan); font-size: 1.2rem;
+  opacity: 0; transition: opacity 0.3s ease;
+  padding: 2px 0;
+}
+.summary-arrow.visible { opacity: 0.6; }
+
+/* ── End Screen ────────────────────────────────────────────── */
+#end-screen {
+  position: fixed; inset: 0; z-index: 250;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg-deep);
+  opacity: 0; pointer-events: none;
+  transition: opacity 1s ease;
+}
+#end-screen.visible { opacity: 1; pointer-events: auto; }
+#end-screen h1 {
+  font-size: 2.6rem; font-weight: 900;
+  letter-spacing: 0.06em;
+  background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--purple) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 2rem;
+}
+.end-taglines {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; margin-bottom: 3rem;
+}
+.end-taglines span {
+  font-size: 1.1rem; font-weight: 500;
+  color: var(--text-secondary);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s var(--transition-smooth);
+}
+.end-taglines span.visible {
+  opacity: 1; transform: translateY(0);
+}
+.end-brand {
+  font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ── Controls Bar ──────────────────────────────────────────── */
+#controls {
+  position: fixed; top: 12px; right: 16px; z-index: 300;
+  display: flex; gap: 8px;
+}
+.ctrl-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(12px);
+  color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; transition: all 0.2s ease;
+}
+.ctrl-btn:hover { color: var(--cyan); border-color: var(--cyan); }
+.ctrl-btn.active { color: var(--cyan); border-color: var(--cyan); background: var(--cyan-dim); }
+
+/* ── Progress Bar ──────────────────────────────────────────── */
+#progress-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  z-index: 300; background: rgba(255,255,255,0.05);
+}
+#progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px var(--cyan-glow);
+}
+
+/* ── Step Label ────────────────────────────────────────────── */
+#step-label {
+  position: fixed; top: 12px; left: 16px; z-index: 300;
+  font-size: 0.65rem; font-weight: 600;
+  color: var(--text-dim); text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+#step-label.visible { opacity: 1; }
+
+/* ── Highlight Overlay ─────────────────────────────────────── */
+.highlight-ring {
+  position: absolute; border-radius: var(--radius-sm);
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 20px var(--cyan-glow), inset 0 0 12px var(--cyan-dim);
+  pointer-events: none; z-index: 20;
+  opacity: 0; transition: opacity 0.4s ease;
+  animation: ring-pulse 1.8s ease-in-out infinite;
+}
+.highlight-ring.visible { opacity: 1; }
+@keyframes ring-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--cyan-glow), inset 0 0 12px var(--cyan-dim); }
+  50% { box-shadow: 0 0 30px var(--cyan-glow), inset 0 0 20px var(--cyan-dim); }
+}
+
+/* ── Explain Card (inline) ─────────────────────────────────── */
+#explain-card {
+  position: absolute; z-index: 30;
+  bottom: 80px; left: 50%; transform: translateX(-50%);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px);
+  padding: 18px 24px;
+  max-width: 480px; width: 90%;
+  box-shadow: var(--shadow-glow);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+#explain-card.visible { opacity: 1; }
+#explain-card .explain-title {
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--cyan); text-transform: uppercase;
+  letter-spacing: 0.12em; margin-bottom: 8px;
+}
+#explain-card .explain-body {
+  font-size: 0.88rem; color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Utility ───────────────────────────────────────────────── */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- Background particle canvas -->
+<canvas id="bg-canvas"></canvas>
+<div class="grid-overlay"></div>
+
+<!-- Progress bar -->
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<!-- Step label -->
+<div id="step-label"></div>
+
+<!-- Controls -->
+<div id="controls">
+  <button class="ctrl-btn" id="btn-mute" title="Toggle narration voice">🔊</button>
+  <button class="ctrl-btn" id="btn-pause" title="Pause / Resume">⏸</button>
+  <button class="ctrl-btn" id="btn-restart" title="Restart">↺</button>
+</div>
+
+<!-- Main stage -->
+<div id="stage">
+
+  <!-- Title Card -->
+  <div id="title-card">
+    <h1>GROVER'S ALGORITHM</h1>
+    <div class="subtitle">Interactive Quantum Teaching Video</div>
+    <div class="brand-line">QUALUTION</div>
+  </div>
+
+  <!-- Workspace (circuit + panels) -->
+  <div id="workspace">
+    <div id="circuit-area">
+      <span class="area-label">Quantum Circuit</span>
+      <canvas id="circuit-canvas"></canvas>
+    </div>
+
+    <div id="right-panel">
+      <!-- States Card -->
+      <div class="panel-card" id="states-card">
+        <div class="card-title">Search Space</div>
+        <div id="states-display"></div>
+      </div>
+
+      <!-- Math Card -->
+      <div class="panel-card" id="math-card">
+        <div class="card-title">Mathematics</div>
+        <div id="math-render"></div>
+        <div id="math-label" class="math-label"></div>
+      </div>
+
+      <!-- Probability Card -->
+      <div class="panel-card" id="prob-card">
+        <div class="card-title">Probability Distribution</div>
+        <div class="prob-bars" id="prob-bars"></div>
+      </div>
+
+      <!-- Q-Sphere Card -->
+      <div class="panel-card" id="qsphere-card">
+        <div class="card-title">Q-Sphere State</div>
+        <canvas id="qsphere-canvas"></canvas>
+      </div>
+
+      <!-- Histogram Card -->
+      <div class="panel-card" id="histogram-card">
+        <div class="card-title">Measurement Results</div>
+        <div class="histogram-bars" id="histogram-bars"></div>
+      </div>
+    </div>
+
+    <!-- Explain Card -->
+    <div id="explain-card">
+      <div class="explain-title" id="explain-title"></div>
+      <div class="explain-body" id="explain-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Narration bar -->
+<div id="narration-bar">
+  <div id="narration-inner">
+    <div class="narrator-avatar">Q</div>
+    <div id="narration-text"></div>
+  </div>
+</div>
+
+<!-- Teaching Cursor -->
+<div id="teaching-cursor">
+  <div id="cursor-glow"></div>
+  <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 2 L4 22 L8.5 17.5 L13 24 L15 23 L10.5 16.5 L17 16.5 Z"
+          fill="white" stroke="#00dcff" stroke-width="1.5" stroke-linejoin="round"/>
+  </svg>
+</div>
+
+<!-- Socratic Overlay -->
+<div id="socratic-overlay">
+  <div id="socratic-card">
+    <h3>Socratic Checkpoint</h3>
+    <div id="socratic-question"></div>
+    <div id="socratic-options"></div>
+  </div>
+</div>
+
+<!-- Summary Overlay -->
+<div id="summary-overlay">
+  <div class="summary-flow" id="summary-flow"></div>
+</div>
+
+<!-- End Screen -->
+<div id="end-screen">
+  <h1>GROVER'S ALGORITHM</h1>
+  <div class="end-taglines">
+    <span>Predict.</span>
+    <span>Build.</span>
+    <span>Simulate.</span>
+    <span>Understand.</span>
+  </div>
+  <div class="end-brand">QUALUTION</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   QUALUTION — Grover's Algorithm Interactive Teaching Video
+   Timeline Engine + All Rendering Logic
+   ═══════════════════════════════════════════════════════════════ */
+
+// ── DOM References ────────────────────────────────────────────
+const $ = (id) => document.getElementById(id);
+const bgCanvas = $('bg-canvas');
+const circuitCanvas = $('circuit-canvas');
+const qsphereCanvas = $('qsphere-canvas');
+const titleCard = $('title-card');
+const workspace = $('workspace');
+const narrationBar = $('narration-bar');
+const narrationText = $('narration-text');
+const teachingCursor = $('teaching-cursor');
+const progressFill = $('progress-fill');
+const stepLabel = $('step-label');
+const mathRender = $('math-render');
+const mathLabel = $('math-label');
+const statesDisplay = $('states-display');
+const probBars = $('prob-bars');
+const histogramBars = $('histogram-bars');
+const explainCard = $('explain-card');
+const explainTitle = $('explain-title');
+const explainBody = $('explain-body');
+const socraticOverlay = $('socratic-overlay');
+const socraticQuestion = $('socratic-question');
+const socraticOptions = $('socratic-options');
+const summaryOverlay = $('summary-overlay');
+const summaryFlow = $('summary-flow');
+const endScreen = $('end-screen');
+const btnMute = $('btn-mute');
+const btnPause = $('btn-pause');
+const btnRestart = $('btn-restart');
+
+// ── State ─────────────────────────────────────────────────────
+let isPaused = false;
+let isMuted = false;
+let startTime = 0;
+let pauseOffset = 0;
+let pauseStart = 0;
+let currentNarrationTimeout = null;
+let ttsUtterance = null;
+let socraticResolve = null;
+let timelineIndex = 0;
+let animFrameId = null;
+
+// ── Circuit State ─────────────────────────────────────────────
+const gates = [];  // { gate, qubit, col, id }
+const QUBITS = 2;
+const WIRE_Y_START = 100;
+const WIRE_SPACING = 70;
+const COL_START = 120;
+const COL_WIDTH = 65;
+const GATE_SIZE = 40;
+
+// ── Quantum State (actual simulation) ─────────────────────────
+// |00⟩, |01⟩, |10⟩, |11⟩ as complex amplitudes [re, im]
+let stateVector = [[1,0],[0,0],[0,0],[0,0]]; // |00⟩
+
+function complexMul(a, b) {
+  return [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]];
+}
+function complexAdd(a, b) {
+  return [a[0]+b[0], a[1]+b[1]];
+}
+function prob(c) {
+  return c[0]*c[0] + c[1]*c[1];
+}
+
+// Apply H to a single qubit
+function applyH(qubitIdx) {
+  const sq = 1/Math.sqrt(2);
+  const newState = [[0,0],[0,0],[0,0],[0,0]];
+  for (let i = 0; i < 4; i++) {
+    const bit = (i >> (1 - qubitIdx)) & 1;
+    const partner = i ^ (1 << (1 - qubitIdx));
+    if (bit === 0) {
+      newState[i] = complexAdd(newState[i], [stateVector[i][0]*sq, stateVector[i][1]*sq]);
+      newState[i] = complexAdd(newState[i], [stateVector[partner][0]*sq, stateVector[partner][1]*sq]);
+    } else {
+      newState[i] = complexAdd(newState[i], [stateVector[partner][0]*sq, stateVector[partner][1]*sq]);
+      newState[i] = complexAdd(newState[i], [-stateVector[i][0]*sq, -stateVector[i][1]*sq]);
+    }
+  }
+  stateVector = newState;
+}
+
+// Apply X to a single qubit
+function applyX(qubitIdx) {
+  const newState = [[0,0],[0,0],[0,0],[0,0]];
+  for (let i = 0; i < 4; i++) {
+    const partner = i ^ (1 << (1 - qubitIdx));
+    newState[i] = [stateVector[partner][0], stateVector[partner][1]];
+  }
+  stateVector = newState;
+}
+
+// Apply CZ (controlled-Z on qubits 0,1)
+function applyCZ() {
+  // Only |11⟩ gets a phase flip
+  stateVector[3] = [-stateVector[3][0], -stateVector[3][1]];
+}
+
+function getProbs() {
+  return stateVector.map(c => prob(c));
+}
+
+function resetState() {
+  stateVector = [[1,0],[0,0],[0,0],[0,0]];
+}
+
+// ── Particle Background ──────────────────────────────────────
+const bgCtx = bgCanvas.getContext('2d');
+let particles = [];
+
+function initParticles() {
+  bgCanvas.width = window.innerWidth;
+  bgCanvas.height = window.innerHeight;
+  particles = [];
+  const count = Math.floor((bgCanvas.width * bgCanvas.height) / 8000);
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * bgCanvas.width,
+      y: Math.random() * bgCanvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.5 + 0.5,
+      a: Math.random() * 0.3 + 0.05,
+    });
+  }
+}
+
+function drawParticles() {
+  bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+  // Gradient background
+  const grad = bgCtx.createRadialGradient(
+    bgCanvas.width/2, bgCanvas.height/2, 0,
+    bgCanvas.width/2, bgCanvas.height/2, bgCanvas.width * 0.7
+  );
+  grad.addColorStop(0, '#0d1225');
+  grad.addColorStop(1, '#060a14');
+  bgCtx.fillStyle = grad;
+  bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+  for (const p of particles) {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = bgCanvas.width;
+    if (p.x > bgCanvas.width) p.x = 0;
+    if (p.y < 0) p.y = bgCanvas.height;
+    if (p.y > bgCanvas.height) p.y = 0;
+    bgCtx.beginPath();
+    bgCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    bgCtx.fillStyle = `rgba(0, 220, 255, ${p.a})`;
+    bgCtx.fill();
+  }
+}
+
+// ── Circuit Renderer ──────────────────────────────────────────
+let circCtx = null;
+
+function initCircuit() {
+  const rect = circuitCanvas.parentElement.getBoundingClientRect();
+  circuitCanvas.width = rect.width * window.devicePixelRatio;
+  circuitCanvas.height = rect.height * window.devicePixelRatio;
+  circuitCanvas.style.width = rect.width + 'px';
+  circuitCanvas.style.height = rect.height + 'px';
+  circCtx = circuitCanvas.getContext('2d');
+  circCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+}
+
+function drawCircuit() {
+  if (!circCtx) return;
+  const w = circuitCanvas.width / window.devicePixelRatio;
+  const h = circuitCanvas.height / window.devicePixelRatio;
+  circCtx.clearRect(0, 0, w, h);
+
+  // Qubit labels
+  circCtx.font = '13px "JetBrains Mono", monospace';
+  circCtx.fillStyle = '#8892b0';
+  for (let q = 0; q < QUBITS; q++) {
+    const y = WIRE_Y_START + q * WIRE_SPACING;
+    circCtx.fillText(`q${q}`, 24, y + 5);
+
+    // Ket label
+    circCtx.fillStyle = '#5a6480';
+    circCtx.fillText(`|0⟩`, 56, y + 5);
+    circCtx.fillStyle = '#8892b0';
+  }
+
+  // Wires
+  const maxCol = gates.length > 0 ? Math.max(...gates.map(g => g.col)) + 2 : 4;
+  const wireEnd = COL_START + maxCol * COL_WIDTH + 40;
+  for (let q = 0; q < QUBITS; q++) {
+    const y = WIRE_Y_START + q * WIRE_SPACING;
+    circCtx.beginPath();
+    circCtx.moveTo(90, y);
+    circCtx.lineTo(wireEnd, y);
+    circCtx.strokeStyle = 'rgba(136, 146, 176, 0.3)';
+    circCtx.lineWidth = 1.5;
+    circCtx.stroke();
+  }
+
+  // Gates
+  for (const g of gates) {
+    const cx = COL_START + g.col * COL_WIDTH;
+
+    if (g.gate === 'cz') {
+      // CZ: dot on control, dot on target, vertical line
+      const y0 = WIRE_Y_START + g.targets[0] * WIRE_SPACING;
+      const y1 = WIRE_Y_START + g.targets[1] * WIRE_SPACING;
+
+      circCtx.beginPath();
+      circCtx.moveTo(cx, y0);
+      circCtx.lineTo(cx, y1);
+      circCtx.strokeStyle = '#a855f7';
+      circCtx.lineWidth = 2;
+      circCtx.stroke();
+
+      // Dots
+      for (const y of [y0, y1]) {
+        circCtx.beginPath();
+        circCtx.arc(cx, y, 6, 0, Math.PI * 2);
+        circCtx.fillStyle = '#a855f7';
+        circCtx.fill();
+        circCtx.strokeStyle = '#c084fc';
+        circCtx.lineWidth = 1.5;
+        circCtx.stroke();
+      }
+
+      // Label
+      circCtx.font = '10px "JetBrains Mono", monospace';
+      circCtx.fillStyle = '#c084fc';
+      circCtx.textAlign = 'center';
+      circCtx.fillText('CZ', cx, Math.min(y0, y1) - 12);
+      circCtx.textAlign = 'start';
+    } else {
+      // Single-qubit gate box
+      const y = WIRE_Y_START + g.targets[0] * WIRE_SPACING;
+      const half = GATE_SIZE / 2;
+
+      // Box
+      circCtx.fillStyle = 'rgba(15, 22, 40, 0.9)';
+      circCtx.strokeStyle = g.highlight ? '#00dcff' : 'rgba(136, 146, 176, 0.4)';
+      circCtx.lineWidth = g.highlight ? 2 : 1.5;
+      circCtx.beginPath();
+      circCtx.roundRect(cx - half, y - half, GATE_SIZE, GATE_SIZE, 6);
+      circCtx.fill();
+      circCtx.stroke();
+
+      if (g.highlight) {
+        circCtx.shadowColor = 'rgba(0, 220, 255, 0.3)';
+        circCtx.shadowBlur = 12;
+        circCtx.stroke();
+        circCtx.shadowBlur = 0;
+      }
+
+      // Label
+      circCtx.font = '16px "JetBrains Mono", monospace';
+      circCtx.fillStyle = g.gate === 'h' ? '#00dcff' :
+                          g.gate === 'x' ? '#f59e0b' : '#fff';
+      circCtx.textAlign = 'center';
+      circCtx.textBaseline = 'middle';
+      circCtx.fillText(g.gate.toUpperCase(), cx, y);
+      circCtx.textAlign = 'start';
+      circCtx.textBaseline = 'alphabetic';
+    }
+  }
+
+  // Column section labels
+  const sections = [];
+  if (gates.some(g => g.col === 0)) sections.push({ col: 0, label: 'SUPERPOSITION', color: '#00dcff' });
+  if (gates.some(g => g.col === 1)) sections.push({ col: 1, label: 'ORACLE', color: '#a855f7' });
+  if (gates.some(g => g.col >= 2)) sections.push({ col: 4, label: 'DIFFUSER', color: '#10b981' });
+
+  circCtx.font = '9px Inter, sans-serif';
+  for (const s of sections) {
+    const cx = COL_START + s.col * COL_WIDTH;
+    circCtx.fillStyle = s.color;
+    circCtx.globalAlpha = 0.5;
+    circCtx.textAlign = 'center';
+    circCtx.fillText(s.label, cx, WIRE_Y_START - 35);
+    circCtx.textAlign = 'start';
+    circCtx.globalAlpha = 1;
+  }
+}
+
+function addGateVisual(gate, targets, col) {
+  gates.push({ gate, targets, col, highlight: false });
+  // Apply actual quantum operation
+  if (gate === 'h') applyH(targets[0]);
+  else if (gate === 'x') applyX(targets[0]);
+  else if (gate === 'cz') applyCZ();
+  drawCircuit();
+}
+
+// ── Q-Sphere Renderer ─────────────────────────────────────────
+let qsCtx = null;
+
+function initQSphere() {
+  const rect = qsphereCanvas.parentElement.getBoundingClientRect();
+  const w = 300; const h = 140;
+  qsphereCanvas.width = w * window.devicePixelRatio;
+  qsphereCanvas.height = h * window.devicePixelRatio;
+  qsphereCanvas.style.width = w + 'px';
+  qsphereCanvas.style.height = h + 'px';
+  qsCtx = qsphereCanvas.getContext('2d');
+  qsCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+}
+
+function drawQSphere(amplitudes) {
+  if (!qsCtx) initQSphere();
+  const w = 300, h = 140;
+  const cx = w / 2, cy = h / 2, r = 50;
+  qsCtx.clearRect(0, 0, w, h);
+
+  // Sphere outline
+  qsCtx.beginPath();
+  qsCtx.arc(cx, cy, r, 0, Math.PI * 2);
+  qsCtx.strokeStyle = 'rgba(136, 146, 176, 0.2)';
+  qsCtx.lineWidth = 1;
+  qsCtx.stroke();
+
+  // Equator
+  qsCtx.beginPath();
+  qsCtx.ellipse(cx, cy, r, r * 0.3, 0, 0, Math.PI * 2);
+  qsCtx.strokeStyle = 'rgba(136, 146, 176, 0.12)';
+  qsCtx.stroke();
+
+  // Cross lines
+  circCtx && (() => {
+    qsCtx.beginPath();
+    qsCtx.moveTo(cx - r, cy); qsCtx.lineTo(cx + r, cy);
+    qsCtx.moveTo(cx, cy - r); qsCtx.lineTo(cx, cy + r);
+    qsCtx.strokeStyle = 'rgba(136, 146, 176, 0.08)';
+    qsCtx.stroke();
+  })();
+
+  const labels = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+  const angles = [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75];
+
+  for (let i = 0; i < 4; i++) {
+    const amp = amplitudes ? amplitudes[i] : [0, 0];
+    const magnitude = Math.sqrt(prob(amp));
+    const phase = Math.atan2(amp[1], amp[0]);
+
+    const angle = angles[i];
+    const dotR = Math.max(3, magnitude * 14);
+
+    const dx = cx + Math.cos(angle) * r * 0.75;
+    const dy = cy + Math.sin(angle) * r * 0.55;
+
+    // Line from center
+    if (magnitude > 0.01) {
+      qsCtx.beginPath();
+      qsCtx.moveTo(cx, cy);
+      qsCtx.lineTo(dx, dy);
+      qsCtx.strokeStyle = `rgba(0, 220, 255, ${magnitude * 0.4})`;
+      qsCtx.lineWidth = 1;
+      qsCtx.stroke();
+    }
+
+    // Dot
+    const hue = ((phase / Math.PI) * 180 + 360) % 360;
+    const color = magnitude > 0.01 ?
+      `hsl(${hue}, 80%, 60%)` : 'rgba(136, 146, 176, 0.2)';
+
+    qsCtx.beginPath();
+    qsCtx.arc(dx, dy, dotR, 0, Math.PI * 2);
+    qsCtx.fillStyle = color;
+    qsCtx.fill();
+
+    if (magnitude > 0.01) {
+      qsCtx.shadowColor = color;
+      qsCtx.shadowBlur = 8;
+      qsCtx.fill();
+      qsCtx.shadowBlur = 0;
+    }
+
+    // Label
+    qsCtx.font = '10px "JetBrains Mono", monospace';
+    qsCtx.fillStyle = magnitude > 0.5 ? '#f0f4ff' : '#5a6480';
+    qsCtx.textAlign = 'center';
+    qsCtx.fillText(labels[i], dx, dy + dotR + 14);
+    if (magnitude > 0.01) {
+      qsCtx.fillStyle = '#8892b0';
+      qsCtx.font = '9px "JetBrains Mono", monospace';
+      const sign = amp[0] < -0.001 ? '−' : '+';
+      const val = Math.abs(amp[0]).toFixed(2);
+      qsCtx.fillText(`${sign}${val}`, dx, dy - dotR - 6);
+    }
+    qsCtx.textAlign = 'start';
+  }
+}
+
+// ── Probability Bars ──────────────────────────────────────────
+function renderProbBars(probs) {
+  const labels = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+  probBars.innerHTML = '';
+  for (let i = 0; i < 4; i++) {
+    const pct = (probs[i] * 100);
+    const row = document.createElement('div');
+    row.className = 'prob-row';
+    const isTarget = i === 3;
+    row.innerHTML = `
+      <span class="prob-label">${labels[i]}</span>
+      <div class="prob-track">
+        <div class="prob-fill ${isTarget ? 'target-fill' : ''}"
+             style="width: 0%"
+             data-target="${pct}"></div>
+      </div>
+      <span class="prob-value">${pct.toFixed(1)}%</span>
+    `;
+    probBars.appendChild(row);
+  }
+  // Animate after a frame
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      probBars.querySelectorAll('.prob-fill').forEach(el => {
+        el.style.width = el.dataset.target + '%';
+      });
+    });
+  });
+}
+
+// ── Histogram ─────────────────────────────────────────────────
+function renderHistogram(counts) {
+  const labels = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+  const total = Object.values(counts).reduce((a,b) => a+b, 0);
+  histogramBars.innerHTML = '';
+  for (let i = 0; i < 4; i++) {
+    const key = ['00','01','10','11'][i];
+    const count = counts[key] || 0;
+    const pct = total > 0 ? (count / total) * 100 : 0;
+    const col = document.createElement('div');
+    col.className = 'hist-col';
+    const isWinner = count === total && count > 0;
+    col.innerHTML = `
+      <div class="hist-count">${count}</div>
+      <div class="hist-bar-track">
+        <div class="hist-bar ${isWinner ? 'winner' : ''}"
+             style="height: 0%" data-target="${pct}"></div>
+      </div>
+      <div class="hist-label">${labels[i]}</div>
+    `;
+    histogramBars.appendChild(col);
+  }
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      histogramBars.querySelectorAll('.hist-bar').forEach(el => {
+        el.style.height = el.dataset.target + '%';
+      });
+    });
+  });
+}
+
+// ── Narration Engine ──────────────────────────────────────────
+function narrate(text) {
+  return new Promise((resolve) => {
+    narrationBar.classList.add('visible');
+    narrationText.innerHTML = '';
+    const blinkSpan = document.createElement('span');
+    blinkSpan.className = 'narration-cursor-blink';
+
+    let i = 0;
+    const speed = 28; // ms per char
+    if (currentNarrationTimeout) clearInterval(currentNarrationTimeout);
+
+    // TTS
+    if (!isMuted && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      ttsUtterance = new SpeechSynthesisUtterance(text);
+      ttsUtterance.rate = 0.92;
+      ttsUtterance.pitch = 1.0;
+      ttsUtterance.volume = 0.8;
+      // Try to pick a good voice
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = voices.find(v => v.name.includes('Google') && v.lang.startsWith('en'))
+                     || voices.find(v => v.lang.startsWith('en-US'))
+                     || voices.find(v => v.lang.startsWith('en'));
+      if (preferred) ttsUtterance.voice = preferred;
+      window.speechSynthesis.speak(ttsUtterance);
+    }
+
+    currentNarrationTimeout = setInterval(() => {
+      if (isPaused) return;
+      if (i < text.length) {
+        narrationText.textContent = text.substring(0, i + 1);
+        narrationText.appendChild(blinkSpan);
+        i++;
+      } else {
+        clearInterval(currentNarrationTimeout);
+        currentNarrationTimeout = null;
+        narrationText.textContent = text;
+        setTimeout(resolve, 600);
+      }
+    }, speed);
+  });
+}
+
+// ── Cursor Movement ───────────────────────────────────────────
+function moveCursor(x, y) {
+  return new Promise((resolve) => {
+    teachingCursor.style.transform = `translate(${x}px, ${y}px)`;
+    setTimeout(resolve, 700);
+  });
+}
+
+function getCursorTarget(name) {
+  // Compute positions based on workspace layout
+  const circRect = circuitCanvas.getBoundingClientRect();
+  const rightRect = document.getElementById('right-panel').getBoundingClientRect();
+
+  switch (name) {
+    case 'center': return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    case 'gate-H': return { x: circRect.left + 40, y: circRect.top + 40 };
+    case 'qubit-q0': return { x: circRect.left + COL_START, y: circRect.top + WIRE_Y_START };
+    case 'qubit-q1': return { x: circRect.left + COL_START, y: circRect.top + WIRE_Y_START + WIRE_SPACING };
+    case 'circuit-center': return { x: circRect.left + circRect.width * 0.4, y: circRect.top + circRect.height * 0.4 };
+    case 'oracle-region': return { x: circRect.left + COL_START + COL_WIDTH, y: circRect.top + WIRE_Y_START + WIRE_SPACING / 2 };
+    case 'diffuser-region': return { x: circRect.left + COL_START + COL_WIDTH * 4, y: circRect.top + WIRE_Y_START + WIRE_SPACING / 2 };
+    case 'math-panel': return { x: rightRect.left + 30, y: rightRect.top + 120 };
+    case 'prob-panel': return { x: rightRect.left + 30, y: rightRect.top + 260 };
+    case 'qsphere-panel': return { x: rightRect.left + 30, y: rightRect.top + 400 };
+    case 'histogram-panel': return { x: rightRect.left + 30, y: rightRect.top + 500 };
+    case 'states-panel': return { x: rightRect.left + 30, y: rightRect.top + 30 };
+    case 'measure-btn': return { x: circRect.left + circRect.width - 60, y: circRect.top + 30 };
+    default: return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  }
+}
+
+// ── Show/Hide Helpers ─────────────────────────────────────────
+function showCard(id) { document.getElementById(id).classList.add('visible'); }
+function hideCard(id) { document.getElementById(id).classList.remove('visible'); }
+
+function showMath(latex, label) {
+  try {
+    katex.render(latex, mathRender, { displayMode: true, throwOnError: false });
+  } catch (e) {
+    mathRender.textContent = latex;
+  }
+  mathLabel.textContent = label || '';
+  showCard('math-card');
+}
+
+function showExplain(title, body) {
+  explainTitle.textContent = title;
+  explainBody.textContent = body;
+  explainCard.classList.add('visible');
+}
+function hideExplain() { explainCard.classList.remove('visible'); }
+
+function showStates(highlight) {
+  const states = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+  statesDisplay.innerHTML = '';
+  for (let i = 0; i < 4; i++) {
+    const badge = document.createElement('div');
+    badge.className = 'state-badge';
+    if (highlight === i) badge.classList.add('target');
+    badge.textContent = states[i];
+    statesDisplay.appendChild(badge);
+  }
+  showCard('states-card');
+}
+
+function dimNonTargetStates() {
+  const badges = statesDisplay.querySelectorAll('.state-badge');
+  badges.forEach((b, i) => {
+    if (i !== 3) b.classList.add('dimmed');
+  });
+}
+
+function setProgress(pct) {
+  progressFill.style.width = pct + '%';
+}
+
+function setStepLabel(text) {
+  stepLabel.textContent = text;
+  stepLabel.classList.add('visible');
+}
+
+// ── Wait helper ───────────────────────────────────────────────
+function wait(ms) {
+  return new Promise((resolve) => {
+    const check = () => {
+      if (!isPaused) {
+        resolve();
+      } else {
+        setTimeout(check, 100);
+      }
+    };
+    setTimeout(check, ms);
+  });
+}
+
+// ── Socratic Question ─────────────────────────────────────────
+function askSocratic(question, options) {
+  return new Promise((resolve) => {
+    socraticQuestion.textContent = question;
+    socraticOptions.innerHTML = '';
+    options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'socratic-option';
+      btn.textContent = opt.label;
+      btn.onclick = () => {
+        socraticOptions.querySelectorAll('.socratic-option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        setTimeout(() => {
+          socraticOverlay.classList.remove('visible');
+          resolve(i);
+        }, 800);
+      };
+      socraticOptions.appendChild(btn);
+    });
+    socraticOverlay.classList.add('visible');
+  });
+}
+
+// ── Summary Flow ──────────────────────────────────────────────
+function showSummaryFlow() {
+  return new Promise(async (resolve) => {
+    const steps = [
+      { icon: '🔍', label: 'PROBLEM' },
+      { icon: '🌊', label: 'SUPERPOSITION' },
+      { icon: '🎯', label: 'ORACLE' },
+      { icon: '📡', label: 'DIFFUSER' },
+      { icon: '📈', label: 'AMPLITUDE AMPLIFICATION' },
+      { icon: '📊', label: 'MEASUREMENT' },
+    ];
+
+    summaryFlow.innerHTML = '';
+    for (let i = 0; i < steps.length; i++) {
+      if (i > 0) {
+        const arrow = document.createElement('div');
+        arrow.className = 'summary-arrow';
+        arrow.textContent = '↓';
+        summaryFlow.appendChild(arrow);
+      }
+      const step = document.createElement('div');
+      step.className = 'summary-step';
+      step.innerHTML = `<span class="step-icon">${steps[i].icon}</span>${steps[i].label}`;
+      summaryFlow.appendChild(step);
+    }
+
+    summaryOverlay.classList.add('visible');
+
+    // Animate each step in
+    const allSteps = summaryFlow.querySelectorAll('.summary-step');
+    const allArrows = summaryFlow.querySelectorAll('.summary-arrow');
+
+    for (let i = 0; i < allSteps.length; i++) {
+      await wait(350);
+      allSteps[i].classList.add('visible');
+      if (i > 0 && allArrows[i-1]) allArrows[i-1].classList.add('visible');
+    }
+
+    await wait(3000);
+    resolve();
+  });
+}
+
+// ── End Screen ────────────────────────────────────────────────
+function showEndScreen() {
+  return new Promise(async (resolve) => {
+    summaryOverlay.classList.remove('visible');
+    workspace.classList.remove('visible');
+    narrationBar.classList.remove('visible');
+    teachingCursor.style.display = 'none';
+
+    endScreen.classList.add('visible');
+
+    const taglines = endScreen.querySelectorAll('.end-taglines span');
+    for (const t of taglines) {
+      await wait(500);
+      t.classList.add('visible');
+    }
+
+    await wait(3000);
+    resolve();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TIMELINE — The Complete Teaching Video Sequence
+// ═══════════════════════════════════════════════════════════════
+
+async function runTimeline() {
+  // Fetch the JSON payload
+  let payload;
+  try {
+    const resp = await fetch('grover-video.json');
+    payload = await resp.json();
+  } catch (e) {
+    console.error("Failed to load JSON script", e);
+    return;
+  }
+  const scenes = payload.scenes;
+
+  // Reset everything
+  gates.length = 0;
+  resetState();
+  teachingCursor.style.display = 'block';
+  teachingCursor.style.transform = 'translate(-100px, -100px)';
+
+  // Hide all panels initially
+  document.querySelectorAll('.panel-card').forEach(c => c.classList.remove('visible'));
+  hideExplain();
+  narrationBar.classList.remove('visible');
+  workspace.classList.remove('visible');
+  titleCard.classList.remove('visible');
+  endScreen.classList.remove('visible');
+  summaryOverlay.classList.remove('visible');
+  socraticOverlay.classList.remove('visible');
+
+  // Title Card setup
+  document.querySelector('#title-card h1').textContent = payload.video.title.toUpperCase();
+
+  const totalSteps = scenes.length;
+  let currentStep = 0;
+
+  // JSON Engine Loop
+  for (const scene of scenes) {
+    currentStep++;
+    setProgress((currentStep / totalSteps) * 100);
+    setStepLabel(`Scene ${scene.id}`);
+
+    // Scene 1 vs Main Workspace vs End Screen
+    if (scene.id === 1) {
+      titleCard.classList.add('visible');
+      await wait(500);
+    } else if (scene.id === 2) {
+      titleCard.classList.remove('visible');
+      workspace.classList.add('visible');
+      initCircuit();
+      initQSphere();
+      await wait(400);
+    } else if (scene.id === 15) {
+      workspace.classList.remove('visible');
+      narrationBar.classList.remove('visible');
+      teachingCursor.style.display = 'none';
+      summaryOverlay.classList.remove('visible');
+    }
+
+    // 1. Process Cursor Movement
+    if (scene.cursor) {
+      let targetName = 'center';
+      if (scene.cursor.move === 'slow_arc_to_center') targetName = 'center';
+      else if (scene.cursor.target) targetName = scene.cursor.target;
+      else if (scene.cursor.targets) targetName = scene.cursor.targets[0];
+      
+      const targetMap = {
+        '|11⟩': 'states-panel',
+        'q0': 'qubit-q0',
+        'probability_11': 'prob-panel',
+        'marked_state': 'qsphere-panel',
+        'measurement': 'measure-btn',
+        'histogram_11': 'histogram-panel'
+      };
+      
+      const mappedTarget = targetMap[targetName] || 'center';
+      const t = getCursorTarget(mappedTarget);
+      moveCursor(t.x, t.y); // Concurrent
+    }
+
+    // 2. Process Visual Overlays
+    if (scene.visual) {
+      if (scene.visual.type === 'state_row' || scene.visual.states) {
+        showStates(-1);
+      }
+      if (scene.visual.target === '|11⟩') {
+        showStates(3);
+        if (scene.visual.animation === 'circle_then_arrow') dimNonTargetStates();
+      }
+      if (scene.visual.type === 'probability_bars') {
+        renderProbBars(getProbs());
+        showCard('prob-card');
+      }
+      if (scene.visual.flow) {
+        workspace.classList.remove('visible');
+        narrationBar.classList.remove('visible');
+        teachingCursor.style.display = 'none';
+        showSummaryFlow(); // Concurrent animation
+      }
+    }
+
+    // 3. Process Circuit Initialization
+    if (scene.circuit && scene.circuit.state === '|00⟩') {
+       drawCircuit();
+    }
+
+    // 4. Process Circuit Animations
+    if (scene.circuit_animation) {
+      let anims = Array.isArray(scene.circuit_animation) ? scene.circuit_animation : [scene.circuit_animation];
+      for (const anim of anims) {
+        if (anim.action === 'place' && anim.gate === 'H') {
+           const q = anim.qubit === 'q0' ? 0 : 1;
+           addGateVisual('h', [q], 0);
+           await wait(200);
+        } else if (anim.action === 'build_oracle') {
+           addGateVisual('cz', [0,1], 1);
+        } else if (anim.action === 'build_diffuser') {
+           addGateVisual('h', [0], 2); addGateVisual('h', [1], 2);
+           addGateVisual('x', [0], 3); addGateVisual('x', [1], 3);
+           addGateVisual('cz', [0, 1], 4);
+           addGateVisual('x', [0], 5); addGateVisual('x', [1], 5);
+           addGateVisual('h', [0], 6); addGateVisual('h', [1], 6);
+        }
+      }
+    }
+
+    // 5. Process Math Display
+    if (scene.math) {
+      let latex = scene.math.content;
+      if (latex.includes('/ 2')) latex = '(|00\\rangle + |01\\rangle + |10\\rangle + |11\\rangle) / 2';
+      if (latex === 'Amplitude Amplification') latex = '\\text{Amplitude Amplification}';
+      showMath(latex, '');
+    }
+
+    // 6. Process Probabilities Update
+    if (scene.probability && scene.probability.source === 'actual_simulation') {
+      renderProbBars(getProbs());
+    }
+
+    // 7. Process QSphere
+    if (scene.qsphere) {
+      drawQSphere(stateVector);
+      showCard('qsphere-card');
+    }
+
+    // 8. Process Histogram
+    if (scene.histogram) {
+      const counts = { '00': 0, '01': 0, '10': 0, '11': 1000 };
+      renderHistogram(counts);
+      showCard('histogram-card');
+    }
+
+    // 9. Process End Screen
+    if (scene.id === 15) {
+      const taglines = endScreen.querySelector('.end-taglines');
+      taglines.innerHTML = `<span>QUALUTION</span><span>Learn. Build. Experiment. Understand.</span>`;
+      showEndScreen();
+    }
+
+    // 10. Process Narration (Await this so text completes before next scene)
+    if (scene.text && scene.text.content) {
+      await narrate(scene.text.content);
+    }
+    
+    // Add extra padding based on requested duration vs elapsed (simplified to fixed pause)
+    await wait(800);
+  }
+}
+
+
+
+// ── Controls ──────────────────────────────────────────────────
+btnMute.addEventListener('click', () => {
+  isMuted = !isMuted;
+  btnMute.textContent = isMuted ? '🔇' : '🔊';
+  btnMute.classList.toggle('active', isMuted);
+  if (isMuted && window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+});
+
+btnPause.addEventListener('click', () => {
+  isPaused = !isPaused;
+  btnPause.textContent = isPaused ? '▶' : '⏸';
+  btnPause.classList.toggle('active', isPaused);
+  if (isPaused && window.speechSynthesis) {
+    window.speechSynthesis.pause();
+  } else if (!isPaused && window.speechSynthesis) {
+    window.speechSynthesis.resume();
+  }
+});
+
+btnRestart.addEventListener('click', () => {
+  isPaused = false;
+  btnPause.textContent = '⏸';
+  btnPause.classList.remove('active');
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (currentNarrationTimeout) clearInterval(currentNarrationTimeout);
+  // Force reload to restart cleanly
+  location.reload();
+});
+
+// ── Background Animation Loop ────────────────────────────────
+function bgLoop() {
+  drawParticles();
+  requestAnimationFrame(bgLoop);
+}
+
+// ── Boot ──────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  // Preload TTS voices
+  if (window.speechSynthesis) {
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+  }
+
+  initParticles();
+  bgLoop();
+
+  // Small delay before starting
+  setTimeout(() => {
+    runTimeline();
+  }, 800);
+});
+
+window.addEventListener('resize', () => {
+  initParticles();
+  if (workspace.classList.contains('visible')) {
+    initCircuit();
+    drawCircuit();
+    initQSphere();
+    drawQSphere(stateVector);
+  }
+});
+</script>
+</body>
+</html>

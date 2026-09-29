@@ -1,0 +1,408 @@
+/* ═══════════════════════════════════════════════════════════════
+   IBM QUANTUM OPERATIONS SIDEBAR & TOOLBAR
+   ═══════════════════════════════════════════════════════════════ */
+
+.ibm-operations-sidebar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--wb-bg-panel, #161a22);
+  border-right: none;
+  user-select: none;
+  overflow: hidden;
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+
+[data-theme="light"] .ibm-operations-sidebar {
+  background-color: #ffffff;
+}
+
+/* ── Operations Header (Standard Panel Header) ──────────────── */
+.ibm-ops-header {
+  height: var(--wb-panel-header-height, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background-color: var(--wb-bg-elevated, #1e232d);
+  border-bottom: 1px solid var(--wb-border, #262c36);
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .ibm-ops-header {
+  background-color: #f4f4f4;
+  border-bottom-color: #e0e0e0;
+}
+
+.ibm-ops-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wb-text-primary, #f4f7fa);
+  letter-spacing: 0.15px;
+}
+
+.ibm-ops-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ibm-ops-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  background: transparent;
+  border: none;
+  color: var(--qs-text-secondary, #a8a8a8);
+  cursor: pointer;
+  transition: all 100ms ease;
+}
+
+.ibm-ops-icon-btn:hover {
+  background-color: var(--qs-surface-hover, #262626);
+  color: var(--qs-text, #ffffff);
+}
+
+[data-theme="light"] .ibm-ops-icon-btn:hover {
+  background-color: #f4f4f4;
+  color: #161616;
+}
+
+.ibm-ops-icon-btn.active {
+  background-color: var(--qs-accent-muted, rgba(15, 98, 254, 0.15));
+  color: var(--qs-accent, #0f62fe);
+}
+
+/* ── Search Input ───────────────────────────────────────────── */
+.ibm-search-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 6px 10px;
+  background-color: var(--qs-surface-elevated, #262626);
+  border-bottom: 1px solid var(--qs-border, #393939);
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .ibm-search-box {
+  background-color: #f4f4f4;
+  border-bottom-color: #e0e0e0;
+}
+
+.ibm-search-input {
+  width: 100%;
+  height: 26px;
+  padding: 0 24px 0 8px;
+  background: var(--qs-bg, #161616);
+  border: 1px solid var(--qs-border, #393939);
+  border-radius: 3px;
+  color: var(--qs-text, #f4f4f4);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+[data-theme="light"] .ibm-search-input {
+  background: #ffffff;
+  border-color: #e0e0e0;
+  color: #161616;
+}
+
+.ibm-search-input:focus {
+  border-color: #0f62fe;
+}
+
+.ibm-search-clear {
+  position: absolute;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--qs-text-muted, #8d8d8d);
+  cursor: pointer;
+}
+
+/* ── Wire & Circuit Action Toolbar ──────────────────────────── */
+.ibm-wire-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background-color: var(--qs-surface-elevated, #1c2128);
+  border-bottom: 1px solid var(--qs-border, #393939);
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .ibm-wire-toolbar {
+  background-color: #f4f4f4;
+  border-bottom-color: #e0e0e0;
+}
+
+.ibm-wire-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 3px;
+  background-color: var(--qs-surface, #262626);
+  border: 1px solid var(--qs-border, #393939);
+  color: var(--qs-text, #f4f4f4);
+  font-size: 11px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 100ms ease;
+}
+
+[data-theme="light"] .ibm-wire-btn {
+  background-color: #ffffff;
+  border-color: #e0e0e0;
+  color: #161616;
+}
+
+.ibm-wire-btn:hover {
+  background-color: var(--qs-surface-hover, #353535);
+  border-color: var(--qs-border-strong, #525252);
+  color: #ffffff;
+}
+
+[data-theme="light"] .ibm-wire-btn:hover {
+  background-color: #e8e8e8;
+  border-color: #c6c6c6;
+  color: #000000;
+}
+
+.ibm-wire-btn.ibm-btn-clear:hover {
+  background-color: rgba(224, 82, 82, 0.15);
+  border-color: #e05252;
+  color: #f89898;
+}
+
+/* ── Operations Palette Content & Grid ──────────────────────── */
+.ibm-palette-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+}
+
+.ibm-gates-grid.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  align-content: start;
+}
+
+.ibm-gate-tile.grid {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 100ms ease, box-shadow 100ms ease;
+}
+
+.ibm-gate-tile.grid:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.08);
+}
+
+.ibm-gate-tile.grid:active {
+  cursor: grabbing;
+  transform: scale(0.96);
+}
+
+.ibm-gate-symbol,
+.ibm-svg-symbol {
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* List view mode */
+.ibm-gates-grid.list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ibm-gate-tile.list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: grab;
+}
+
+.ibm-gate-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ibm-gate-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ibm-gate-info-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.ibm-gate-info-btn:hover {
+  opacity: 1;
+}
+
+/* ── Glossary Popup ─────────────────────────────────────────── */
+.sidebar-glossary-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.sidebar-glossary-card {
+  background-color: var(--qs-surface-elevated, #262626);
+  border: 1px solid var(--qs-border, #393939);
+  border-radius: 6px;
+  padding: 14px;
+  width: 100%;
+  max-width: 280px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.glossary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.glossary-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--qs-text, #f4f4f4);
+}
+
+.btn-close-glossary {
+  background: transparent;
+  border: none;
+  color: var(--qs-text-muted, #8d8d8d);
+  cursor: pointer;
+}
+
+.glossary-summary {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--qs-text-secondary, #c6c6c6);
+  margin-bottom: 10px;
+}
+
+.glossary-category-pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(15, 98, 254, 0.15);
+  color: #78a9ff;
+  border: 1px solid rgba(15, 98, 254, 0.3);
+}
+
+/* Collapsed Sidebar Styles */
+.ibm-operations-sidebar.collapsed {
+  width: 38px !important;
+  min-width: 38px !important;
+  align-items: center;
+}
+
+.ibm-ops-header.collapsed {
+  justify-content: center;
+  padding: 0;
+  width: 100%;
+}
+
+.collapsed-vertical-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--qs-text-muted, #8d8d8d);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 24px;
+}
+
+/* Special Phase Disk Tile */
+.ibm-gate-tile.phase-disk-tile {
+  background: transparent !important;
+  box-shadow: none;
+}
+
+.ibm-gate-tile.phase-disk-tile:hover {
+  filter: brightness(1.2);
+}
+
+/* SVG Symbols Inside Tiles */
+.ibm-svg-symbol {
+  display: block;
+  margin: auto;
+}
+
+/* Active Tap-To-Place Gate Selection */
+.ibm-gate-tile.active-palette-gate {
+  outline: 2px solid #00f2ff !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.6) !important;
+  transform: scale(1.08);
+  z-index: 10;
+}
+
+/* Live AI Teacher Cursor Hover & Pickup Animation States (Phase 2 Drag Lifecycle) */
+.ibm-gate-tile.teaching-hover-active {
+  transform: translateY(-2px) scale(1.03) !important;
+  box-shadow: 0 4px 14px rgba(0, 240, 255, 0.45) !important;
+  filter: brightness(1.15) !important;
+  outline: 1.5px solid rgba(0, 242, 255, 0.7) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  z-index: 20;
+}
+
+.ibm-gate-tile.teaching-held-active {
+  transform: translateY(-4px) scale(1.05) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 240, 255, 0.5) !important;
+  filter: brightness(1.22) !important;
+  outline: 2px solid #00f2ff !important;
+  outline-offset: 1px;
+  z-index: 50;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+

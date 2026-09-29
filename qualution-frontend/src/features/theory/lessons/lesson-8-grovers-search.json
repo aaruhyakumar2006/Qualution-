@@ -1,0 +1,400 @@
+{
+  "version": 1,
+  "lesson_id": "lesson-8-grovers-search",
+  "title": "Grover's Search Algorithm",
+  "track": "Track 2 — Circuit Design & Algorithms (Intermediate)",
+  "badge": "Quantum Searcher",
+  "xp_reward": 350,
+  "estimated_time_min": 16,
+  "assessment_gate": "Predict required iteration count before running (R=1 for N=4)",
+  "defaults": {
+    "qubits": 2,
+    "classical_bits": 2,
+    "shots": 1000,
+    "cursor_speed": "smooth",
+    "math_color": "#38bdf8",
+    "accent_color": "#00f0ff"
+  },
+  "stages": [
+    {
+      "stage_number": 1,
+      "stage_id": "stage-1-equal-superposition",
+      "title": "STAGE 1 — Equal Superposition",
+      "objective": "Initialize equal superposition across all 4 basis states using Hadamard gates on both wires.",
+      "katex": "|s\\rangle = H^{\\otimes 2}|00\\rangle = \\frac{1}{2}|00\\rangle + \\frac{1}{2}|01\\rangle + \\frac{1}{2}|10\\rangle + \\frac{1}{2}|11\\rangle",
+      "narration": "We begin in the ground state |00⟩. By applying a Hadamard gate to qubit 0 and qubit 1, we place both wires into equal superposition. The composite two-qubit state now has an identical probability amplitude of one-half across all four computational basis states: |00⟩, |01⟩, |10⟩, and |11⟩.",
+      "circuit_state_after": {
+        "qubits": 2,
+        "classical_bits": 2,
+        "gates": [
+          { "id": "g-s1-h0", "gate": "h", "targets": [0], "column": 0 },
+          { "id": "g-s1-h1", "gate": "h", "targets": [1], "column": 0 }
+        ]
+      },
+      "actions": [
+        {
+          "type": "MOVE_CURSOR",
+          "target": { "type": "palette_gate", "gate": "h" }
+        },
+        {
+          "type": "NARRATE",
+          "text": "We begin in the ground state |00⟩. By applying a Hadamard gate to qubit 0 and qubit 1, we place both wires into equal superposition."
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "h",
+          "target": { "qubit": 0, "column": 0 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "h",
+          "target": { "qubit": 1, "column": 0 }
+        },
+        {
+          "type": "RENDER_KATEX",
+          "id": "eq-stage-1-superposition",
+          "expression": "|s\\rangle = H^{\\otimes 2}|00\\rangle = \\frac{1}{2}|00\\rangle + \\frac{1}{2}|01\\rangle + \\frac{1}{2}|10\\rangle + \\frac{1}{2}|11\\rangle",
+          "duration": 800
+        },
+        {
+          "type": "NARRATE",
+          "text": "The composite two-qubit state now has an identical probability amplitude of one-half across all four computational basis states: |00⟩, |01⟩, |10⟩, and |11⟩."
+        },
+        {
+          "type": "PAUSE",
+          "duration": 1200
+        }
+      ]
+    },
+    {
+      "stage_number": 2,
+      "stage_id": "stage-2-oracle-phase-inversion",
+      "title": "STAGE 2 — Oracle (Phase Inversion)",
+      "objective": "Mark target state |11⟩ with a phase flip using a Controlled-Z oracle connection or equivalent H-CX-H decomposition.",
+      "interactive_interrupt": {
+        "event_type": "await_user_connection",
+        "prompt": "The oracle needs to mark state |11⟩ with a phase flip. Which connection completes that?",
+        "required_action": "connect_oracle",
+        "target_wires": [0, 1],
+        "column": 1,
+        "auto_place_disabled": true,
+        "accepted_solutions": [
+          {
+            "id": "direct-cz",
+            "type": "single_gate",
+            "description": "Direct Controlled-Z gate across q0 and q1",
+            "gate": "cz",
+            "wires": [0, 1]
+          },
+          {
+            "id": "cnot-hadamard-sandwich",
+            "type": "sequence",
+            "description": "Controlled-NOT with target Hadamard sandwich (H on q1, CX 0->1, H on q1)",
+            "sequence": [
+              { "gate": "h", "targets": [1] },
+              { "gate": "cx", "targets": [0, 1] },
+              { "gate": "h", "targets": [1] }
+            ]
+          }
+        ]
+      },
+      "katex": "|\\psi_1\\rangle = O_{11}|s\\rangle = \\frac{1}{2}|00\\rangle + \\frac{1}{2}|01\\rangle + \\frac{1}{2}|10\\rangle - \\frac{1}{2}|11\\rangle",
+      "narration_pre_pause": "The oracle needs to mark state |11⟩ with a phase flip. Which connection completes that?",
+      "narration_post_resolved": "The oracle is in place. State |11⟩ now carries a negative phase, but because measurement probabilities depend only on the squared magnitude of each amplitude, this phase flip remains invisible to direct readout.",
+      "circuit_state_after": {
+        "qubits": 2,
+        "classical_bits": 2,
+        "gates": [
+          { "id": "g-s1-h0", "gate": "h", "targets": [0], "column": 0 },
+          { "id": "g-s1-h1", "gate": "h", "targets": [1], "column": 0 },
+          { "id": "g-s2-cz-oracle", "gate": "cz", "targets": [0, 1], "column": 1 }
+        ]
+      },
+      "actions": [
+        {
+          "type": "MOVE_CURSOR",
+          "target": { "type": "wire_slot", "qubit": 0, "column": 1 }
+        },
+        {
+          "type": "NARRATE",
+          "text": "The oracle needs to mark state |11⟩ with a phase flip. Which connection completes that?"
+        },
+        {
+          "type": "await_user_connection",
+          "target_qubits": [0, 1],
+          "target_column": 1,
+          "accepted_solutions": [
+            { "gate": "cz", "wires": [0, 1] },
+            { "sequence": ["h", "cx", "h"], "wires": [0, 1] }
+          ],
+          "description": "Cursor pauses here. Await learner drag-and-drop or connection of CZ oracle gate (or equivalent H-CX-H sandwich)."
+        },
+        {
+          "type": "RENDER_KATEX",
+          "id": "eq-stage-2-oracle",
+          "expression": "|\\psi_1\\rangle = O_{11}|s\\rangle = \\frac{1}{2}|00\\rangle + \\frac{1}{2}|01\\rangle + \\frac{1}{2}|10\\rangle - \\frac{1}{2}|11\\rangle",
+          "duration": 800
+        },
+        {
+          "type": "NARRATE",
+          "text": "The marked state now carries a negative phase, invisible to direct measurement. We need an interference step to convert this phase into probability."
+        },
+        {
+          "type": "PAUSE",
+          "duration": 1200
+        }
+      ]
+    },
+    {
+      "stage_number": 3,
+      "stage_id": "stage-3-grover-diffusion-operator",
+      "title": "STAGE 3 — Grover Diffusion Operator",
+      "objective": "Perform inversion about the mean via H⊗² → X⊗² → CZ → X⊗² → H⊗² to amplify target amplitude to 100%.",
+      "diffusion_sequence": ["h", "x", "cz", "x", "h"],
+      "katex_mean_calculation": "\\mu = \\frac{1}{4}\\left(\\frac{1}{2} + \\frac{1}{2} + \\frac{1}{2} - \\frac{1}{2}\\right) = \\frac{1}{4}",
+      "katex_final_state": "\\boxed{|\\psi_2\\rangle = 0|00\\rangle + 0|01\\rangle + 0|10\\rangle + 1|11\\rangle = |11\\rangle}",
+      "narration": "Now we apply the Grover diffusion operator: H on both wires, X on both wires, a CZ connection, followed by X and H on both wires. This operation reflects all amplitudes about their mean. Because the mean is positive one-fourth and state |11⟩ was negative one-half, reflection about the mean amplifies the marked state to certainty, while destructively canceling out all other states.",
+      "circuit_state_after": {
+        "qubits": 2,
+        "classical_bits": 2,
+        "gates": [
+          { "id": "g-s1-h0", "gate": "h", "targets": [0], "column": 0 },
+          { "id": "g-s1-h1", "gate": "h", "targets": [1], "column": 0 },
+          { "id": "g-s2-cz-oracle", "gate": "cz", "targets": [0, 1], "column": 1 },
+          { "id": "g-s3-h0-diff", "gate": "h", "targets": [0], "column": 2 },
+          { "id": "g-s3-h1-diff", "gate": "h", "targets": [1], "column": 2 },
+          { "id": "g-s3-x0-diff", "gate": "x", "targets": [0], "column": 3 },
+          { "id": "g-s3-x1-diff", "gate": "x", "targets": [1], "column": 3 },
+          { "id": "g-s3-cz-diff", "gate": "cz", "targets": [0, 1], "column": 4 },
+          { "id": "g-s3-x0-post", "gate": "x", "targets": [0], "column": 5 },
+          { "id": "g-s3-x1-post", "gate": "x", "targets": [1], "column": 5 },
+          { "id": "g-s3-h0-post", "gate": "h", "targets": [0], "column": 6 },
+          { "id": "g-s3-h1-post", "gate": "h", "targets": [1], "column": 6 }
+        ]
+      },
+      "actions": [
+        {
+          "type": "NARRATE",
+          "text": "Now we construct the diffusion operator: H on both wires, X on both wires, CZ, X on both wires, and H on both wires."
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "h",
+          "target": { "qubit": 0, "column": 2 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "h",
+          "target": { "qubit": 1, "column": 2 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "x",
+          "target": { "qubit": 0, "column": 3 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "x",
+          "target": { "qubit": 1, "column": 3 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "cz",
+          "target": { "qubits": [0, 1], "column": 4 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "x",
+          "target": { "qubit": 0, "column": 5 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "x",
+          "target": { "qubit": 1, "column": 5 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "h",
+          "target": { "qubit": 0, "column": 6 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "h",
+          "target": { "qubit": 1, "column": 6 }
+        },
+        {
+          "type": "RENDER_KATEX",
+          "id": "eq-stage-3-mean",
+          "expression": "\\mu = \\frac{1}{4}\\left(\\frac{1}{2} + \\frac{1}{2} + \\frac{1}{2} - \\frac{1}{2}\\right) = \\frac{1}{4}",
+          "duration": 800
+        },
+        {
+          "type": "NARRATE",
+          "text": "The average amplitude across all four states is exactly one-quarter. Applying inversion about the mean: alpha prime equals two mu minus alpha."
+        },
+        {
+          "type": "RENDER_KATEX",
+          "id": "eq-stage-3-final-boxed",
+          "expression": "\\boxed{|\\psi_2\\rangle = 0|00\\rangle + 0|01\\rangle + 0|10\\rangle + 1|11\\rangle = |11\\rangle}",
+          "duration": 800,
+          "boxed": true
+        },
+        {
+          "type": "NARRATE",
+          "text": "Reflection about the mean amplifies the marked state to certainty, while the unmarked states completely disappear."
+        },
+        {
+          "type": "PAUSE",
+          "duration": 1200
+        }
+      ]
+    },
+    {
+      "stage_number": 4,
+      "stage_id": "stage-4-measurement-readout",
+      "title": "STAGE 4 — Measurement & Readout",
+      "objective": "Complete the predict-iteration assessment gate, measure computational basis wires over 1000 shots, and verify P(|11⟩) ≈ 0.99–1.00.",
+      "assessment_gate": {
+        "id": "checkpoint-grover-iterations",
+        "type": "CHECKPOINT",
+        "question": "For this 2-qubit search space (N = 4 items) with 1 marked state, how many Grover iterations (Oracle + Diffusion) are required to reach peak target probability?",
+        "formula": "R \\approx \\left\\lfloor \\frac{\\pi}{4}\\sqrt{N} \\right\\rfloor = \\left\\lfloor \\frac{\\pi}{4}\\sqrt{4} \\right\\rfloor = 1",
+        "options": [
+          { "id": "opt-4", "text": "4 iterations (one for each database entry)" },
+          { "id": "opt-2", "text": "2 iterations (since N = 4 and sqrt(4) = 2)" },
+          { "id": "opt-1", "text": "1 iteration (exact amplitude rotation onto |11⟩)" },
+          { "id": "opt-16", "text": "16 iterations" }
+        ],
+        "correct_id": "opt-1",
+        "explanation": "For N = 4, the rotation angle per Grover step is theta = pi/3. Exactly 1 iteration places the state vector completely on the marked state (|11⟩) with 100% theoretical probability. A second iteration would over-rotate the vector to 150 degrees, dropping the target probability back down to ~25% and returning all four outcomes to ~25% uniform probability."
+      },
+      "narration_pre_checkpoint": "Before we run the simulation: based on the amplitude amplification formula, predict the optimal number of Grover iterations needed for this four-item search space.",
+      "narration_post_checkpoint": "Exactly one iteration. For N equals four, a single rotation achieves one hundred percent theoretical probability. Now let's measure both wires and run one thousand shots on the simulator.",
+      "circuit_state_after": {
+        "qubits": 2,
+        "classical_bits": 2,
+        "measure": true,
+        "shots": 1000,
+        "gates": [
+          { "id": "g-s1-h0", "gate": "h", "targets": [0], "column": 0 },
+          { "id": "g-s1-h1", "gate": "h", "targets": [1], "column": 0 },
+          { "id": "g-s2-cz-oracle", "gate": "cz", "targets": [0, 1], "column": 1 },
+          { "id": "g-s3-h0-diff", "gate": "h", "targets": [0], "column": 2 },
+          { "id": "g-s3-h1-diff", "gate": "h", "targets": [1], "column": 2 },
+          { "id": "g-s3-x0-diff", "gate": "x", "targets": [0], "column": 3 },
+          { "id": "g-s3-x1-diff", "gate": "x", "targets": [1], "column": 3 },
+          { "id": "g-s3-cz-diff", "gate": "cz", "targets": [0, 1], "column": 4 },
+          { "id": "g-s3-x0-post", "gate": "x", "targets": [0], "column": 5 },
+          { "id": "g-s3-x1-post", "gate": "x", "targets": [1], "column": 5 },
+          { "id": "g-s3-h0-post", "gate": "h", "targets": [0], "column": 6 },
+          { "id": "g-s3-h1-post", "gate": "h", "targets": [1], "column": 6 },
+          { "id": "g-s4-m0", "gate": "measure", "targets": [0], "column": 7 },
+          { "id": "g-s4-m1", "gate": "measure", "targets": [1], "column": 7 }
+        ]
+      },
+      "telemetry_verification": {
+        "shots": 1000,
+        "target_state": "11",
+        "expected_probabilities": {
+          "00": 0.0,
+          "01": 0.0,
+          "10": 0.0,
+          "11": 1.0
+        },
+        "target_probability_min": 0.99,
+        "target_probability_max": 1.0,
+        "unmarked_states_threshold": 0.01,
+        "metrics": {
+          "qubit_count": 2,
+          "classical_bit_count": 2,
+          "gate_count": 12,
+          "depth": 7,
+          "single_qubit_gate_count": 10,
+          "two_qubit_gate_count": 2,
+          "rotation_gate_count": 0,
+          "measurement_count": 2,
+          "two_qubit_gate_ratio": 0.1667,
+          "two_qubit_gate_ratio_percent": "16.7%",
+          "statevector_amplitudes": 4,
+          "simulation_memory_class": "small",
+          "note_on_authoritative_metrics": "Authoritative circuit calculation: 10 single-qubit gates (6 H, 4 X) + 2 two-qubit gates (2 CZ) = 12 total quantum gates across 7 columns (depth 7). Two-qubit gate ratio = 2 / 12 = 16.67%. (The earlier human report's '10 gates / depth 6' was an undercount of the 12-gate schematic)."
+        },
+        "routing": {
+          "selected_backend": "Stabilizer / Clifford Simulator",
+          "framework": "qiskit_aer_stabilizer",
+          "policy": "clifford_stabilizer_optimal",
+          "reason": "All gates belong to the Clifford group {H, X, CZ} and measurements are in Z-basis."
+        }
+      },
+      "actions": [
+        {
+          "type": "NARRATE",
+          "text": "Before we run the simulation: based on the amplitude amplification formula, predict the optimal number of Grover iterations needed for this four-item search space."
+        },
+        {
+          "type": "CHECKPOINT",
+          "id": "checkpoint-grover-iterations",
+          "prompt": "Predict required iteration count before running (R=1 for N=4)",
+          "question": "For this 2-qubit search space (N = 4 items) with 1 marked state, how many Grover iterations (Oracle + Diffusion) are required to reach peak target probability?",
+          "formula": "R \\approx \\left\\lfloor \\frac{\\pi}{4}\\sqrt{N} \\right\\rfloor = \\left\\lfloor \\frac{\\pi}{4}\\sqrt{4} \\right\\rfloor = 1",
+          "options": [
+            { "id": "opt-4", "text": "4 iterations (one for each database entry)" },
+            { "id": "opt-2", "text": "2 iterations (since N = 4 and sqrt(4) = 2)" },
+            { "id": "opt-1", "text": "1 iteration (exact amplitude rotation onto |11⟩)" },
+            { "id": "opt-16", "text": "16 iterations" }
+          ],
+          "correct_id": "opt-1",
+          "correct": "opt-1",
+          "explanation": "For N = 4, the rotation angle per Grover step is theta = pi/3. Exactly 1 iteration places the state vector completely on the marked state (|11⟩) with 100% theoretical probability. A second iteration would over-rotate the vector to 150 degrees, dropping the target probability back down to ~25% and returning all four outcomes to ~25% uniform probability."
+        },
+        {
+          "type": "NARRATE",
+          "text": "Exactly one iteration. For N equals four, a single rotation achieves one hundred percent theoretical probability. Now let's attach measurements to both quantum wires."
+        },
+        {
+          "type": "MOVE_CURSOR",
+          "target": { "type": "palette_gate", "gate": "measure" }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "measure",
+          "target": { "qubit": 0, "column": 7 }
+        },
+        {
+          "type": "PLACE_GATE",
+          "gate": "measure",
+          "target": { "qubit": 1, "column": 7 }
+        },
+        {
+          "type": "NARRATE",
+          "text": "Now we execute one thousand shots on the simulator."
+        },
+        {
+          "type": "RUN_SIMULATION",
+          "shots": 1000,
+          "duration": 600
+        },
+        {
+          "type": "DISPLAY_HISTOGRAM",
+          "id": "histogram-grover-result",
+          "probabilities": {
+            "00": 0.0,
+            "01": 0.0,
+            "10": 0.0,
+            "11": 1.0
+          },
+          "target_highlight": "11",
+          "duration": 1000
+        },
+        {
+          "type": "NARRATE",
+          "text": "The empirical histogram confirms our quantum search: state |11⟩ is observed with one hundred percent probability."
+        },
+        {
+          "type": "PAUSE",
+          "duration": 2000
+        }
+      ]
+    }
+  ]
+}

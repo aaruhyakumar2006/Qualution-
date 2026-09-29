@@ -1,0 +1,602 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-quantum-phase",
+  "lessonTitle": "Quantum Phase & Interference",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 210,
+  "fps": 30,
+  "totalFrames": 6300,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Understand wave interference: constructive vs destructive.",
+    "Analyze how the Pauli-Z gate applies relative phase: Z|1\u27e9 = -|1\u27e9.",
+    "Trace the Hadamard-Z-Hadamard sequence and its destructive cancellation.",
+    "Distinguish classical probabilistic transitions from quantum phase interference.",
+    "Understand interference as the computational mechanism of quantum algorithms."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Constructive interference (waves in phase reinforce)",
+      "Destructive interference (waves out of phase cancel)",
+      "Pauli-Z phase flip: Z|0\u27e9 = |0\u27e9, Z|1\u27e9 = -|1\u27e9",
+      "H-Z-H circuit identity (transforming Z into X: HZH = X)",
+      "Interference-based algorithm principles (Grover, Deutsch-Jozsa preview)"
+    ],
+    "topicsDeferred": [
+      "Continuous rotation gates Rz(\u03b8), Rx(\u03b8) (Lesson 8)",
+      "Phase kickback in controlled operations (Sprint 2)",
+      "Quantum Fourier Transform (Sprint 3)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Double Slit and Quantum Waves",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In the famous double slit experiment, particles shot through two barriers create an alternating pattern of bright and dark fringes. Quantum computers harness this identical phenomenon: Wave Interference.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "The double-slit experiment revealed the wave nature of quantum particles.",
+          "startFrame": 1,
+          "endFrame": 300
+        },
+        {
+          "text": "Quantum computers engineer wave interference to amplify correct answers.",
+          "startFrame": 301,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 7: QUANTUM PHASE & INTERFERENCE",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "Constructive Reinforcement & Destructive Cancellation",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce the physical wave nature of quantum states.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Constructive vs Destructive Interference",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "When two quantum paths are in phase (peaks aligned with peaks), their amplitudes add constructively, amplifying probability. When they are 180 degrees out of phase, peaks meet troughs and cancel out completely.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Constructive: in-phase waves add together, amplifying probability.",
+          "startFrame": 601,
+          "endFrame": 960
+        },
+        {
+          "text": "Destructive: opposite-phase waves cancel out, driving probability to zero.",
+          "startFrame": 961,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_interf",
+          "text": "Principles of Quantum Wave Interference",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_const",
+          "text": "Constructive: (+A) + (+A) = +2A (P \u221d 4A\u00b2)",
+          "role": "body",
+          "position": [
+            -4.0,
+            0.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_dest",
+          "text": "Destructive: (+A) + (-A) = 0 (P = 0)",
+          "role": "body",
+          "position": [
+            4.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Illustrate constructive and destructive interference with wave graphics.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "The Pauli-Z Phase Gate",
+      "durationSeconds": 30,
+      "startFrame": 1351,
+      "endFrame": 2250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To control phase in a quantum circuit, we use phase gates. The foundational phase gate is Pauli-Z. Acting on |0\u27e9, Z leaves it unchanged. But acting on |1\u27e9, it flips the sign, imparting a 180-degree relative phase shift.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "The Pauli-Z gate imparts a 180\u00b0 (\u03c0) relative phase shift to |1\u27e9.",
+          "startFrame": 1351,
+          "endFrame": 1770
+        },
+        {
+          "text": "Z|0\u27e9 = |0\u27e9, while Z|1\u27e9 = -|1\u27e9. Z leaves computational probabilities unchanged!",
+          "startFrame": 1771,
+          "endFrame": 2250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_z_mat",
+          "text": "Z = [ [1,  0], [0, -1] ]",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_z_act",
+          "text": "Z |0\u27e9 = |0\u27e9  |  Z |1\u27e9 = -|1\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            -0.6,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Define the Pauli-Z gate and its selective phase-flip action.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "Transforming |+\u27e9 to |-\u27e9",
+      "durationSeconds": 30,
+      "startFrame": 2251,
+      "endFrame": 3150,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Consider what happens when Z acts on the plus state |+\u27e9 = (|0\u27e9 + |1\u27e9)/\u221a2. The |0\u27e9 term remains positive, while the |1\u27e9 term flips negative, transforming |+\u27e9 directly into the minus state |-\u27e9!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Z |+\u27e9 = Z [ (|0\u27e9 + |1\u27e9)/\u221a2 ] = (|0\u27e9 - |1\u27e9)/\u221a2 = |-\u27e9.",
+          "startFrame": 2251,
+          "endFrame": 2700
+        },
+        {
+          "text": "Z rotates the state vector across the equator of the Bloch sphere.",
+          "startFrame": 2701,
+          "endFrame": 3150
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_z_plus",
+          "text": "Z |+\u27e9 = |-\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_z_minus",
+          "text": "Z |-\u27e9 = |+\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            -0.6,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Show how Pauli-Z toggles between the plus and minus states.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "The H-Z-H Interference Experiment",
+      "durationSeconds": 35,
+      "startFrame": 3151,
+      "endFrame": 4200,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Now let us observe the full power of interference. Start in |0\u27e9. Apply H to create |+\u27e9. Apply Z to flip the phase to |-\u27e9. Now apply H a second time! The paths to |0\u27e9 destructively cancel, and we measure |1\u27e9 with 100% certainty!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Start at |0\u27e9 -> H -> |+\u27e9 -> Z -> |-\u27e9 -> H -> |1\u27e9.",
+          "startFrame": 3151,
+          "endFrame": 3630
+        },
+        {
+          "text": "The paths to |0\u27e9 cancel to 0; the paths to |1\u27e9 reinforce to 100% certainty!",
+          "startFrame": 3631,
+          "endFrame": 4200
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_hzh",
+          "text": "H \u00b7 Z \u00b7 H = X (Bit-Flip via Phase Interference)",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_tree",
+          "text": "Paths to |0\u27e9: (+1/2) + (-1/2) = 0 | Paths to |1\u27e9: (+1/2) + (+1/2) = 1",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3151,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Walk through the foundational H-Z-H circuit showing path interference.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "How Quantum Algorithms Work",
+      "durationSeconds": 35,
+      "startFrame": 4201,
+      "endFrame": 5250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "This reveals the master blueprint behind all quantum algorithms: we configure quantum gates so that incorrect solutions destructively cancel out, while the correct answers constructively amplify into high probability.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "The quantum algorithm blueprint: cancel wrong paths, amplify the right ones.",
+          "startFrame": 4201,
+          "endFrame": 4680
+        },
+        {
+          "text": "Interference enables Grover search, Shor's algorithm, and quantum simulation.",
+          "startFrame": 4681,
+          "endFrame": 5250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_algo_title",
+          "text": "The Quantum Algorithmic Engine",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_bad",
+          "text": "Wrong Answers \u2500\u2500\u2500> Destructive Interference (P -> 0)",
+          "role": "body",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_good",
+          "text": "Correct Solution \u2500\u2500\u2500> Constructive Interference (P -> 1)",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4201,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Demystify quantum computational advantage as guided wave interference.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Summary & Next Steps",
+      "durationSeconds": 35,
+      "startFrame": 5251,
+      "endFrame": 6300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In summary: Phase is the rudder that steers quantum interference. By manipulating relative phases, gates orchestrate constructive and destructive wave behavior. In Lesson 8, we explore the complete canonical suite of Single-Qubit Gates.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Summary: Phase steers constructive amplification and destructive cancellation.",
+          "startFrame": 5251,
+          "endFrame": 5700
+        },
+        {
+          "text": "Next: Lesson 8 \u2014 Single-Qubit Quantum Gates.",
+          "startFrame": 5701,
+          "endFrame": 6300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 7 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_i1",
+          "text": "1. Interference: Constructive (+) amplifies; Destructive (-) cancels",
+          "role": "body",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_i2",
+          "text": "2. Pauli-Z Gate: Inverts phase of |1\u27e9 while preserving |0\u27e9",
+          "role": "body",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_i3",
+          "text": "3. HZH = X: A phase flip sandwiched between Hadamards flips the bit",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Recap interference fundamentals and preview single-qubit gate taxonomy.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

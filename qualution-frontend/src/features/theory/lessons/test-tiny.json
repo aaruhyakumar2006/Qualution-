@@ -1,0 +1,33 @@
+{
+  "v": 1,
+  "id": "test-tiny",
+  "title": "Tiny Test Lesson",
+  "topic": "basics",
+  "difficulty": "Beginner",
+  "estimatedMinutes": 1,
+  "defaults": { "color": "#e8e8e8" },
+  "steps": [
+    {
+      "id": "s1",
+      "title": "Move",
+      "cmds": [
+        ["m", 200, 150]
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Write",
+      "cmds": [
+        ["w", "Hello, Board!", 200, 150, 1.4],
+        ["p", 500]
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Pause",
+      "cmds": [
+        ["p", 800]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "video": {
+    "title": "Grover's Algorithm",
+    "format": "live_teaching_canvas",
+    "style": "QUALUTION teaching canvas",
+    "background": {
+      "color": "#07111f",
+      "grid": "subtle dotted quantum grid",
+      "particles": "very subtle"
+    },
+    "ui": {
+      "top_left": "QUALUTION",
+      "top_badge": "Pause / Play / Canvas & Cursor",
+      "bottom_controls": true,
+      "controls": ["Play/Pause", "Step", "Highlight", "Restart"]
+    }
+  },
+
+  "scenes": [
+
+    {
+      "id": 1,
+      "duration": 4,
+      "text": {
+        "content": "Let's understand Grover's algorithm.",
+        "position": "center"
+      },
+      "cursor": {
+        "move": "slow_arc_to_center"
+      }
+    },
+
+    {
+      "id": 2,
+      "duration": 6,
+      "text": {
+        "content": "We want to find one state.",
+        "position": "center_top"
+      },
+      "visual": {
+        "type": "state_row",
+        "states": ["|00⟩", "|01⟩", "|10⟩", "|11⟩"]
+      },
+      "cursor": {
+        "target": "|11⟩"
+      }
+    },
+
+    {
+      "id": 3,
+      "duration": 4,
+      "text": {
+        "content": "Our target is |11⟩.",
+        "position": "center_top"
+      },
+      "visual": {
+        "target": "|11⟩",
+        "animation": "circle_and_arrow"
+      },
+      "cursor": {
+        "target": "|11⟩"
+      }
+    },
+
+    {
+      "id": 4,
+      "duration": 5,
+      "text": {
+        "content": "First, we create a superposition.",
+        "position": "center_top"
+      },
+      "circuit": {
+        "qubits": ["q0", "q1"],
+        "gates": [],
+        "state": "|00⟩"
+      },
+      "cursor": {
+        "target": "q0"
+      }
+    },
+
+    {
+      "id": 5,
+      "duration": 8,
+      "text": {
+        "content": "Apply a Hadamard gate to both qubits.",
+        "position": "center_top"
+      },
+      "circuit_animation": [
+        {
+          "action": "place",
+          "gate": "H",
+          "qubit": "q0"
+        },
+        {
+          "action": "place",
+          "gate": "H",
+          "qubit": "q1"
+        }
+      ]
+    },
+
+    {
+      "id": 6,
+      "duration": 7,
+      "text": {
+        "content": "Now all four states have equal probability.",
+        "position": "center_top"
+      },
+      "visual": {
+        "type": "probability_bars"
+      },
+      "cursor": {
+        "target": "probability_11"
+      }
+    },
+
+    {
+      "id": 7,
+      "duration": 8,
+      "text": {
+        "content": "The oracle marks the state we are searching for.",
+        "position": "center_top"
+      },
+      "circuit_animation": {
+        "action": "build_oracle"
+      },
+      "cursor": {
+        "target": "oracle-region"
+      }
+    },
+
+    {
+      "id": 8,
+      "duration": 8,
+      "text": {
+        "content": "Then the diffuser amplifies its amplitude.",
+        "position": "center_top"
+      },
+      "circuit_animation": {
+        "action": "build_diffuser"
+      }
+    },
+
+    {
+      "id": 9,
+      "duration": 7,
+      "text": {
+        "content": "The probability of our target becomes much larger.",
+        "position": "center_top"
+      },
+      "probability": {
+        "source": "actual_simulation"
+      },
+      "qsphere": {
+        "source": "actual_statevector"
+      },
+      "cursor": {
+        "target": "probability_11"
+      }
+    },
+
+    {
+      "id": 10,
+      "duration": 8,
+      "text": {
+        "content": "Measure, and we find the marked state.",
+        "position": "center_top"
+      },
+      "circuit_animation": {
+        "action": "measure"
+      },
+      "histogram": {
+        "source": "actual_simulation"
+      },
+      "visual": {
+        "target": "|11⟩"
+      },
+      "cursor": {
+        "target": "histogram_11"
+      }
+    },
+
+    {
+      "id": 15,
+      "duration": 6,
+      "text": {
+        "content": "Grover: Superposition → Oracle → Diffuser → Measurement",
+        "position": "center"
+      },
+      "visual": {
+        "flow": [
+          "SUPERPOSITION",
+          "ORACLE",
+          "DIFFUSER",
+          "MEASUREMENT"
+        ]
+      }
+    }
+  ]
+}

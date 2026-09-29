@@ -1,0 +1,140 @@
+/* ════════════════════════════════════════════════════════════════════════
+   BoardCursor.css
+   Phase 2: Academic Teaching Cursor — visual styles
+   ════════════════════════════════════════════════════════════════════════
+
+   Design intent: the cursor must feel like a teacher's hand on a board —
+   intentional, calm, and secondary to the content. It should never draw
+   attention away from what is being taught.
+
+   Positioning:
+   The .board-cursor element is absolutely positioned inside the cursor layer
+   using percentage coordinates (left/top set via inline style). This means
+   it is always aligned with the logical board coordinate system regardless
+   of the container's physical pixel dimensions.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.board-cursor {
+  position: absolute;
+
+  /* The hotspot of the cursor is its top-left corner (the arrow tip).
+     We use a negative translate to align the SVG tip pixel-perfectly
+     with the percentage coordinate point. */
+  transform: translate(0, 0);
+
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+
+  /* No CSS transition on position — movement is driven by rAF in the hook. */
+  transition: opacity 220ms ease;
+
+  /* Cursor renders above all board content layers */
+  z-index: 100;
+
+  /* Contain both the arrow SVG and the glow element */
+  width: 0;
+  height: 0;
+  overflow: visible;
+}
+
+/* ── Arrow SVG ────────────────────────────────────────────────────────── */
+
+.board-cursor__arrow {
+  display: block;
+
+  /*
+    transform-origin at the tip of the arrow path (3px, 1.5px in the 22×26 viewBox).
+    This ensures any scale transforms pivot on the hotspot.
+  */
+  transform-origin: 3px 1.5px;
+
+  /* Gentle idle presence animation — barely perceptible breathing effect.
+     This avoids a fully static cursor (which can look frozen) while
+     remaining non-distracting during teaching. */
+  animation: board-cursor-breathe 3s ease-in-out infinite;
+
+  /* Resting glow: very subtle cyan tint — matches board's ambient palette */
+  filter:
+    drop-shadow(0 0 5px rgba(180, 210, 240, 0.35))
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+
+  will-change: filter, transform;
+}
+
+/* While actively moving: slightly brighter glow and a touch of scale to
+   communicate intentionality. The animation is overridden during motion. */
+.board-cursor--moving .board-cursor__arrow {
+  animation: board-cursor-moving 0.1s linear infinite;
+  filter:
+    drop-shadow(0 0 8px rgba(180, 225, 255, 0.55))
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.55));
+}
+
+@keyframes board-cursor-breathe {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 4px rgba(180, 210, 240, 0.28))
+      drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+    transform: scale(1);
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 7px rgba(180, 210, 240, 0.45))
+      drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+    transform: scale(1.015);
+  }
+}
+
+@keyframes board-cursor-moving {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.025); }
+}
+
+/* Respect user preference to reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .board-cursor__arrow {
+    animation: none;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+  }
+  .board-cursor--moving .board-cursor__arrow {
+    animation: none;
+  }
+}
+
+/* ── Ambient Glow ────────────────────────────────────────────────────── */
+
+.board-cursor__glow {
+  position: absolute;
+
+  /* Center the glow circle on the arrow tip */
+  top: -18px;
+  left: -18px;
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(190, 220, 255, 0.12) 0%,
+    rgba(190, 220, 255, 0.06) 50%,
+    transparent 80%
+  );
+
+  /* Glow pulses very slowly so it doesn't compete with the content */
+  animation: board-cursor-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes board-cursor-glow-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50%       { opacity: 1.0; transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-cursor__glow {
+    animation: none;
+    opacity: 0.4;
+  }
+}

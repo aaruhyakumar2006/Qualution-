@@ -1,0 +1,80 @@
+[
+  {
+    "test": "qBraid API & Backend Contract",
+    "qubits": "N/A",
+    "status": "PASS",
+    "details": "Backend available: False, Status: UNAVAILABLE"
+  },
+  {
+    "test": "2-Qubit Bell Circuit",
+    "qubits": 2,
+    "gates": 2,
+    "backend": "qiskit_aer",
+    "latency_ms": 34.17,
+    "memory_delta_kb": 4100.0,
+    "status": "PASS"
+  },
+  {
+    "test": "8-Qubit Entangled Circuit",
+    "qubits": 8,
+    "gates": 8,
+    "backend": "clifford_stabilizer",
+    "latency_ms": 83.56,
+    "memory_delta_kb": 2896.0,
+    "status": "PASS"
+  },
+  {
+    "test": "28-Qubit Boundary Circuit",
+    "qubits": 28,
+    "gates": 28,
+    "backend": "clifford_stabilizer",
+    "latency_ms": 14.06,
+    "memory_delta_kb": 100.0,
+    "status": "PASS"
+  },
+  {
+    "test": "41-Qubit Empty Circuit (Bug Fix)",
+    "qubits": 41,
+    "gates": 0,
+    "backend": "clifford_stabilizer",
+    "latency_ms": 12.68,
+    "memory_delta_kb": 44.0,
+    "status": "PASS"
+  },
+  {
+    "test": "100-Qubit GHZ State",
+    "qubits": 100,
+    "gates": 100,
+    "backend": "clifford_stabilizer",
+    "latency_ms": 43.95,
+    "memory_delta_kb": 384.0,
+    "status": "PASS"
+  },
+  {
+    "test": "500-Qubit Clifford Circuit",
+    "qubits": 500,
+    "gates": 499,
+    "backend": "clifford_stabilizer",
+    "latency_ms": 2031.39,
+    "memory_delta_kb": 2616.0,
+    "status": "PASS"
+  },
+  {
+    "test": "1,000-Qubit Stabilizer Circuit",
+    "qubits": 1000,
+    "gates": 7,
+    "backend": "clifford_stabilizer",
+    "latency_ms": 6967.98,
+    "stabilizer_ram_kb": 489.8,
+    "status": "PASS"
+  },
+  {
+    "test": "1,000-Qubit Statevector Safety Guard",
+    "qubits": 1000,
+    "mode": "statevector",
+    "status_code": 400,
+    "latency_ms": 5.36,
+    "status": "PASS",
+    "details": "Safely rejected before memory allocation"
+  }
+]

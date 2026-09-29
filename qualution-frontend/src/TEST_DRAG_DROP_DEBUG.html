@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drag Drop Test</title>
+    <style>
+        .gate { 
+            width: 80px; 
+            height: 80px; 
+            background: #4CAF50; 
+            margin: 10px; 
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .slot { 
+            width: 80px; 
+            height: 80px; 
+            border: 2px dashed #ccc; 
+            margin: 10px;
+            display: inline-block;
+        }
+        .slot.drag-over {
+            background: rgba(0, 210, 255, 0.3);
+            border-color: #00d2ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Drag Drop Test</h1>
+    <div class="gate" draggable="true" id="testGate">H GATE</div>
+    <div class="slot" id="slot1">Drop Here</div>
+    
+    <script>
+        const gate = document.getElementById('testGate');
+        const slot = document.getElementById('slot1');
+        
+        gate.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('gate', 'H');
+            e.target.style.opacity = '0.5';
+            console.log('Drag started!');
+        });
+        
+        gate.addEventListener('dragend', (e) => {
+            e.target.style.opacity = '1';
+        });
+        
+        slot.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            slot.classList.add('drag-over');
+            console.log('Dragging over slot');
+        });
+        
+        slot.addEventListener('dragleave', () => {
+            slot.classList.remove('drag-over');
+        });
+        
+        slot.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const gateType = e.dataTransfer.getData('gate');
+            slot.textContent = gateType + ' placed!';
+            slot.classList.remove('drag-over');
+            console.log('Dropped:', gateType);
+        });
+    </script>
+</body>
+</html>

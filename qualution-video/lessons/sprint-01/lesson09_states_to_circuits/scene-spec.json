@@ -1,0 +1,592 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-states-to-circuits",
+  "lessonTitle": "From Quantum States to Circuits",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 210,
+  "fps": 30,
+  "totalFrames": 6300,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Read and interpret quantum circuit diagrams.",
+    "Understand wire initialization in the canonical |0\u27e9 state.",
+    "Trace chronological execution flow from left to right.",
+    "Calculate circuit depth, gate counts, and two-qubit ratios.",
+    "Bridge visual drag-and-drop circuits to executable Python code (Qiskit, PennyLane, Cirq)."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Circuit wire conventions and chronological time progression (left to right)",
+      "Initialization in |0\u27e9...|0\u27e9",
+      "Gate placement and serial application",
+      "Measurement operations and classical registers",
+      "Circuit metrics: Depth, Total Gate Count, Active Wires",
+      "Code generation from circuit diagrams (Qiskit / PennyLane / Cirq)"
+    ],
+    "topicsDeferred": [
+      "Two-qubit entangling gates CNOT / CZ (Sprint 2)",
+      "Circuit compilation and transpilation to physical device topologies (Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Musical Score of Quantum Computing",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "A quantum circuit is like a musical score. Each horizontal line is a wire representing a qubit progressing through time from left to right, while gates are musical notes transforming the harmony of quantum states.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "A quantum circuit is a chronological score for quantum states.",
+          "startFrame": 1,
+          "endFrame": 300
+        },
+        {
+          "text": "Horizontal wires track qubits over time; gates transform state amplitudes.",
+          "startFrame": 301,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 9: FROM QUANTUM STATES TO CIRCUITS",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "Anatomy of Quantum Circuit Diagrams",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Provide an accessible mental model for reading quantum circuit diagrams.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Wire Initialization & Time Flow",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "By convention, every qubit wire begins at time zero in the ground state |0\u27e9. Operations execute sequentially from left to right. When two gates sit in the same vertical column on different wires, they execute simultaneously.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Qubits initialize in |0\u27e9 at the far left.",
+          "startFrame": 601,
+          "endFrame": 960
+        },
+        {
+          "text": "Time flows left to right. Gates in the same column execute concurrently.",
+          "startFrame": 961,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_wire_diag",
+          "text": "q[0]: |0\u27e9 \u2500\u2500\u2500\u2500\u2500[ H ]\u2500\u2500\u2500\u2500\u2500[ Z ]\u2500\u2500\u2500\u2500\u2500[ M ] \u2500\u2500\u2500> c[0]",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_time_arrow",
+          "text": "TIME PROGRESSION \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Explain circuit diagram syntax and initialization standards.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Matrix Multiplication in Reverse Order",
+      "durationSeconds": 30,
+      "startFrame": 1351,
+      "endFrame": 2250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Here is a crucial rule for every quantum programmer: while circuits execute left-to-right, mathematical matrix multiplication is written right-to-left! If a circuit applies gate A then gate B, the overall unitary is B times A.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Visual circuit flow: left to right (Gate A then Gate B).",
+          "startFrame": 1351,
+          "endFrame": 1770
+        },
+        {
+          "text": "Matrix algebra order: right to left! Overall unitary: U = B \u00b7 A.",
+          "startFrame": 1771,
+          "endFrame": 2250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_order_title",
+          "text": "The Operator Ordering Rule",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_vis",
+          "text": "Circuit: \u2500\u2500\u2500[ A ]\u2500\u2500\u2500[ B ]\u2500\u2500\u2500>",
+          "role": "body",
+          "position": [
+            -3.5,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_mat",
+          "text": "Math: |\u03c8_final\u27e9 = (B \u00b7 A) |0\u27e9",
+          "role": "body",
+          "position": [
+            3.5,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Warn students about the classic left-to-right vs right-to-left ordering trap.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "Circuit Depth and Gate Count",
+      "durationSeconds": 35,
+      "startFrame": 2251,
+      "endFrame": 3300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To evaluate circuit efficiency, we measure two key structural metrics: Total Gate Count\u2014the sum of all operations\u2014and Circuit Depth\u2014the number of sequential time steps required to execute the circuit when parallel gates run together.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Total Gate Count: the total number of quantum gates in the circuit.",
+          "startFrame": 2251,
+          "endFrame": 2730
+        },
+        {
+          "text": "Circuit Depth: the number of concurrent time-steps required to run all gates.",
+          "startFrame": 2731,
+          "endFrame": 3300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_metrics_title",
+          "text": "Circuit Complexity Metrics",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_gc",
+          "text": "Total Gate Count = Total number of gates",
+          "role": "body",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_depth",
+          "text": "Circuit Depth = Length of critical time path",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce circuit depth and complexity analysis.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "Measurement and Classical Registers",
+      "durationSeconds": 30,
+      "startFrame": 3301,
+      "endFrame": 4200,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "At the end of a circuit, measurement meters convert quantum statevectors into classical bits, storing the results in a classical register denoted with double lines. This marks the transition from quantum coherence to classical data.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Measurement meters convert quantum information into classical bits.",
+          "startFrame": 3301,
+          "endFrame": 3720
+        },
+        {
+          "text": "Classical registers are indicated by double lines (c[0], c[1]).",
+          "startFrame": 3721,
+          "endFrame": 4200
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_meter",
+          "text": "q[0] \u2500\u2500\u2500[ M ]\u2500\u2500\u2500\n          \u2551\n          \u25bc\nc[0] \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 (Classical Bit Storage)",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3301,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Explain measurement meter symbols and classical registers.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "Code Generation: From Visual Canvas to Python",
+      "durationSeconds": 35,
+      "startFrame": 4201,
+      "endFrame": 5250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In QUALUTION, your visual circuit is bidirectionally synchronized with real quantum code. As you drag gates, the platform automatically generates idiomatic Qiskit, PennyLane, or Cirq scripts ready for real quantum hardware.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Visual circuits compile directly into real Python code.",
+          "startFrame": 4201,
+          "endFrame": 4680
+        },
+        {
+          "text": "Export instantly to Qiskit, PennyLane, Cirq, or OpenQASM 2.0.",
+          "startFrame": 4681,
+          "endFrame": 5250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_codegen_title",
+          "text": "Unified Code Generation Architecture",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_code_ex",
+          "text": "qc = QuantumCircuit(1, 1)\nqc.h(0)\nqc.z(0)\nqc.measure(0, 0)",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4201,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Connect visual diagramming directly to software engineering code generation.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Summary & Sprint 1 Milestone",
+      "durationSeconds": 35,
+      "startFrame": 5251,
+      "endFrame": 6300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Congratulations! You have mastered the journey from quantum states to full circuit diagrams. Next, we consolidate everything in Lesson 10 with our Sprint 1 Comprehensive Review and Knowledge Check.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Milestone: You now read, write, and analyze quantum circuits like a pro.",
+          "startFrame": 5251,
+          "endFrame": 5700
+        },
+        {
+          "text": "Next: Lesson 10 \u2014 Sprint 1 Comprehensive Review & Knowledge Check.",
+          "startFrame": 5701,
+          "endFrame": 6300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 9 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_c1",
+          "text": "1. Circuits flow left-to-right in time; operators multiply right-to-left",
+          "role": "body",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_c2",
+          "text": "2. Circuit Depth measures execution steps along the critical path",
+          "role": "body",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_c3",
+          "text": "3. Visual circuits translate 1:1 into Qiskit, PennyLane, and Cirq",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Celebrate completion of core single-qubit curriculum.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

@@ -1,0 +1,434 @@
+/* ════════════════════════════════════════════════════════════════════════
+   TheoryBoard.css  —  Phase 14 Reference-Tuned
+   Visual target: academic digital teaching board.
+   Dark, clean, minimal. The content is everything.
+   No glows, no scanlines, no cyberpunk effects.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Container ─────────────────────────────────────────────────────────── */
+
+.theory-board-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0d0d14;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+/* ── Header Bar ────────────────────────────────────────────────────────── */
+
+.theory-board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 16px;
+  background: #0d0d14;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 12px;
+  min-height: 42px;
+}
+
+.theory-board-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.theory-board-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #666688;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.theory-board-lesson-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #9090a8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theory-board-step-label {
+  font-size: 11px;
+  color: #44445a;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Board Canvas Area ─────────────────────────────────────────────────── */
+
+.theory-board-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 12 / 7;
+  /* Deep dark board — like a blackboard at night */
+  background: #080810;
+  overflow: hidden;
+  cursor: default;
+}
+
+/* Very faint dot grid — barely visible, gives spatial reference */
+.theory-board-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px
+  );
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+/* SVG canvas for drawing shapes/lines/arrows */
+.theory-board-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* DOM overlay for text and math items */
+.theory-board-dom-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* ── Text Items ────────────────────────────────────────────────────────── */
+
+.theory-board-text-item {
+  position: absolute;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  pointer-events: none;
+  /* Monospace — matches the reference video's chalk-on-board feel */
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+  letter-spacing: 0.03em;
+  /* Subtle chalk-like softness — no glow, no animation */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+/* ── Math Items ────────────────────────────────────────────────────────── */
+
+.theory-board-math-item {
+  position: absolute;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+  z-index: 2;
+}
+
+.theory-board-math-item .katex {
+  font-size: inherit;
+}
+
+/* ── Highlight Items ───────────────────────────────────────────────────── */
+
+.theory-board-highlight {
+  position: absolute;
+  border-radius: 3px;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 1;
+  /* No box-shadow glow — just a clean semi-transparent fill */
+}
+
+/* ── Teaching Cursor Overlay ───────────────────────────────────────────── */
+
+.theory-board-cursor-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 10;
+}
+
+/* ── Caption Bar ───────────────────────────────────────────────────────── */
+
+.theory-board-caption {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  background: #0a0a12;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 10px;
+}
+
+.theory-board-caption-icon {
+  color: #44445a;
+  flex-shrink: 0;
+}
+
+.theory-board-caption-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #7070a0;
+  font-style: italic;
+  flex: 1;
+  min-height: 20px;
+  transition: color 300ms ease;
+}
+
+.theory-board-caption-text.speaking {
+  color: #9090c0;
+}
+
+/* ── Playback Controls ─────────────────────────────────────────────────── */
+
+.theory-board-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #0a0a12;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.theory-board-progress-track {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 1px;
+  overflow: hidden;
+  position: relative;
+}
+
+.theory-board-progress-fill {
+  height: 100%;
+  background: rgba(120, 140, 220, 0.7);
+  border-radius: 1px;
+  transition: width 300ms linear;
+}
+
+.theory-board-ctrl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #55557a;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+  flex-shrink: 0;
+}
+
+.theory-board-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #8888aa;
+}
+
+.theory-board-ctrl-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.theory-board-ctrl-btn.primary {
+  width: 36px;
+  height: 36px;
+  background: rgba(100, 120, 200, 0.15);
+  border-color: rgba(100, 120, 200, 0.25);
+  color: #7788cc;
+}
+
+.theory-board-ctrl-btn.primary:hover {
+  background: rgba(100, 120, 200, 0.25);
+  color: #99aadd;
+}
+
+.theory-board-step-counter {
+  font-size: 11px;
+  color: #33334a;
+  white-space: nowrap;
+  padding: 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Idle / Start State ────────────────────────────────────────────────── */
+
+.theory-board-idle-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(8, 8, 16, 0.88);
+  z-index: 10;
+}
+
+.theory-board-idle-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(100, 120, 200, 0.1);
+  border: 1px solid rgba(100, 120, 200, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6677bb;
+}
+
+.theory-board-idle-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #b0b0cc;
+  text-align: center;
+  max-width: 480px;
+  line-height: 1.4;
+}
+
+.theory-board-idle-subtitle {
+  font-size: 12px;
+  color: #55556a;
+  text-align: center;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+.theory-board-start-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 22px;
+  border-radius: 7px;
+  background: rgba(100, 120, 200, 0.15);
+  border: 1px solid rgba(100, 120, 200, 0.3);
+  color: #8899cc;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+  letter-spacing: 0.02em;
+}
+
+.theory-board-start-btn:hover {
+  background: rgba(100, 120, 200, 0.25);
+  color: #aabbdd;
+}
+
+/* ── Completed Overlay ─────────────────────────────────────────────────── */
+
+.theory-board-complete-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 36px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.theory-board-transition-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 26px;
+  border-radius: 8px;
+  background: rgba(100, 120, 200, 0.18);
+  border: 1px solid rgba(100, 120, 200, 0.35);
+  color: #8899cc;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  pointer-events: all;
+  transition: background 200ms ease, color 200ms ease;
+  opacity: 0;
+  animation: cta-appear 500ms 200ms ease forwards;
+}
+
+.theory-board-transition-cta:hover {
+  background: rgba(100, 120, 200, 0.3);
+  color: #bbccee;
+}
+
+@keyframes cta-appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Objectives Panel ──────────────────────────────────────────────────── */
+
+.theory-board-objectives {
+  padding: 10px 16px;
+  background: #0a0a12;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.theory-board-objectives-title {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #33334a;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.theory-board-objectives-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+.theory-board-objectives-list li {
+  font-size: 11px;
+  color: #55556a;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.4;
+  max-width: 340px;
+}
+
+.theory-board-objectives-list li::before {
+  content: '·';
+  color: #33334a;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .theory-board-caption {
+    padding: 8px 12px;
+  }
+  .theory-board-caption-text {
+    font-size: 12px;
+  }
+  .theory-board-controls {
+    padding: 6px 10px;
+  }
+}

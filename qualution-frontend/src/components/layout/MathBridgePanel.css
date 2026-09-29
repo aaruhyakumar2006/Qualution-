@@ -1,0 +1,104 @@
+.math-bridge-panel {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+  color: var(--ide-text-primary, #ffffff);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.math-bridge-panel.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--ide-text-muted, #8d8d8d);
+  font-style: italic;
+}
+
+.math-header h3 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: var(--ide-text-secondary, #b0b0b0);
+  border-bottom: 1px solid var(--ide-border, #333);
+  padding-bottom: 4px;
+}
+
+.math-header.mt-4 {
+  margin-top: 24px;
+}
+
+.math-content {
+  background: var(--ide-bg-subtle, #1a1a1a);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  border: 1px solid var(--ide-border, #333);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ket-equation {
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.ket-equation .psi {
+  font-weight: bold;
+  color: var(--accent-color, #4589ff);
+  margin-right: 8px;
+}
+
+.ket-term {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ket-term .amplitude {
+  color: #a8a8a8;
+}
+
+.ket-term .ket-state {
+  color: #4fe3c1;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.vector-matrix {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 14px;
+}
+
+.vector-bracket {
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--ide-text-secondary, #b0b0b0);
+  display: flex;
+  align-items: center;
+  transform: scaleY(1.5);
+}
+
+.left-bracket {
+  margin-right: 12px;
+}
+
+.right-bracket {
+  margin-left: 12px;
+}
+
+.vector-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: right;
+}
+
+.vector-element {
+  color: #a8a8a8;
+  padding: 2px 0;
+}

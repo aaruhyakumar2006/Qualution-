@@ -1,0 +1,353 @@
+{
+  "lesson_id": "lesson-8-grovers-search",
+  "title": "Grover's Search Algorithm",
+  "subtitle": "Quantum Amplitude Amplification & The Quadratic Speedup",
+  "duration_ms": 160000,
+  "width": 1600,
+  "height": 900,
+  "total_scenes": 16,
+  "target_objectives": [
+    "Understand the classical search bottleneck (O(N) queries)",
+    "Explain how superposition prepares equal probability across N candidate items",
+    "Describe how the Oracle marks the target state using a phase flip (+1/2 to -1/2)",
+    "Explain the Grover Diffusion operator as geometric inversion about the mean amplitude",
+    "Calculate why 2-qubit Grover search achieves 100% certainty in exactly 1 iteration",
+    "Transition to the practical Quantum Lab to build and verify the 14-gate circuit"
+  ],
+  "scenes": [
+    {
+      "scene_id": "scene_01",
+      "scene_number": 1,
+      "title": "The Search Problem",
+      "start_ms": 0,
+      "duration_ms": 10000,
+      "narration": "Imagine an unstructured database of four candidate boxes. One of these four boxes holds a hidden prize, but you are not allowed to peek inside beforehand.",
+      "highlight_words": ["database", "boxes", "prize"],
+      "visual": {
+        "type": "classical_boxes",
+        "params": {
+          "box_count": 4,
+          "target_index": 3,
+          "labels": ["00", "01", "10", "11"],
+          "active_checks": [0, 1, 2]
+        }
+      },
+      "katex": "N = 4 \\quad (\\text{Unsorted Database Candidates})",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_02",
+      "scene_number": 2,
+      "title": "Why Quantum Search?",
+      "start_ms": 10000,
+      "duration_ms": 10000,
+      "narration": "A classical search must inspect items one by one, requiring Order N queries. But quantum computing does not simply check everything at once: it shapes quantum interference so the target amplitude grows while wrong items cancel.",
+      "highlight_words": ["classical", "interference", "amplitude"],
+      "visual": {
+        "type": "search_comparison",
+        "params": {
+          "classical_complexity": "O(N)",
+          "quantum_complexity": "O(√N)",
+          "speedup_factor": "Quadratic Speedup"
+        }
+      },
+      "katex": "\\text{Classical: } \\mathcal{O}(N) \\quad \\longleftrightarrow \\quad \\text{Grover: } \\mathcal{O}(\\sqrt{N})",
+      "transition": "slide"
+    },
+    {
+      "scene_id": "scene_03",
+      "scene_number": 3,
+      "title": "The 2-Qubit Search Space",
+      "start_ms": 20000,
+      "duration_ms": 10000,
+      "narration": "In a 2-qubit quantum computer, two wires span four computational basis states: ket zero-zero, zero-one, one-zero, and our marked target state, ket one-one.",
+      "highlight_words": ["qubit", "basis", "target"],
+      "visual": {
+        "type": "state_grid",
+        "params": {
+          "states": ["|00⟩", "|01⟩", "|10⟩", "|11⟩"],
+          "target_state": "|11⟩",
+          "highlight_target": true
+        }
+      },
+      "katex": "\\mathcal{H}_4 = \\text{span}\\{|00\\rangle, |01\\rangle, |10\\rangle, |11\\rangle\\}",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_04",
+      "scene_number": 4,
+      "title": "Superposition",
+      "start_ms": 30000,
+      "duration_ms": 10000,
+      "narration": "Applying a Hadamard gate to both qubits prepares an equal superposition state s. All four basis states now share an identical amplitude of positive one-half, meaning each has a 25% probability of being measured.",
+      "highlight_words": ["Hadamard", "superposition", "probability"],
+      "visual": {
+        "type": "amplitude_bars",
+        "params": {
+          "amplitudes": [0.5, 0.5, 0.5, 0.5],
+          "probabilities": [0.25, 0.25, 0.25, 0.25],
+          "labels": ["|00⟩", "|01⟩", "|10⟩", "|11⟩"],
+          "highlight_index": -1
+        }
+      },
+      "katex": "|s\\rangle = H^{\\otimes 2}|00\\rangle = \\frac{1}{2}(|00\\rangle + |01\\rangle + |10\\rangle + |11\\rangle)",
+      "transition": "slide"
+    },
+    {
+      "scene_id": "scene_05",
+      "scene_number": 5,
+      "title": "Prediction Checkpoint: Superposition",
+      "start_ms": 40000,
+      "duration_ms": 10000,
+      "narration": "Let's pause for a quick concept check: Right now in this equal superposition, which state has the highest probability of being measured?",
+      "highlight_words": ["pause", "superposition", "probability"],
+      "visual": {
+        "type": "checkpoint",
+        "params": {
+          "question": "Before the oracle runs, which state has the highest probability?",
+          "options": [
+            { "id": "a", "text": "Target |11⟩", "isCorrect": false },
+            { "id": "b", "text": "State |00⟩", "isCorrect": false },
+            { "id": "c", "text": "All four states are equal (25% each)", "isCorrect": true },
+            { "id": "d", "text": "Cannot be determined", "isCorrect": false }
+          ],
+          "explanation": "Correct! Each state has amplitude +1/2, so by the Born rule P = |1/2|² = 25% for all four states."
+        }
+      },
+      "katex": "P(|x\\rangle) = |\\alpha_x|^2 = (1/2)^2 = 0.25 \\quad (\\forall x)",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_06",
+      "scene_number": 6,
+      "title": "The Oracle",
+      "start_ms": 50000,
+      "duration_ms": 10000,
+      "narration": "Now the Oracle activates. The oracle recognizes our target state one-one, and flips its relative phase from positive one-half to negative one-half, leaving all other states completely untouched.",
+      "highlight_words": ["Oracle", "phase", "untouched"],
+      "visual": {
+        "type": "amplitude_bars",
+        "params": {
+          "amplitudes": [0.5, 0.5, 0.5, -0.5],
+          "probabilities": [0.25, 0.25, 0.25, 0.25],
+          "labels": ["|00⟩", "|01⟩", "|10⟩", "|11⟩"],
+          "highlight_index": 3,
+          "is_negative": [false, false, false, true]
+        }
+      },
+      "katex": "U_\\omega = I - 2|11\\rangle\\langle 11| \\implies U_\\omega|s\\rangle = \\frac{1}{2}(|00\\rangle + |01\\rangle + |10\\rangle - |11\\rangle)",
+      "transition": "slide"
+    },
+    {
+      "scene_id": "scene_07",
+      "scene_number": 7,
+      "title": "Phase Visualization",
+      "start_ms": 60000,
+      "duration_ms": 10000,
+      "narration": "Notice this crucial quantum fact: Because measurement probability equals amplitude squared, minus one-half squared is still twenty-five percent! The phase mark is completely invisible to direct measurement.",
+      "highlight_words": ["quantum", "squared", "invisible"],
+      "visual": {
+        "type": "phase_vs_prob",
+        "params": {
+          "positive_amp": 0.5,
+          "negative_amp": -0.5,
+          "positive_prob": 0.25,
+          "negative_prob": 0.25,
+          "insight": "P = |-1/2|² = +1/4 = 25%. Measurement alone cannot detect a phase mark!"
+        }
+      },
+      "katex": "P(|11\\rangle) = |-\\frac{1}{2}|^2 = +\\frac{1}{4} = 25\\% \\quad (\\text{Invisible Phase})",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_08",
+      "scene_number": 8,
+      "title": "Diffusion Operator",
+      "start_ms": 70000,
+      "duration_ms": 10000,
+      "narration": "To turn that hidden phase into measurable probability, we construct the Grover Diffusion Operator: a symmetric gate sandwich of Hadamard, Pauli-X, Controlled-Z, Pauli-X, and Hadamard.",
+      "highlight_words": ["Diffusion", "symmetric", "sandwich"],
+      "visual": {
+        "type": "circuit_decomposition",
+        "params": {
+          "stages": ["H ⊗ H", "X ⊗ X", "CZ", "X ⊗ X", "H ⊗ H"],
+          "operator_symbol": "U_s = 2|s⟩⟨s| - I",
+          "matrix_size": "4x4"
+        }
+      },
+      "katex": "U_s = 2|s\\rangle\\langle s| - I = H^{\\otimes 2} (2|00\\rangle\\langle 00| - I) H^{\\otimes 2}",
+      "transition": "slide"
+    },
+    {
+      "scene_id": "scene_09",
+      "scene_number": 9,
+      "title": "Amplitude Amplification",
+      "start_ms": 80000,
+      "duration_ms": 10000,
+      "narration": "Diffusion performs inversion about the mean. The average amplitude is positive one-fourth. Reflecting across the mean cancels the three unmarked states to zero, while boosting state one-one all the way to positive one!",
+      "highlight_words": ["inversion", "mean", "boosting"],
+      "visual": {
+        "type": "reflection_about_mean",
+        "params": {
+          "mean": 0.25,
+          "before": [0.5, 0.5, 0.5, -0.5],
+          "after": [0.0, 0.0, 0.0, 1.0],
+          "formula": "α'_x = 2μ - α_x"
+        }
+      },
+      "katex": "\\mu = +0.25 \\implies \\alpha'_{11} = 2(0.25) - (-0.50) = +1.00",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_10",
+      "scene_number": 10,
+      "title": "3D Quantum State Visualization",
+      "start_ms": 90000,
+      "duration_ms": 10000,
+      "narration": "Geometrically, Grover's algorithm rotates the quantum state vector inside a two-dimensional subspace. Each iteration rotates the state vector by exactly sixty degrees, pointing directly along the target axis.",
+      "highlight_words": ["rotates", "subspace", "target"],
+      "visual": {
+        "type": "subspace_rotation_3d",
+        "params": {
+          "initial_angle_deg": 30,
+          "rotation_step_deg": 60,
+          "final_angle_deg": 90,
+          "basis_axes": ["|s'⟩ (Unmarked)", "|11⟩ (Target)"]
+        }
+      },
+      "katex": "\\theta = 30^\\circ \\quad \\xrightarrow{+2\\theta} \\quad \\theta_{\\text{final}} = 90^\\circ \\quad (|\\psi\\rangle = |11\\rangle)",
+      "transition": "slide"
+    },
+    {
+      "scene_id": "scene_11",
+      "scene_number": 11,
+      "title": "Measurement",
+      "start_ms": 100000,
+      "duration_ms": 10000,
+      "narration": "Now we measure both wires. With amplitude one and probability 100%, the wavefunction collapses with certainty into classical bits one-one. Grover has located the target in a single query!",
+      "highlight_words": ["measure", "collapses", "certainty"],
+      "visual": {
+        "type": "measurement_collapse",
+        "params": {
+          "final_state": "|11⟩",
+          "probability": 1.00,
+          "classical_bits": "11",
+          "shots": 1000
+        }
+      },
+      "katex": "P(11) = |1.00|^2 = 1.00 = 100\\% \\implies \\text{Readout: } '11'",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_12",
+      "scene_number": 12,
+      "title": "Why √N?",
+      "start_ms": 110000,
+      "duration_ms": 10000,
+      "narration": "Why does Grover scale as square root of N? Because each reflection rotates the state by two theta, where sine theta is one over root N. Reaching ninety degrees takes approximately pi over four times root N steps.",
+      "highlight_words": ["scale", "reflection", "steps"],
+      "visual": {
+        "type": "scaling_chart",
+        "params": {
+          "data": [
+            { "N": 4, "classical": 3, "grover": 1, "speedup": "3x" },
+            { "N": 16, "classical": 15, "grover": 3, "speedup": "5x" },
+            { "N": 64, "classical": 63, "grover": 6, "speedup": "10x" },
+            { "N": 1048576, "classical": 1000000, "grover": 1000, "speedup": "1000x" }
+          ]
+        }
+      },
+      "katex": "R \\approx \\left\\lfloor \\frac{\\pi}{4}\\sqrt{N} \\right\\rfloor \\implies \\text{For } N=4, R = 1",
+      "transition": "slide"
+    },
+    {
+      "scene_id": "scene_13",
+      "scene_number": 13,
+      "title": "Full Grover Circuit Walkthrough",
+      "start_ms": 120000,
+      "duration_ms": 10000,
+      "narration": "Here is the complete quantum circuit: Hadamards for superposition, Controlled-Z for the oracle, H-X-CZ-X-H for diffusion, followed by measurement detectors on both qubits.",
+      "highlight_words": ["circuit", "Hadamards", "measurement"],
+      "visual": {
+        "type": "circuit_walkthrough",
+        "params": {
+          "columns": [
+            { "name": "Init", "gates": ["H", "H"] },
+            { "name": "Oracle", "gates": ["CZ"] },
+            { "name": "Diffusion", "gates": ["H", "X", "CZ", "X", "H"] },
+            { "name": "Measure", "gates": ["M", "M"] }
+          ],
+          "highlight_blocks": ["Init", "Oracle", "Diffusion", "Measure"]
+        }
+      },
+      "katex": "\\text{Circuit: } H^{\\otimes 2} \\;\\to\\; U_\\omega \\;\\to\\; U_s \\;\\to\\; \\text{Measure}",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_14",
+      "scene_number": 14,
+      "title": "Final Prediction Checkpoint",
+      "start_ms": 130000,
+      "duration_ms": 10000,
+      "narration": "Final mastery test: After completing one Grover iteration on a 2-qubit register targeting state one-one, what is the expected measurement outcome?",
+      "highlight_words": ["mastery", "iteration", "outcome"],
+      "visual": {
+        "type": "checkpoint",
+        "params": {
+          "question": "What state dominates after one Grover iteration for target |11⟩?",
+          "options": [
+            { "id": "a", "text": "State |00⟩ with 50%", "isCorrect": false },
+            { "id": "b", "text": "State |11⟩ with ~100% probability", "isCorrect": true },
+            { "id": "c", "text": "All 4 states equally likely", "isCorrect": false },
+            { "id": "d", "text": "Random noise", "isCorrect": false }
+          ],
+          "explanation": "Mastery confirmed! One iteration rotates the vector to exactly 90 degrees, focusing 100% of measurement probability on target state |11⟩."
+        }
+      },
+      "katex": "|\\psi_1\\rangle = 1.00|11\\rangle \\implies P(11) = 100\\%",
+      "transition": "slide"
+    },
+    {
+      "scene_id": "scene_15",
+      "scene_number": 15,
+      "title": "Theory Summary",
+      "start_ms": 140000,
+      "duration_ms": 10000,
+      "narration": "You have mastered the four pillars of Grover's search: equal superposition, phase-flip oracle, inversion about the mean, and measurement readout.",
+      "highlight_words": ["pillars", "superposition", "readout"],
+      "visual": {
+        "type": "summary_pillars",
+        "params": {
+          "pillars": [
+            "1. Superposition: Equalizes all basis amplitudes to +1/2",
+            "2. Oracle: Inverts the target phase to -1/2",
+            "3. Diffusion: Reflects amplitudes across the mean μ = +0.25",
+            "4. Measurement: Collapses wavefunction to target with 100% certainty"
+          ]
+        }
+      },
+      "katex": "\\boxed{\\text{Grover Search Mastered: 1 Query } \\longleftrightarrow 100\\% \\text{ Fidelity}}",
+      "transition": "fade"
+    },
+    {
+      "scene_id": "scene_16",
+      "scene_number": 16,
+      "title": "Enter the Lab",
+      "start_ms": 150000,
+      "duration_ms": 10000,
+      "narration": "You understand the physics. Now step into the Quantum Lab and assemble the live circuit on the Workbench yourself.",
+      "highlight_words": ["physics", "Quantum Lab", "Workbench"],
+      "visual": {
+        "type": "lab_cta",
+        "params": {
+          "button_text": "ENTER QUANTUM LAB",
+          "action": "launch_workbench",
+          "lesson_id": "lesson-8-grovers-search",
+          "xp_reward": 350
+        }
+      },
+      "katex": "\\text{Theory Complete } (+350\\text{ XP}) \\implies \\text{Ready for Workbench Lab}",
+      "transition": "fade"
+    }
+  ]
+}

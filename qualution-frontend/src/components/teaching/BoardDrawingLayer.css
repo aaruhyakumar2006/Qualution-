@@ -1,0 +1,18 @@
+/**
+ * BoardDrawingLayer.css
+ *
+ * PHASE 5: Styles for the SVG drawing layer.
+ * Minimal — most visual properties are set inline via React props.
+ */
+
+.board-drawing-layer {
+  pointer-events: none;
+}
+
+.board-drawing-layer line,
+.board-drawing-layer path,
+.board-drawing-layer circle,
+.board-drawing-layer polygon,
+.board-drawing-layer rect {
+  vector-effect: non-scaling-stroke;
+}

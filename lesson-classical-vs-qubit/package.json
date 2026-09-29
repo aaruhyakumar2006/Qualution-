@@ -1,0 +1,20 @@
+{
+  "name": "lesson-classical-vs-qubit",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild player.js --bundle --outfile=bundle.js --format=esm --sourcemap",
+    "dev": "esbuild player.js --bundle --outfile=bundle.js --format=esm --sourcemap --watch",
+    "serve": "npx --yes serve . --listen 5050",
+    "start": "npm run build && npm run serve",
+    "validate": "node validate.js"
+  },
+  "dependencies": {
+    "animejs": "^4.0.0",
+    "katex": "^0.18.9"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "esbuild": "^0.25.0"
+  }
+}

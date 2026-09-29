@@ -1,0 +1,79 @@
+/**
+ * CaptionLayer.css
+ *
+ * PHASE 7: Teaching Caption Layer styles.
+ *
+ * The layer is an absolute overlay that covers the board stage container.
+ * Captions are rendered as dark pills at top / center / bottom slots.
+ * Pointer events are disabled so captions never block board interaction.
+ */
+
+/* ── Overlay container ──────────────────────────────────────────────────── */
+
+.caption-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20; /* above all board layers (max z-index 4) */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 0;
+  box-sizing: border-box;
+}
+
+/* ── Position slots ─────────────────────────────────────────────────────── */
+
+.caption-layer__slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.caption-layer__slot--top {
+  justify-content: flex-start;
+}
+
+.caption-layer__slot--center {
+  justify-content: center;
+  /* flex-grow so it fills the middle space */
+  flex: 1;
+}
+
+.caption-layer__slot--bottom {
+  justify-content: flex-end;
+}
+
+/* ── Caption pill ───────────────────────────────────────────────────────── */
+
+.caption-layer__pill {
+  display: inline-block;
+  background: rgba(8, 10, 18, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 8px;
+  padding: 8px 20px;
+  max-width: 720px;
+  width: fit-content;
+  /* Opacity is set inline from ActiveCaption.opacity */
+  transition: opacity 80ms linear;
+  /* Prevent layout shift during fade */
+  will-change: opacity;
+}
+
+/* ── Caption text ───────────────────────────────────────────────────────── */
+
+.caption-layer__text {
+  display: block;
+  color: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.08px;
+  /* Crisp legibility over dark board */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+  /* Font size is set inline from ActiveCaption.fontSize */
+}

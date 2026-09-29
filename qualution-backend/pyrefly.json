@@ -1,0 +1,10 @@
+{
+  "project_roots": [
+    "."
+  ],
+  "python_interpreter": "venv/Scripts/python.exe",
+  "search_path": [
+    ".",
+    "venv/Lib/site-packages"
+  ]
+}

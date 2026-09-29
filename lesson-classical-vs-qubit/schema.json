@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "qualution-lesson-schema",
+  "title": "Qualution Lesson",
+  "type": "object",
+  "required": ["lesson_id", "duration_ms", "keyframes"],
+  "additionalProperties": false,
+  "properties": {
+    "lesson_id": { "type": "string" },
+    "duration_ms": { "type": "number", "minimum": 0 },
+    "keyframes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/keyframe" }
+    }
+  },
+  "definitions": {
+    "keyframe": {
+      "type": "object",
+      "required": ["keyframe_id", "start_ms", "duration_ms", "narration", "highlight_words", "visual", "transition"],
+      "additionalProperties": false,
+      "properties": {
+        "keyframe_id": { "type": "string" },
+        "start_ms": { "type": "number", "minimum": 0 },
+        "duration_ms": { "type": "number", "minimum": 0 },
+        "narration": { "type": "string" },
+        "highlight_words": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "visual": { "$ref": "#/definitions/visual" },
+        "transition": {
+          "type": "string",
+          "enum": ["fade", "slide", "none"]
+        }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "required": ["type", "params"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["bit_flip", "qubit_sphere", "comparison_table", "text_only"]
+        },
+        "params": { "type": "object" }
+      }
+    }
+  }
+}

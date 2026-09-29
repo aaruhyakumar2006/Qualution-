@@ -1,0 +1,74 @@
+.win-splitter-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.win-splitter-container.horizontal {
+  flex-direction: row;
+}
+
+.win-splitter-container.vertical {
+  flex-direction: column;
+}
+
+.win-splitter-first {
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+}
+
+.win-splitter-second {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+
+/* Splitter Bar */
+.win-splitter-bar {
+  background: var(--wb-bg-app, #090c10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 10;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.win-splitter-bar.horizontal {
+  width: 4px;
+  cursor: col-resize;
+  border: none;
+}
+
+.win-splitter-bar.vertical {
+  height: 4px;
+  cursor: row-resize;
+  border: none;
+}
+
+.win-splitter-bar:hover,
+.win-splitter-bar:active {
+  background: var(--wb-accent, #0f62fe);
+}
+
+.win-splitter-handle {
+  background: var(--text-muted, rgba(255, 255, 255, 0.2));
+  opacity: 0.5;
+  border-radius: 1px;
+}
+
+.win-splitter-bar.horizontal .win-splitter-handle {
+  width: 1px;
+  height: 20px;
+}
+
+.win-splitter-bar.vertical .win-splitter-handle {
+  width: 20px;
+  height: 1px;
+}

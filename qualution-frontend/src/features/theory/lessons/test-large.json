@@ -1,0 +1,289 @@
+{
+  "v": 1,
+  "id": "test-large",
+  "title": "Quantum Gates: From Classical to Quantum Computing",
+  "topic": "quantum-gates",
+  "difficulty": "Intermediate",
+  "estimatedMinutes": 12,
+  "objectives": [
+    "Understand the difference between classical and quantum gates",
+    "Learn the Pauli-X, Hadamard, and CNOT gates",
+    "Understand reversibility in quantum computing",
+    "Recognise gate matrices and their action on qubit states",
+    "Apply gates to construct simple quantum circuits"
+  ],
+  "defaults": {
+    "color": "#e8e8e8",
+    "mathColor": "#f5c842",
+    "strokeWidth": 2,
+    "fontSize": 1.0
+  },
+  "styles": {
+    "title":    { "scale": 1.7, "color": "#ffffff", "bold": true },
+    "heading":  { "scale": 1.3, "color": "#e8e8e8", "bold": true },
+    "subhead":  { "scale": 1.1, "color": "#cccccc", "bold": true },
+    "body":     { "scale": 1.0, "color": "#e8e8e8" },
+    "caption":  { "scale": 0.85, "color": "#aaaaaa", "italic": true },
+    "emphasis": { "scale": 1.0, "color": "#f5c842", "bold": true }
+  },
+  "objects": {
+    "wire0":   { "type": "qubit-wire", "length": 600, "label": "|0⟩" },
+    "wire1":   { "type": "qubit-wire", "length": 600, "label": "|1⟩" },
+    "wirePsi": { "type": "qubit-wire", "length": 600, "label": "|ψ⟩" },
+    "xGate":   { "type": "gate-box", "label": "X",    "size": 44 },
+    "hGate":   { "type": "gate-box", "label": "H",    "size": 44 },
+    "zGate":   { "type": "gate-box", "label": "Z",    "size": 44 },
+    "yGate":   { "type": "gate-box", "label": "Y",    "size": 44 },
+    "tGate":   { "type": "gate-box", "label": "T",    "size": 44 },
+    "sGate":   { "type": "gate-box", "label": "S",    "size": 44 },
+    "measure": { "type": "measure-symbol", "size": 44 },
+    "ket0":    { "type": "ket", "label": "|0⟩" },
+    "ket1":    { "type": "ket", "label": "|1⟩" },
+    "ketPlus": { "type": "ket", "label": "|+⟩" }
+  },
+  "steps": [
+    {
+      "id": "title-card",
+      "title": "Title",
+      "cmds": [
+        ["m", 100, 80],
+        ["n", "In this lesson we explore quantum gates — the building blocks of quantum circuits."],
+        ["ws", "Quantum Gates", 200, 130, "title"],
+        ["p", 800]
+      ]
+    },
+    {
+      "id": "classical-gates",
+      "title": "Classical Gates",
+      "cmds": [
+        ["n", "Classical logic gates operate on bits. They are the foundation of all classical computers."],
+        ["m", 200, 220],
+        ["ws", "Classical Logic Gates", 200, 220, "heading"],
+        ["p", 500],
+        ["ws", "AND, OR, NOT, NAND, XOR", 200, 265, "body"],
+        ["p", 600],
+        ["n", "Classical gates are generally irreversible. Given the output, you cannot always recover the input."],
+        ["ws", "Problem: most are irreversible", 200, 310, "caption"],
+        ["p", 700]
+      ]
+    },
+    {
+      "id": "quantum-difference",
+      "title": "Quantum Difference",
+      "cmds": [
+        ["n", "Quantum gates are fundamentally different. They are always reversible and operate on qubits."],
+        ["m", 200, 390],
+        ["ws", "Quantum gates are:", 200, 390, "subhead"],
+        ["p", 400],
+        ["w", "• Always reversible (unitary)", 220, 430, 1.0],
+        ["p", 300],
+        ["w", "• Operate on superpositions", 220, 465, 1.0],
+        ["p", 300],
+        ["w", "• Represented by unitary matrices", 220, 500, 1.0],
+        ["p", 600]
+      ]
+    },
+    {
+      "id": "pauli-x-intro",
+      "title": "Pauli-X Gate",
+      "cmds": [
+        ["n", "The Pauli-X gate is the quantum equivalent of the classical NOT gate."],
+        ["m", 200, 130],
+        ["ws", "Pauli-X Gate (NOT)", 200, 130, "heading"],
+        ["p", 500],
+        ["n", "It flips the qubit state: zero becomes one, and one becomes zero."],
+        ["ws", "Flips |0⟩ ↔ |1⟩", 200, 175, "body"],
+        ["p", 600]
+      ]
+    },
+    {
+      "id": "pauli-x-matrix",
+      "title": "X Matrix",
+      "cmds": [
+        ["n", "The matrix representation of the Pauli-X gate is a two-by-two matrix with ones on the anti-diagonal."],
+        ["m", 200, 250],
+        ["ws", "Matrix:", 200, 250, "caption"],
+        ["wm", "X = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}", 200, 290, 1.4],
+        ["p", 900]
+      ]
+    },
+    {
+      "id": "pauli-x-action",
+      "title": "X Gate Action",
+      "cmds": [
+        ["n", "Applying X to the zero state gives the one state. Applying it again returns to zero."],
+        ["m", 200, 420],
+        ["wm", "X|0\\rangle = |1\\rangle", 200, 420, 1.3],
+        ["p", 600],
+        ["wm", "X|1\\rangle = |0\\rangle", 200, 470, 1.3],
+        ["p", 600],
+        ["h", [180, 405, 300, 85]],
+        ["p", 800]
+      ]
+    },
+    {
+      "id": "pauli-x-circuit",
+      "title": "X Circuit",
+      "cmds": [
+        ["n", "Here is a simple circuit applying the X gate to the zero state."],
+        ["m", 150, 560],
+        ["o", "wire0", 150, 560],
+        ["o", "xGate", 400, 560],
+        ["o", "measure", 680, 560],
+        ["p", 1000]
+      ]
+    },
+    {
+      "id": "hadamard-intro",
+      "title": "Hadamard Gate",
+      "cmds": [
+        ["n", "The Hadamard gate creates superposition. It is one of the most important gates in quantum computing."],
+        ["m", 200, 130],
+        ["ws", "Hadamard Gate (H)", 200, 130, "heading"],
+        ["p", 500],
+        ["ws", "Creates equal superposition", 200, 175, "body"],
+        ["p", 600]
+      ]
+    },
+    {
+      "id": "hadamard-matrix",
+      "title": "H Matrix",
+      "cmds": [
+        ["n", "The Hadamard matrix is one over root two, times the sum of the Pauli-X and Pauli-Z matrices."],
+        ["m", 200, 250],
+        ["wm", "H = \\frac{1}{\\sqrt{2}}\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}", 200, 290, 1.3],
+        ["p", 1000]
+      ]
+    },
+    {
+      "id": "hadamard-action",
+      "title": "H Gate Action",
+      "cmds": [
+        ["n", "Applying H to zero gives the plus state — an equal superposition of zero and one."],
+        ["m", 200, 420],
+        ["wm", "H|0\\rangle = |{+}\\rangle = \\frac{|0\\rangle + |1\\rangle}{\\sqrt{2}}", 200, 420, 1.2],
+        ["p", 800],
+        ["n", "Applying H to one gives the minus state."],
+        ["wm", "H|1\\rangle = |{-}\\rangle = \\frac{|0\\rangle - |1\\rangle}{\\sqrt{2}}", 200, 480, 1.2],
+        ["p", 800],
+        ["h", [180, 405, 580, 95]],
+        ["p", 900]
+      ]
+    },
+    {
+      "id": "hadamard-circuit",
+      "title": "H Circuit",
+      "cmds": [
+        ["n", "This circuit applies H to the zero state, creating superposition before measurement."],
+        ["m", 150, 580],
+        ["o", "wire0", 150, 580],
+        ["o", "hGate", 400, 580],
+        ["o", "measure", 680, 580],
+        ["p", 1000]
+      ]
+    },
+    {
+      "id": "pauli-z-intro",
+      "title": "Pauli-Z Gate",
+      "cmds": [
+        ["n", "The Pauli-Z gate applies a phase flip. It leaves zero unchanged but flips the sign of one."],
+        ["m", 200, 130],
+        ["ws", "Pauli-Z Gate (Phase Flip)", 200, 130, "heading"],
+        ["p", 500],
+        ["wm", "Z = \\begin{pmatrix} 1 & 0 \\\\ 0 & -1 \\end{pmatrix}", 200, 200, 1.3],
+        ["p", 700],
+        ["wm", "Z|0\\rangle = |0\\rangle", 200, 310, 1.2],
+        ["p", 400],
+        ["wm", "Z|1\\rangle = -|1\\rangle", 200, 360, 1.2],
+        ["p", 700]
+      ]
+    },
+    {
+      "id": "reversibility",
+      "title": "Reversibility",
+      "cmds": [
+        ["n", "All quantum gates are reversible. Applying a gate twice returns to the original state for self-inverse gates."],
+        ["m", 200, 130],
+        ["ws", "Reversibility", 200, 130, "heading"],
+        ["p", 500],
+        ["ws", "Self-inverse gates: X, H, Z, Y", 200, 175, "body"],
+        ["p", 500],
+        ["wm", "X^2 = H^2 = Z^2 = I", 200, 230, 1.3],
+        ["p", 700],
+        ["n", "This is a fundamental difference from classical irreversible gates like AND and OR."],
+        ["ws", "Classical AND is NOT reversible", 200, 300, "caption"],
+        ["p", 700]
+      ]
+    },
+    {
+      "id": "cnot-intro",
+      "title": "CNOT Gate",
+      "cmds": [
+        ["n", "The CNOT gate operates on two qubits. It flips the target qubit if and only if the control qubit is one."],
+        ["m", 200, 130],
+        ["ws", "CNOT Gate (Controlled-NOT)", 200, 130, "heading"],
+        ["p", 500],
+        ["ws", "Two-qubit gate: control + target", 200, 175, "body"],
+        ["p", 600]
+      ]
+    },
+    {
+      "id": "cnot-truth-table",
+      "title": "CNOT Truth Table",
+      "cmds": [
+        ["n", "The CNOT truth table shows how the target qubit changes based on the control qubit."],
+        ["m", 200, 250],
+        ["ws", "Control | Target | Output", 200, 250, "caption"],
+        ["p", 400],
+        ["w", "  0     |   0    |   0", 200, 285, 0.9],
+        ["p", 200],
+        ["w", "  0     |   1    |   1", 200, 315, 0.9],
+        ["p", 200],
+        ["w", "  1     |   0    |   1", 200, 345, 0.9],
+        ["p", 200],
+        ["w", "  1     |   1    |   0", 200, 375, 0.9],
+        ["p", 600],
+        ["h", [180, 330, 380, 50]],
+        ["p", 800]
+      ]
+    },
+    {
+      "id": "cnot-circuit",
+      "title": "CNOT Circuit",
+      "cmds": [
+        ["n", "Here is a two-qubit circuit using the CNOT gate to create an entangled Bell state."],
+        ["m", 150, 500],
+        ["o", "wire0", 150, 500],
+        ["o", "hGate", 350, 500],
+        ["m", 150, 570],
+        ["o", "wire0", 150, 570],
+        ["d", "l", 350, 500, 350, 570],
+        ["d", "c", 350, 570, 8],
+        ["o", "measure", 680, 500],
+        ["o", "measure", 680, 570],
+        ["p", 1200]
+      ]
+    },
+    {
+      "id": "gate-summary",
+      "title": "Summary",
+      "cmds": [
+        ["n", "To summarise: quantum gates are reversible unitary operations that transform qubit states."],
+        ["m", 200, 130],
+        ["ws", "Summary", 200, 130, "heading"],
+        ["p", 400],
+        ["w", "X  — bit flip (NOT)", 220, 185, 1.0],
+        ["p", 250],
+        ["w", "H  — superposition", 220, 220, 1.0],
+        ["p", 250],
+        ["w", "Z  — phase flip", 220, 255, 1.0],
+        ["p", 250],
+        ["w", "CNOT — entanglement", 220, 290, 1.0],
+        ["p", 600],
+        ["n", "These four gates form the foundation of most quantum algorithms."],
+        ["d", "u", 200, 155, 200],
+        ["p", 900]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,562 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-knowledge-check",
+  "lessonTitle": "Sprint 1 Comprehensive Knowledge Check",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 220,
+  "fps": 30,
+  "totalFrames": 6600,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Synthesize all core concepts of Sprint 1 (Quantum Foundations).",
+    "Review state vector representation, Born's Rule, and normalization.",
+    "Compare Pauli X, Y, Z, Hadamard, and phase gates.",
+    "Walk through diagnostic multi-step circuit analysis questions.",
+    "Prepare learner for the formal Sprint 1 Theoretical Assessment."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Synthesis of Lessons 1 through 9",
+      "Statevector mathematics |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9",
+      "Born rule probability verification",
+      "Bloch sphere geometric coordinates",
+      "Circuit trace walkthroughs",
+      "Common student misconceptions and remediation"
+    ],
+    "topicsDeferred": [
+      "Two-qubit entanglement (Sprint 2)",
+      "Hardware error mitigation (Sprint 3)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "Welcome to the Sprint 1 Review",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "You have traveled from the basic definition of a qubit to full circuit design and wave interference. In this review, we synthesize every concept to ensure you have rock-solid quantum foundations.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Welcome to the Sprint 1 Comprehensive Knowledge Review.",
+          "startFrame": 1,
+          "endFrame": 300
+        },
+        {
+          "text": "Let us synthesize every foundational concept before the formal assessment.",
+          "startFrame": 301,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 10: SPRINT 1 KNOWLEDGE CHECK",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "Mastery Review & Diagnostic Synthesis",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Frame review session and motivate student readiness.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Pillar 1: The Quantum State Vector",
+      "durationSeconds": 30,
+      "startFrame": 601,
+      "endFrame": 1500,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Remember Pillar 1: A qubit is a unit vector |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9 in two-dimensional complex Hilbert space. The normalization constraint |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1 guarantees that total probability is always 100 percent.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Pillar 1: |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9 in \u2102\u00b2 Hilbert space.",
+          "startFrame": 601,
+          "endFrame": 1020
+        },
+        {
+          "text": "Conservation of probability: |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.0 always.",
+          "startFrame": 1021,
+          "endFrame": 1500
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_p1_title",
+          "text": "Pillar 1: The Quantum State Vector",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_p1_eq",
+          "text": "|\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9  with  |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Reinforce state vector definition and normalization.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Pillar 2: Born's Rule & Measurement",
+      "durationSeconds": 30,
+      "startFrame": 1501,
+      "endFrame": 2400,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Pillar 2: Measurement is non-deterministic and irreversible. Born's Rule tells us that the probability of observing outcome x is the absolute square of its inner product with the state: P(x) = |\u27e8x|\u03c8\u27e9|\u00b2.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Pillar 2: Measurement collapses superposition irreversibly.",
+          "startFrame": 1501,
+          "endFrame": 1920
+        },
+        {
+          "text": "Born's Rule: P(x) = |\u27e8x|\u03c8\u27e9|\u00b2. P(0) = |\u03b1|\u00b2, P(1) = |\u03b2|\u00b2.",
+          "startFrame": 1921,
+          "endFrame": 2400
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_p2_title",
+          "text": "Pillar 2: Born's Rule & Collapse",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_p2_eq",
+          "text": "P(x) = |\u27e8x|\u03c8\u27e9|\u00b2  (Irreversible Projection)",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1501,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Reinforce measurement mechanics and Born's Rule.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "Pillar 3: The Single-Qubit Gate Suite",
+      "durationSeconds": 35,
+      "startFrame": 2401,
+      "endFrame": 3450,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Pillar 3: All single-qubit gates are unitary rotations. X flips bits; Z flips relative phase; H creates superposition; S and T apply \u03c0/2 and \u03c0/4 phase shifts; and Rx, Ry, Rz provide continuous angle control.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Pillar 3: Quantum gates are unitary rotations (U\u2020U = I).",
+          "startFrame": 2401,
+          "endFrame": 2880
+        },
+        {
+          "text": "X = Bit-flip | Z = Phase-flip | H = Superposition | S, T = Phase shifts.",
+          "startFrame": 2881,
+          "endFrame": 3450
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_p3_title",
+          "text": "Pillar 3: Canonical Single-Qubit Gates",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_p3_grid",
+          "text": "X, Y, Z (Pauli) | H (Hadamard) | S, T (Phase) | R_x, R_y, R_z (Rotations)",
+          "role": "body",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2401,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Summarize the complete gate taxonomy.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "Pillar 4: Quantum Phase & Interference",
+      "durationSeconds": 35,
+      "startFrame": 3451,
+      "endFrame": 4500,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Pillar 4: Relative phase drives wave interference. By chaining gates like Hadamard and Z, quantum algorithms engineer destructive cancellation for incorrect paths and constructive amplification for the solution.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Pillar 4: Relative phase steers constructive and destructive interference.",
+          "startFrame": 3451,
+          "endFrame": 3930
+        },
+        {
+          "text": "H \u00b7 Z \u00b7 H = X: Interference transforms a phase flip into a bit flip.",
+          "startFrame": 3931,
+          "endFrame": 4500
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_p4_title",
+          "text": "Pillar 4: Wave Interference in Action",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_p4_interf",
+          "text": "H \u00b7 Z \u00b7 H = X (Interference Identity)",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3451,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Revisit interference mechanics as the core computational mechanism.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "Diagnostic Practice Question",
+      "durationSeconds": 40,
+      "startFrame": 4501,
+      "endFrame": 5700,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Let us test your intuition: Starting in state |0\u27e9, what state results from applying an X gate followed by an H gate? First, X flips |0\u27e9 to |1\u27e9. Then H transforms |1\u27e9 into the minus state: (|0\u27e9 - |1\u27e9) / \u221a2!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Diagnostic Challenge: What is the state after applying X then H to |0\u27e9?",
+          "startFrame": 4501,
+          "endFrame": 5040
+        },
+        {
+          "text": "Step 1: X|0\u27e9 = |1\u27e9. Step 2: H|1\u27e9 = |-\u27e9 = (|0\u27e9 - |1\u27e9)/\u221a2. Excellent!",
+          "startFrame": 5041,
+          "endFrame": 5700
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_diag_q",
+          "text": "Challenge: H \u00b7 X |0\u27e9 = ?",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_ans",
+          "text": "Answer: |-\u27e9 = (|0\u27e9 - |1\u27e9) / \u221a2",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4501,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Provide an active retrieval practice exercise.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Ready for the Assessment",
+      "durationSeconds": 30,
+      "startFrame": 5701,
+      "endFrame": 6600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "You are now thoroughly prepared! Proceed to Lesson 11 for the formal Sprint 1 Theoretical Assessment to prove your mastery, earn your Sprint 1 badge, and advance to multi-qubit systems in Sprint 2.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "You are now fully prepared for the Sprint 1 Theoretical Assessment.",
+          "startFrame": 5701,
+          "endFrame": 6120
+        },
+        {
+          "text": "Proceed to Lesson 11 to demonstrate your quantum mastery!",
+          "startFrame": 6121,
+          "endFrame": 6600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_ready_title",
+          "text": "SPRINT 1 ASSESSMENT READY",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_badge",
+          "text": "Earn the 'Quantum Foundations Master' Credential",
+          "role": "subheader",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5701,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Inspire confidence and transition to the final assessment.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

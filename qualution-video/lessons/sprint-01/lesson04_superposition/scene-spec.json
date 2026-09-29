@@ -1,0 +1,689 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-superposition",
+  "lessonTitle": "Understanding Superposition",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 240,
+  "fps": 30,
+  "totalFrames": 7200,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Demystify quantum superposition beyond popular science tropes.",
+    "Understand superposition as linear combinations of state vectors in Hilbert space.",
+    "Differentiate equal superposition from classical probabilistic mixtures.",
+    "Analyze the Hadamard gate H and its transformation of basis vectors.",
+    "Recognize the plus state |+\u27e9 and minus state |-\u27e9.",
+    "Explain quantum parallelism and its computational implications."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Linear superposition as vector addition in vector space",
+      "Superposition vs classical coin flips / mixed states",
+      "The Hadamard gate transformation matrix",
+      "Creation of the plus state |+\u27e9 = (|0\u27e9 + |1\u27e9)/\u221a2",
+      "Creation of the minus state |-\u27e9 = (|0\u27e9 - |1\u27e9)/\u221a2",
+      "Equator of the Bloch sphere"
+    ],
+    "topicsDeferred": [
+      "Exact Born rule probability formulas (Lesson 5)",
+      "Relative phase rotations around the Z-axis (Lesson 7)",
+      "Multi-qubit superposition and exponential scaling (Lesson 9 & Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Myth vs Reality of Superposition",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Popular media often claims that a qubit is 'in two states at the same time.' But mathematically, a qubit in superposition is simply in ONE definite quantum state\u2014a linear combination of basis vectors.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Myth: A qubit is 'magically in two places at once.'",
+          "startFrame": 1,
+          "endFrame": 270
+        },
+        {
+          "text": "Reality: A qubit is in ONE definite state: a linear combination of basis vectors.",
+          "startFrame": 271,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 4: UNDERSTANDING SUPERPOSITION",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_myth",
+          "text": "Beyond the Pop-Science Tropes",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Debunk misconceptions about superposition and replace them with rigorous linear algebraic intuition.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Vector Addition in Hilbert Space",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Think of classical bits as navigating along a single vertical line between 0 and 1. A qubit expands this line into a continuous plane: by adding vectors \u03b1|0\u27e9 and \u03b2|1\u27e9, we point anywhere on the unit circle.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Classical bits exist only at discrete endpoints: 0 or 1.",
+          "startFrame": 601,
+          "endFrame": 930
+        },
+        {
+          "text": "Quantum superposition is vector addition: \u03b1|0\u27e9 + \u03b2|1\u27e9.",
+          "startFrame": 931,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_vec",
+          "text": "|\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_diag",
+          "text": "Vector Superposition in 2D Complex Plane",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Provide visual geometric intuition for linear combinations.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Superposition vs Classical Probability",
+      "durationSeconds": 30,
+      "startFrame": 1351,
+      "endFrame": 2250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "A classical coin spinning in the air has a 50 percent chance of heads, but at every microsecond it is in a definite classical state\u2014you simply lack knowledge. A qubit in superposition is fundamentally indeterminate until measured.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "A flipped coin is classically deterministic with subjective ignorance.",
+          "startFrame": 1351,
+          "endFrame": 1770
+        },
+        {
+          "text": "A quantum superposition holds intrinsic wave potential and phase.",
+          "startFrame": 1771,
+          "endFrame": 2250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_comp",
+          "text": "Classical Mixture vs Quantum Superposition",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_coin",
+          "text": "Coin: Epistemic ignorance (p=0.5)",
+          "role": "body",
+          "position": [
+            -4.0,
+            0.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_qstate",
+          "text": "Qubit: Coherent wave state with phase",
+          "role": "body",
+          "position": [
+            4.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Clearly distinguish epistemic classical uncertainty from quantum ontological coherence.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "The Hadamard Gate (H)",
+      "durationSeconds": 30,
+      "startFrame": 2251,
+      "endFrame": 3150,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "How do we create superposition in a quantum circuit? The most important tool is the Hadamard gate, denoted H. Applying H to the ground state |0\u27e9 produces an equal superposition of |0\u27e9 and |1\u27e9.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "The Hadamard gate (H) is the primary gateway to superposition.",
+          "startFrame": 2251,
+          "endFrame": 2640
+        },
+        {
+          "text": "Applying H to |0\u27e9 yields: H|0\u27e9 = (|0\u27e9 + |1\u27e9) / \u221a2.",
+          "startFrame": 2641,
+          "endFrame": 3150
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_h_matrix",
+          "text": "H = (1/\u221a2) [ [1,  1], [1, -1] ]",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_h_op",
+          "text": "H |0\u27e9 = |+\u27e9 = (|0\u27e9 + |1\u27e9)/\u221a2",
+          "role": "formula",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce the Hadamard gate matrix and its mathematical action on basis states.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "The Plus and Minus States: |+\u27e9 and |-\u27e9",
+      "durationSeconds": 30,
+      "startFrame": 3151,
+      "endFrame": 4050,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "When H acts on |0\u27e9, it creates the plus state |+\u27e9. But when H acts on |1\u27e9, it introduces a negative sign: the minus state |-\u27e9 = (|0\u27e9 - |1\u27e9)/\u221a2. Both have equal 50/50 measurement probabilities, but different internal phases!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "H|0\u27e9 = |+\u27e9 = (|0\u27e9 + |1\u27e9)/\u221a2.  H|1\u27e9 = |-\u27e9 = (|0\u27e9 - |1\u27e9)/\u221a2.",
+          "startFrame": 3151,
+          "endFrame": 3600
+        },
+        {
+          "text": "Both have 50% probabilities, but completely opposite internal phases!",
+          "startFrame": 3601,
+          "endFrame": 4050
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_plus",
+          "text": "|+\u27e9 = (|0\u27e9 + |1\u27e9) / \u221a2",
+          "role": "formula",
+          "position": [
+            -3.5,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_minus",
+          "text": "|-\u27e9 = (|0\u27e9 - |1\u27e9) / \u221a2",
+          "role": "formula",
+          "position": [
+            3.5,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3151,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Demonstrate the critical difference between |+\u27e9 and |-\u27e9 states.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "Superposition on the Bloch Sphere",
+      "durationSeconds": 35,
+      "startFrame": 4051,
+      "endFrame": 5100,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "On the Bloch sphere, the Hadamard gate rotates the state vector 90 degrees from the North Pole down to the equator along the positive X-axis for |+\u27e9, and the negative X-axis for |-\u27e9.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Hadamard rotates the state from the Z-pole to the equatorial plane.",
+          "startFrame": 4051,
+          "endFrame": 4530
+        },
+        {
+          "text": "|+\u27e9 lies along the +X axis; |-\u27e9 lies along the -X axis.",
+          "startFrame": 4531,
+          "endFrame": 5100
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_bloch_eq",
+          "text": "Equatorial States on the Bloch Sphere",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_xpos",
+          "text": "+X Axis: |+\u27e9",
+          "role": "body",
+          "position": [
+            3.5,
+            1.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_xneg",
+          "text": "-X Axis: |-\u27e9",
+          "role": "body",
+          "position": [
+            -3.5,
+            1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4051,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Visualize Hadamard rotation geometrically on the Bloch sphere.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "The Power of Quantum Parallelism",
+      "durationSeconds": 35,
+      "startFrame": 5101,
+      "endFrame": 6150,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Superposition is the engine of quantum advantage. When we place n qubits into superposition, our register simultaneously represents 2 to the power of n basis states\u2014allowing a quantum computer to evaluate entire search spaces in parallel.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Superposition is the engine of quantum advantage.",
+          "startFrame": 5101,
+          "endFrame": 5550
+        },
+        {
+          "text": "n qubits in superposition encode 2\u207f basis states simultaneously.",
+          "startFrame": 5551,
+          "endFrame": 6150
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_scale",
+          "text": "Quantum Parallelism: 2\u207f States",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_ex1",
+          "text": "10 qubits = 1,024 states",
+          "role": "body",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_ex2",
+          "text": "50 qubits = 1.12 \u00d7 10\u00b9\u2075 states",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5101,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Explain how single-qubit superposition scales into multi-qubit exponential parallelism.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-08",
+      "title": "Summary & Practical Connection",
+      "durationSeconds": 35,
+      "startFrame": 6151,
+      "endFrame": 7200,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To recap: superposition is a coherent linear combination of quantum basis states created by gates like the Hadamard. Next in Lesson 5, we discover what happens when we observe a superposition: Born's Rule and wavefunction collapse.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Summary: Superposition is linear vector combination created by H.",
+          "startFrame": 6151,
+          "endFrame": 6600
+        },
+        {
+          "text": "Next: Lesson 5 \u2014 Measurement, Born's Rule, and Wavefunction Collapse.",
+          "startFrame": 6601,
+          "endFrame": 7200
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 4 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_r1",
+          "text": "1. |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9 represents a coherent vector state",
+          "role": "body",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_r2",
+          "text": "2. H|0\u27e9 = |+\u27e9 and H|1\u27e9 = |-\u27e9 create equal superpositions",
+          "role": "body",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_r3",
+          "text": "3. Superposition scales exponentially: 2\u207f states across n qubits",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_8_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_8_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_8_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 6151,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Summarize lesson findings and build excitement for measurement theory.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

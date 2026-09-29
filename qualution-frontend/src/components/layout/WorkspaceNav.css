@@ -1,0 +1,114 @@
+.workspace-nav {
+  width: 60px;
+  background-color: var(--lab-surface, #0f131a);
+  border-right: 1px solid var(--lab-border-subtle, #151c28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  flex-shrink: 0;
+  user-select: none;
+  z-index: 15;
+  gap: 8px;
+}
+
+.workspace-nav-items,
+.workspace-nav-advanced-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  align-items: center;
+}
+
+.workspace-nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--lab-text-muted, #64748b);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.1s ease;
+  position: relative;
+}
+
+.workspace-nav-btn:hover {
+  background: var(--lab-surface-raised, #141923);
+  color: var(--lab-text, #f1f5f9);
+}
+
+.workspace-nav-btn.active {
+  background: var(--quantum-violet-muted, rgba(139, 92, 246, 0.14));
+  border-color: var(--quantum-violet-border, rgba(139, 92, 246, 0.35));
+  color: var(--quantum-violet-text, #a78bfa);
+  font-weight: 600;
+}
+
+.workspace-nav-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background-color: var(--quantum-violet, #8b5cf6);
+  border-radius: 0 2px 2px 0;
+}
+
+.workspace-nav-btn.advanced {
+  height: 42px;
+}
+
+.nav-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 1;
+}
+
+.workspace-nav-advanced-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid var(--lab-border-subtle, #151c28);
+  padding-top: 6px;
+  gap: 4px;
+}
+
+.workspace-nav-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  color: var(--lab-text-muted, #64748b);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 2px;
+  transition: all 0.1s ease;
+}
+
+.workspace-nav-toggle-btn:hover {
+  color: var(--lab-text-secondary, #94a3b8);
+}
+
+.advanced-toggle-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
