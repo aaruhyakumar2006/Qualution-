@@ -1,7 +1,6 @@
 <div align="center">
 
-<img width="2170" height="725" alt="bc886629-8b50-45be-bec8-98a9973207d4" src="https://github.com/user-attachments/assets/d9da0c6f-4723-40b3-a750-f9960dcadb48" />
-
+<img src="assets/banner.png" alt="QUALUTION: Learn, Build, Understand Quantum" width="100%">
 
 <br/>
 
@@ -30,7 +29,7 @@
 | **Theme** | Smart Education |
 | **Category** | Software |
 | **Team Name** | DADBODS |
-
+| **Team ID** | 126917 |
 
 ---
 
@@ -152,7 +151,7 @@ Shared circuit challenges and a shared learning workflow.
 Practical grading of circuit construction, gate usage, measurement probabilities, required or forbidden operations, target outcomes and state fidelity, leading to certification.
 
 ### 📴 Local-First and Low-Bandwidth
-Lessons ship as **5 KB to 60 KB JSON**. Browser execution, WebAssembly, Web Workers, IndexedDB and PWA capabilities keep selected workloads running offline. The principle is **local when possible, cloud when necessary.**
+Lessons ship as **5 KB to 60 KB JSON**. Browser execution, WebAssembly, Web Workers, IndexedDB (Dexie.js) and PWA capabilities keep selected workloads running offline. The principle is **local when possible, cloud when necessary.**
 
 ---
 
@@ -486,20 +485,24 @@ Open **http://localhost:3000** in your browser.
 
 ---
 
-🧰 Tech Stack
+## 🧰 Tech Stack
 
-Confirm and edit this to match your actual implementation.
+> Confirm and edit this to match your actual implementation.
 
-Layer	Technology
-Frontend	[e.g. React / Next.js, TypeScript]
-Workbench and visualisation	[e.g. canvas library, Three.js for Bloch / Q-sphere]
-Local execution	WebAssembly, Web Workers
-Offline and persistence	PWA, IndexedDB via Dexie.js
-Animation and UI motion	Anime.js
-Quantum simulation	Statevector, Stabilizer, MPS, cloud backend, OpenQASM
-AI and learning	Erwin (Socratic tutor), misconception engine, [LLM provider]
-Backend and database	[e.g. FastAPI, Supabase / PostgreSQL]
-Deployment	[e.g. Vercel, Docker]
+| Layer | Technology |
+|---|---|
+| **Frontend** | `[e.g. React / Next.js, TypeScript]` |
+| **Workbench and visualisation** | `[e.g. canvas library, Three.js for Bloch / Q-sphere]` |
+| **Local execution** | WebAssembly, Web Workers |
+| **Offline and persistence** | PWA, IndexedDB via [Dexie.js](https://dexie.org) |
+| **Animation and UI motion** | [Anime.js](https://animejs.com) |
+| **Quantum simulation** | Statevector, Stabilizer, MPS, cloud backend, OpenQASM |
+| **AI and learning** | Erwin (Socratic tutor), misconception engine, `[LLM provider]` |
+| **Backend and database** | `[e.g. FastAPI, Supabase / PostgreSQL]` |
+| **Deployment** | `[e.g. Vercel, Docker]` |
+
+---
+
 
 
 
@@ -511,8 +514,11 @@ Deployment	[e.g. Vercel, Docker]
 - IEEE workforce-development research identifying education as key to the emerging quantum workforce. `[add links]`
 - IEEE Quantum Week (QCE) papers on university, industry and research efforts to build the quantum workforce. `[add links]`
 
+
+
 ---
 
+<div align="center">
 
 **Learn the concept. Build the circuit. Predict the result. Execute the computation. Analyze the evidence. Collaborate with others. Prove mastery.**
 
