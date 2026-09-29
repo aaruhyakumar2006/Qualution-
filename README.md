@@ -1,386 +1,518 @@
-# ⚛️ Qualution
+<div align="center">
 
-**A live-taught, offline-first quantum learning platform with a built-in quantum workbench.**
+# ⚛️ QUALUTION
 
-*Watch it taught. Predict. Build. Run. See the state. Understand why.*
+### Learn. Build. Predict. Execute. Prove.
+
+**An interactive, AI-assisted quantum learning and simulation platform where the lesson happens *inside* the workbench.**
+
+![SIH 2026](https://img.shields.io/badge/Smart%20India%20Hackathon-2026-orange?style=for-the-badge)
+![PS ID](https://img.shields.io/badge/Problem%20Statement-26140-blue?style=for-the-badge)
+![Theme](https://img.shields.io/badge/Theme-Smart%20Education-green?style=for-the-badge)
+![Category](https://img.shields.io/badge/Category-Software-purple?style=for-the-badge)
+![Team](https://img.shields.io/badge/Team-DADBODS-black?style=for-the-badge)
+
+[🎬 Demo](#-links) · [📝 Article](#-links) · [🏗️ Architecture](#%EF%B8%8F-architecture) · [🚀 Getting Started](#-getting-started) · [👥 Team](#-team)
+
+</div>
+
+---
+
+## 📌 SIH Problem Statement
 
 | | |
 |---|---|
-| **Event** | Smart India Hackathon 2026 |
-| **Team** | DADBODS |
-| **Problem Statement** | SIH26140: AI-Based Interactive Quantum Algorithm Learning Platform |
-| **Theme / Category** | Smart Education / Software |
-| **Demo** | `[demo video URL]` · `[live app URL]` |
-
-![Qualution workbench](docs/images/workbench.png)
-<!-- Replace with a real screenshot or GIF: workbench with circuit, Q-Sphere and tutor panel visible. -->
+| **Problem Statement ID** | 26140 |
+| **Title** | AI-Based Interactive Quantum Algorithm Learning Platform |
+| **Theme** | Smart Education |
+| **Category** | Software |
+| **Team Name** | DADBODS |
+| **Team ID** | 126917 |
 
 ---
 
-## The Problem
+## 📖 Table of Contents
 
-Learners of quantum computing must connect five separate worlds: mathematics, circuit diagrams, code, simulation, and interpretation of measurement results. Today each lives in a different tool. Video courses are heavy for low-bandwidth users, generic AI chatbots can describe the wrong quantum state with full confidence, and hands-on practice usually needs setup or hardware access that most students in India do not have.
+- [Overview](#-overview)
+- [The Problem](#-the-problem)
+- [Our Solution](#-our-solution)
+- [The QUALUTION Learning Loop](#-the-qualution-learning-loop)
+- [Key Features](#-key-features)
+- [How We Are Different](#-how-we-are-different)
+- [Architecture](#%EF%B8%8F-architecture)
+- [Adaptive Circuit Execution](#-adaptive-circuit-execution)
+- [JSON-Driven Live Teaching](#-json-driven-live-teaching)
+- [Erwin: Socratic AI Companion](#-erwin-socratic-ai-companion)
+- [Curriculum](#-curriculum)
+- [Impact](#-impact)
+- [Feasibility & Risk Mitigation](#-feasibility--risk-mitigation)
+- [Project Status & Roadmap](#-project-status--roadmap)
+- [Getting Started](#-getting-started)
+- [Tech Stack](#-tech-stack)
+- [Team](#-team)
+- [Links](#-links)
+- [References](#-references)
+- [License](#-license)
 
-`[Add 1 or 2 cited statistics on the quantum skills gap, e.g. from the IEEE QCE sources in the SIH deck.]`
+---
 
-## The Solution
+## 🌌 Overview
 
-Qualution puts the complete learning loop in one browser workspace:
+Quantum computing is becoming an important computational paradigm, but it is hard to learn. Students face abstract mathematics, unfamiliar computational ideas, circuit-based reasoning, and specialised software, usually spread across separate lecture notes, simulators, and coding tools.
 
-1. A **teaching engine** replays a lesson from lightweight structured data: a teacher cursor writes, draws, highlights, narrates, and pauses.
-2. The lesson hands off into a **quantum workbench** where the learner predicts, builds, and runs the circuit.
-3. **Deterministic simulators** produce the ground truth; **synchronized visualizations** show it.
-4. An **AI tutor** explains the result, and every claim is checked against simulation facts before the learner sees it.
-5. **Misconception-aware adaptation** chooses what the learner does next.
+**QUALUTION** unifies all of it. It combines structured lessons, live teaching, a professional **Quantum Workbench**, multi-backend simulation, an AI tutor, assessments, a student and teacher LMS, and certification into one continuous environment.
 
-> **Core principle:** quantum truth comes from computation. AI explains results; it never establishes them.
+> **The AI explains. The quantum engine verifies.**
 
-## What Makes It Different
+---
 
-| Conventional quantum learning | Qualution |
-|---|---|
-| Recorded video or static slides | Lessons replayed from structured JSON (small files, reusable, editable) |
-| Theory and coding in separate tools | Theory hands off directly into the workbench |
-| Generic chatbot that can hallucinate | Circuit-grounded tutor with fact validation and deterministic fallback |
-| One simulator for everything | Circuit analyzer routes to Statevector, Stabilizer, or MPS |
-| Right/wrong grading | Misconception-aware feedback and Socratic prediction checks |
-| Online-only | Cloud → on-device model → deterministic engine |
-| Fixed syllabus | Evidence-driven next-activity recommendation |
+## ❗ The Problem
 
-## Signature Feature: JSON-Driven Live Teaching
+| # | Challenge | What it looks like today |
+|---|---|---|
+| 1 | **High-complexity concepts** | Superposition, entanglement and interference are hard to grasp without seeing circuit behaviour. |
+| 2 | **Theory and practice are separated** | Notes in one place, a simulator in another. Concept → circuit → execution → understanding is broken across tools. |
+| 3 | **Static learning** | Videos and PDFs offer no continuous interaction, experimentation, or feedback. |
+| 4 | **Limited hardware access** | Real QPUs are scarce, and local simulation gets exponentially expensive as qubits grow. |
+| 5 | **Shallow feedback** | Automated grading says *wrong*, but not *which misconception caused it*. |
+| 6 | **Fragmented management** | Students lack learning paths and proof of mastery, and teachers lack visibility into progress. |
 
-A lesson is data, not code. The same teaching engine plays every lesson, and lesson files are validated against a schema. Lesson scripts never execute arbitrary code.
+---
 
-```json
-{
-  "schemaVersion": "1.0",
-  "id": "qubit-superposition-01",
-  "title": "What is a qubit?",
-  "objectives": ["Explain superposition", "Apply H to |0⟩"],
-  "steps": [
-    { "action": "write",   "text": "What is a qubit?", "style": "heading" },
-    { "action": "math",    "latex": "H|0\\rangle = \\tfrac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle)" },
-    { "action": "highlight", "target": "basis-states" },
-    { "action": "narrate", "text": "A qubit can be in a superposition of 0 and 1.", "lang": "en" },
-    { "action": "pause",   "prompt": "Predict the measurement result." },
-    { "action": "openWorkbench", "task": "predict-then-run", "circuit": ["H", "measure"] }
-  ]
-}
-```
-<!-- Illustrative example. Replace with a trimmed real lesson from /lessons. -->
+## 💡 Our Solution
 
-Typical lesson files are `[5–60 KB]`, compared with `[X MB]` for an equivalent video, so lessons load quickly on weak connections and can be cached for offline use.
+QUALUTION answers each gap directly.
 
-## Feature Status
+- 🎓 **Interactive, visual learning** that makes quantum behaviour observable.
+- 🧪 **All-in-one Quantum Workbench** where theory, coding, simulation and assessment live together.
+- 🔀 **Circuit-intelligent execution** that picks the right simulation strategy for each circuit.
+- 🤖 **Misconception-aware AI (Erwin)** that diagnoses the root cause of an error through Socratic guidance.
+- 📊 **Evidence-driven curriculum** that uses demonstrated reasoning to choose the learner's next activity.
+- 🏫 **Student LMS, teacher analytics, and certification** that close the loop from learning to proof of mastery.
 
-| Capability | Status |
-|---|---|
-| Quantum IDE with visual ↔ code sync (Qiskit, OpenQASM, PennyLane) | ✅ Implemented |
-| Statevector, Stabilizer, MPS engines with automatic routing | ✅ Implemented |
-| Q-Sphere, Bloch spheres, histogram, statevector inspector, circuit metrics | ✅ Implemented |
-| Three-tier AI (cloud, on-device SLM, deterministic) with Fact Boundary validation | ✅ Implemented |
-| Prediction loop, adaptive curriculum, capstone projects with deterministic validation | ✅ Implemented |
-| JSON-driven live teaching engine | 🔧 In progress |
-| Misconception detection and Socratic Grover module | 🔧 In progress |
-| Student and teacher dashboards | 🔧 In progress |
-| Collaborative sessions | 🔧 In progress |
-| Course certification | 📅 Planned |
-| Cloud QPU execution (opt-in) | 📅 Planned |
+---
 
-<!-- Confirm every row against the actual codebase before submission. -->
-
-## The Learning Loop
+## 🔁 The QUALUTION Learning Loop
 
 ```mermaid
 flowchart LR
-    P[Personalize] --> L[Live lesson]
-    L --> PR[Predict]
-    PR --> B[Build in workbench]
-    B --> E[Execute]
-    E --> V[Visualize]
-    V --> X[AI explanation]
-    X --> M{Misconception?}
-    M -->|Yes| S[Socratic recovery]
-    M -->|No| A[Assess / project]
-    S --> A
-    A --> AD[Update mastery, pick next activity]
-    AD --> L
+    A(["📖 Learn"]) --> B(["🖱️ Interact"]) --> C(["🔮 Predict"]) --> D(["🔧 Build"]) --> E(["▶️ Execute"]) --> F(["📊 Analyze"]) --> G(["🏅 Prove"])
+    G -. "next module" .-> A
+    classDef step fill:#E8F1FF,stroke:#3B82F6,color:#0B2A5B
+    classDef goal fill:#E6F9EE,stroke:#22C55E,color:#0B3D1E
+    class A,B,C,D,E,F step
+    class G goal
 ```
 
-## System Architecture
+| Stage | What the learner does |
+|---|---|
+| **Learn** | Receives a structured explanation of a concept |
+| **Interact** | Engages with visual teaching content instead of passive media |
+| **Predict** | Commits to an expected outcome before running anything |
+| **Build** | Constructs the circuit in the Workbench |
+| **Execute** | Runs it on an appropriate backend |
+| **Analyze** | Inspects states, probabilities and measurement results |
+| **Prove** | Completes a practical challenge or assessment |
 
-Qualution keeps **content, rendering, simulation, AI, and assessment as independent modules**. A new lesson does not require a new renderer, a new AI provider does not touch the workbench, and a new simulator does not touch the learning system.
+---
+
+## ✨ Key Features
+
+### 🧪 Quantum Workbench
+Drag-and-drop circuit construction, gate placement and editing, a code editor, and OpenQASM-based workflows. **Circuit and code stay in sync in both directions**, so learners never have to choose between visual and programmatic thinking.
+
+### 🎬 JSON-Driven Live Teaching (QUALUTION Cursor)
+Lessons are lightweight structured data that *drive the real Workbench*. A teacher cursor places gates, highlights components, runs circuits and asks prediction questions. The learner can take over at any moment.
+
+### 🧠 Intelligent Circuit Analyzer
+Inspects qubit count, gate composition, entanglement and complexity, then routes the circuit to the best backend automatically.
+
+### 🤖 Erwin, the AI Learning Companion
+Detects misconceptions and guides with Socratic questions instead of handing over answers.
+
+### ✅ Verifiable AI
+AI predictions are executed and compared against simulator results, so unsupported quantum claims are caught.
+
+### 📈 Visualisation
+Circuit diagrams, probability distributions, **Bloch sphere** and **Q-sphere** views.
+
+### 🎮 Gamified Learning Path
+Structured modules, practical challenges, XP and mastery progression.
+
+### 🏫 Student LMS and Teacher Visualisation
+Track lessons, challenges, scores and prediction performance. Teachers see progress and where learners struggle.
+
+### 🤝 Collaborative Learning
+Shared circuit challenges and a shared learning workflow.
+
+### 🏅 Assessment and Certification
+Practical grading of circuit construction, gate usage, measurement probabilities, required or forbidden operations, target outcomes and state fidelity, leading to certification.
+
+### 📴 Local-First and Low-Bandwidth
+Lessons ship as **5 KB to 60 KB JSON**. Browser execution, WebAssembly, Web Workers, IndexedDB and PWA capabilities keep selected workloads running offline. The principle is **local when possible, cloud when necessary.**
+
+---
+
+## 🆚 How We Are Different
+
+> **Teaching happens inside the Workbench.** Structured lessons directly control live teaching, visualisation and experimentation in the same production environment.
+
+| Capability | Conventional fragmented workflow | **QUALUTION** |
+|---|---|---|
+| Theory | Separate learning resources | Integrated interactive lessons |
+| Practical work | Separate simulator and coding tools | Unified Quantum Workbench |
+| Teaching | Passive videos and documents | Structured live teaching inside the Workbench |
+| Visualisation | Separate tools | Integrated Bloch and Q-sphere views |
+| AI assistance | Generic chatbot | Erwin with Socratic, misconception-aware guidance |
+| Execution | Single or limited backend | Capability-based multi-backend routing |
+| Assessment | Separate quizzes testing recall | Practical circuit challenges |
+| Student management | Separate LMS | Integrated Student LMS |
+| Teacher monitoring | Limited | Teacher visualisation and analytics |
+| Certification | Separate process | Connected mastery pathway |
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 flowchart TB
-    subgraph CLIENT["Browser client (installable PWA)"]
-        UI["Academy · Theory player · Workbench · Dashboards"]
-        LR["Lesson runtime<br/>JSON to cursor, board, narration"]
-        LE["Local quantum engines<br/>Statevector and Stabilizer in Web Worker"]
-        LAI["Local AI tier<br/>SmolLM-135M + deterministic reasoner"]
-        STORE["Local store<br/>IndexedDB · cached lessons · sync queue"]
+    L(["👩‍🎓 Learner"]):::io
+
+    subgraph LEARN["📚 Learning Layer"]
+        direction LR
+        LMS["Student LMS"]:::learn --> LES["JSON Lesson Engine<br/>+ QUALUTION Cursor"]:::learn
     end
-    subgraph EDGE["Delivery"]
-        CDN["Static host / CDN<br/>app shell, lesson JSON, assets"]
-        GW["API gateway<br/>auth · rate limiting · schema validation"]
+
+    subgraph WB["🧪 Quantum Workbench"]
+        direction LR
+        ED["Circuit Editor"]:::work <--> CODE["Code · OpenQASM"]:::work
     end
-    subgraph SVC["Backend services (FastAPI)"]
-        EXE["Execution service<br/>circuit analyzer + router, Qiskit Aer, MPS"]
-        AIG["AI gateway<br/>provider abstraction · redaction · SSE streaming"]
-        FV["Fact Boundary service"]
-        LM["Learner model and curriculum"]
-        ASM["Assessment and project validator"]
-        CERT["Certification service"]
-        COL["Collaboration service<br/>WebSocket rooms"]
+
+    subgraph EXEC["⚙️ Execution Layer"]
+        AN["Circuit Analyzer"]:::exec --> R{"Backend<br/>Router"}:::exec
+        R --> SV["Statevector"]:::exec
+        R --> ST["Stabilizer"]:::exec
+        R --> MPS["MPS"]:::exec
+        R --> CL["Cloud / QPU"]:::exec
     end
-    subgraph DATA["Data"]
-        DB[("Relational DB<br/>users, progress, certificates")]
-        RD[("Redis<br/>sessions, room state")]
+
+    RES["Execution Results"]:::io
+
+    subgraph INSIGHT["💡 Insight Layer"]
+        direction LR
+        VIZ["Visualizers<br/>Bloch · Q-Sphere"]:::work
+        ER["Erwin<br/>Socratic AI"]:::ai
+        AS["Assessment"]:::ai
     end
-    subgraph EXT["External providers"]
-        NIM["NVIDIA NIM"]
-        GQ["Groq"]
-        QPU["Cloud QPU (opt-in)"]
-    end
-    CDN --> UI
-    UI --> LR
-    UI --> LE
-    UI --> LAI
-    UI --> STORE
-    UI -->|HTTPS| GW
-    STORE -.->|sync when online| GW
-    GW --> EXE
-    GW --> AIG
-    GW --> LM
-    GW --> ASM
-    GW --> CERT
-    GW --> COL
-    AIG --> FV
-    AIG --> NIM
-    AIG --> GQ
-    EXE --> QPU
-    LM --> DB
-    ASM --> DB
-    CERT --> DB
-    COL --> RD
+
+    FB["Student Feedback · Teacher Analytics<br/>progress written back to LMS"]:::io
+
+    L --> LEARN
+    LEARN -- "drives" --> WB
+    WB --> AN
+    SV & ST & MPS & CL --> RES
+    RES --> VIZ & ER & AS
+    ER & AS --> FB
+
+    classDef learn fill:#E8F1FF,stroke:#3B82F6,color:#0B2A5B
+    classDef work fill:#F3E8FF,stroke:#8B5CF6,color:#3B0764
+    classDef exec fill:#FFF1E0,stroke:#F97316,color:#5A2A00
+    classDef ai fill:#E6F9EE,stroke:#22C55E,color:#0B3D1E
+    classDef io fill:#F1F5F9,stroke:#64748B,color:#0F172A
+    style LEARN fill:#F5F9FF,stroke:#3B82F6,stroke-dasharray:4 3
+    style WB fill:#FAF5FF,stroke:#8B5CF6,stroke-dasharray:4 3
+    style EXEC fill:#FFF9F1,stroke:#F97316,stroke-dasharray:4 3
+    style INSIGHT fill:#F4FCF7,stroke:#22C55E,stroke-dasharray:4 3
 ```
 
-### Key design decisions
+**Design principle:** education, AI, circuit analysis, and quantum execution are separate layers that communicate through defined interfaces. Each can evolve independently.
 
-| Decision | Why | Trade-off |
-|---|---|---|
-| Lessons as validated JSON | Small, reusable, safe, authorable without engineering | Needs a well-versioned schema and a lesson authoring workflow |
-| Run small circuits in the browser | Zero latency and works offline | Browser memory limits; large circuits go to the backend |
-| Route by circuit structure | Right engine per circuit; MPS and Stabilizer scale far beyond statevector | Router must be conservative to stay correct |
-| Provider keys only on backend | No credential exposure | AI gateway is a required hop when online |
-| Validate AI output against simulation facts | Prevents confidently wrong explanations | Coverage limited to supported claim types (see below) |
-| Local-first storage with sync queue | Learning continues offline | Requires conflict rules (server is authoritative for certificates and scores) |
-
-### Execution routing
+### User Flow
 
 ```mermaid
-flowchart LR
-    C["Circuit<br/>(Qualution IR)"] --> AN["Circuit analyzer<br/>qubits · gate set · entanglement"]
-    AN --> D{Route}
-    D -->|Clifford gates only| ST["Stabilizer"]
-    D -->|Small or general| SV["Statevector"]
-    D -->|Large, bounded entanglement| MPS["Matrix Product State"]
-    D -->|Explicit opt-in| CL["Cloud backend / QPU"]
-    ST --> R["Results + backend used + metrics"]
-    SV --> R
-    MPS --> R
-    CL --> R
-    R --> VZ["Visualization layer"]
+flowchart TB
+    A(["Login + Onboarding"]) --> C["Personalized engine<br/>level · goals · prior knowledge"]
+    C --> D{"Path"}
+    D -->|"Theory"| E["Teacher Cursor<br/>live JSON lesson"]
+    D -->|"Practical"| F["Quantum Lab<br/>circuit auto-builds"]
+    E --> G["Workbench<br/>predict · build · code"]
+    F --> G
+    G --> H["Analyzer → adaptive execution<br/>→ visual results"]
+    H --> J["Erwin feedback<br/>+ assessment"]
+    J --> L(["LMS · certification"])
+    L -. "next lesson" .-> C
+    classDef learn fill:#E8F1FF,stroke:#3B82F6,color:#0B2A5B
+    classDef work fill:#F3E8FF,stroke:#8B5CF6,color:#3B0764
+    classDef exec fill:#FFF1E0,stroke:#F97316,color:#5A2A00
+    classDef ai fill:#E6F9EE,stroke:#22C55E,color:#0B3D1E
+    class A,C,D,E,F learn
+    class G work
+    class H exec
+    class J,L ai
 ```
-
-Probabilities and statevectors are deterministic. Sampled shot counts use a seeded random generator so a run can be reproduced. `[Confirm: which engines run in the browser and which run on the backend.]`
-
-### Grounded AI request flow
-
-```mermaid
-flowchart TD
-    Q[Learner question or event] --> CB[Context builder]
-    CB --> QF[Extract quantum facts from simulation]
-    QF --> RT{Adaptive router<br/>connectivity · latency · capability · complexity}
-    RT -->|Online| T1["Tier 1: Cloud<br/>NVIDIA NIM reasoning, Groq adaptation"]
-    RT -->|Slow or offline| T2["Tier 2: On-device<br/>SmolLM-135M"]
-    RT -->|Unavailable| T3["Tier 3: Deterministic reasoner"]
-    T1 --> V[Fact Boundary Validator]
-    T2 --> V
-    V -->|Verified| OUT[Tutor response]
-    V -->|Contradiction| T3
-    T3 --> OUT
-```
-
-**What the validator checks:** basis probabilities, Bell-state identity, gate semantics, qubit count, circuit properties, and simulator routing. Claims outside these categories are shown as unverified rather than silently trusted. `[Add evaluation result: e.g. contradictions caught on N adversarial test explanations.]`
-
-### Offline-first and sync
-
-```mermaid
-sequenceDiagram
-    participant L as Learner
-    participant C as Client
-    participant S as Local store
-    participant B as Backend
-    L->>C: Complete lab (offline)
-    C->>S: Save progress and queue event
-    Note over C,S: Deterministic tutor and local engines keep working
-    C->>B: Connectivity returns, replay queued events
-    B->>B: Validate, recompute mastery
-    B-->>C: Authoritative state
-    C->>S: Reconcile
-```
-
-## Learning Features
-
-- **Live theory lessons** with teacher cursor, math rendering (KaTeX), narration, and intentional pauses
-- **Socratic Grover module:** predict oracle and amplification behavior, run, compare, reflect
-- **Misconception detection:** maps the gap between prediction and simulated result to a likely misconception, then gives a targeted explanation and re-test
-- **Practical labs and capstone projects** (Bell states, superposition, teleportation, Grover's search, debugging, optimization) with **deterministic validation**, not LLM grading
-- **Adaptive curriculum:** predictions, labs, projects, and misconceptions feed a learner model that recommends remediation or advancement
-- **Dashboards:** students see progress, mastery by concept, XP, and next recommended activity; teachers see class mastery, completion, and common misconceptions
-- **Collaborative sessions:** shared circuits and activities, with individual progress kept separate
-- **Certification:** issued after theory, labs, assessments, and required projects are complete, with `[a verification ID / QR]`
-
-## Quantum Workbench
-
-**Operations:** H, X, Y, Z, S, T, CX, CZ, SWAP, CCX, RX, RY, RZ, measurement, barriers, controlled gates.
-
-**Visualization:** Q-Sphere, Bloch spheres, theoretical vs sampled histograms, statevector inspector (amplitudes, phase, probability).
-
-**Metrics:** gate count, depth, entangling-gate count, backend used, memory estimate, latency.
-
-## Benchmarks
-
-**Environment:** `[CPU, RAM, OS, runtime, library versions]` · **Method:** `[median of N runs after warm-up]`
-
-### MPS engine (nearest-neighbor bounded entanglement, 1,000 shots)
-
-| Qubits | Time | Truncation error | Fidelity | Memory |
-|---:|---:|---:|---:|---|
-| 25 | 16.73 ms | 0.000000 | 1.000000 | < 1 MB |
-| 30 | 29.85 ms | 0.000000 | 1.000000 | < 1 MB |
-| 50 | 26.13 ms | 0.000000 | 1.000000 | < 1 MB |
-| 100 | 39.87 ms | 0.000000 | 1.000000 | < 1 MB |
-| 200 | 89.11 ms | 0.000000 | 1.000000 | < 2 MB |
-| 500 | 94.63 ms | 0.000000 | 1.000000 | < 3 MB |
-| 1,000 | 219.16 ms | 0.000000 | 1.000000 | < 5 MB |
-| 2,000 | 574.72 ms | 0.000000 | 1.000000 | < 10 MB |
-
-Bond dimension: `[χ]`.
-
-### Stabilizer engine (tableau)
-
-| Qubits | Single shot | 100 shots | Tableau memory |
-|---:|---:|---:|---:|
-| 10 | 0.14 ms | 2.68 ms | 441 B |
-| 50 | 0.59 ms | 28.64 ms | 9.96 KB |
-| 100 | 3.49 ms | 193.81 ms | 39.45 KB |
-| 500 | 214.31 ms | 24.54 s | 978.52 KB |
-| 1,000 | 1.91 s | 190.87 s | 3.82 MB |
-
-### Limits
-
-- MPS is efficient only for bounded entanglement; highly entangled circuits need large bond dimensions and are routed elsewhere.
-- Statevector memory grows as 2ⁿ; the IDE shows the requirement before running.
-- Stabilizer simulation covers Clifford circuits only.
-
-## Security and Privacy
-
-- Provider credentials exist only on the backend; none in `VITE_*` variables.
-- Secrets, authorization headers, and provider error details are redacted from AI logs and responses.
-- Lesson scripts are schema-validated data; no `eval` or `exec`.
-- Only circuit operations from an allow-list are accepted by the execution service.
-- Learner data is minimal and stored per user; `[state how it aligns with the Digital Personal Data Protection Act, 2023, and how teachers access class data]`.
-
-## Tech Stack
-
-| Layer | Technologies |
-|---|---|
-| Frontend | React 19, TypeScript, Vite, Vitest, KaTeX, Web Workers, WebGPU/WASM, IndexedDB (Dexie) |
-| Backend | Python, FastAPI, Pydantic, Pytest, SSE streaming |
-| Quantum | Qiskit, Qiskit Aer, OpenQASM, PennyLane interoperability, Qualution IR |
-| AI | NVIDIA NIM (Nemotron), Groq, SmolLM-135M-Instruct (Transformers.js / ONNX Runtime Web) |
-| Content | Structured JSON lessons, Remotion, Blender |
-
-## Getting Started
-
-```bash
-git clone [repository-url]
-cd qualution
-
-# Backend
-cd backend
-pip install -r requirements.txt
-cp .env.example .env          # add provider keys (optional; app falls back without them)
-[backend start command]
-
-# Frontend (new terminal)
-cd frontend
-npm install
-[frontend start command]
-```
-
-| Scope | Variable | Purpose |
-|---|---|---|
-| Backend | `[NVIDIA key variable]` | NVIDIA NIM access |
-| Backend | `[Groq key variable]` | Groq access |
-| Frontend | `[API base URL variable]` | Backend URL |
-
-Never commit real keys.
-
-## Testing
-
-```bash
-[backend test command]
-[frontend test command]
-```
-
-| Suite | Result |
-|---|---|
-| Backend AI regression | `[x / y]` |
-| Frontend AI integration | `[x / y]` |
-
-Frontend tests that require WebGL/canvas are excluded because jsdom does not support them.
-
-## Repository Structure
-
-```
-qualution/
-├── frontend/     # Academy, theory player, workbench, dashboards
-├── backend/      # API, execution router, AI gateway, validators, tests
-├── lessons/      # JSON lesson scripts and schema
-├── docs/         # Architecture, AI, API documentation
-└── README.md
-```
-<!-- Replace with the real tree from the final repository. -->
-
-## Roadmap
-
-| Now | Next | Later |
-|---|---|---|
-| Finish live teaching engine | Misconception library expansion | Cloud QPU execution |
-| Dashboards | Collaborative sessions at scale | Regional-language narration |
-| Integration and regression testing | Certification with verification | Lesson authoring tool for educators |
-
-## Target Users and Impact
-
-**Users:** students, educators and academics, institutions, industry professionals upskilling, and quantum enthusiasts.
-
-**Impact:** lowers the barrier to quantum computing, removes the need for physical QPU access during learning, reduces content bandwidth, gives educators evidence of where learners struggle, and supports workforce development in Smart Education.
-
-## Team DADBODS
-
-| Name | Role |
-|---|---|
-| `[Name]` | `[Role]` |
-
-Institution: `[College]` · Mentor: `[Name]`
-
-## License
-
-`[License]`. See [LICENSE](LICENSE).
 
 ---
 
-**Qualution: a learner enters, is taught a concept visually, predicts, builds, runs, sees the state, gets grounded feedback, and earns mastery without leaving the environment.**
+## 🔀 Adaptive Circuit Execution
+
+A dense statevector needs memory that grows **exponentially** with qubit count, so no single simulator suits every circuit. QUALUTION treats simulation as a **backend selection problem** and routes by circuit characteristics.
+
+| Backend | Best for | Why |
+|---|---|---|
+| **Local Statevector** (on-device / browser) | Small, general, low-complexity circuits | Full state detail, no network needed |
+| **Stabilizer** (Gottesman–Knill) | Clifford / stabilizer circuits | Polynomial scaling for this circuit class |
+| **MPS** (Matrix Product State) | Larger circuits with limited entanglement | Far less memory than a dense statevector |
+| **Cloud / QPU** | Large or specialised workloads | Access beyond local limits, including real hardware |
+
+```mermaid
+flowchart LR
+    C(["Circuit"]) --> A["Analyze<br/>qubits · gates<br/>entanglement"]
+    A --> Q1{"Low<br/>complexity?"}
+    Q1 -->|"Yes"| SV["Local Statevector<br/>on-device"]
+    Q1 -->|"No"| Q2{"Clifford<br/>only?"}
+    Q2 -->|"Yes"| ST["Stabilizer"]
+    Q2 -->|"No"| Q3{"Low<br/>entanglement?"}
+    Q3 -->|"Yes"| MPS["MPS"]
+    Q3 -->|"No"| CL["Cloud / QPU"]
+    classDef exec fill:#FFF1E0,stroke:#F97316,color:#5A2A00
+    classDef io fill:#F1F5F9,stroke:#64748B,color:#0F172A
+    class C io
+    class A,Q1,Q2,Q3,SV,ST,MPS,CL exec
+```
+
+The analyzer weighs **qubit count, gate type, entanglement, and complexity**, then explains its choice to the learner. Understanding *both* the algorithm and the resources needed to run it is a professional skill worth teaching.
+
+---
+
+## 🎬 JSON-Driven Live Teaching
+
+Instead of shipping a video, a lesson is **data** that a Teaching Controller plays inside the real Workbench.
+
+```text
+Lesson JSON → Teaching Controller → Workbench Action → Learner Interaction → Validation
+```
+
+**A lesson can:** move the cursor to a circuit element · highlight a component · place a gate · execute a circuit · display math · ask a prediction question · wait for learner input · validate the learner's actions.
+
+<details>
+<summary><b>Illustrative lesson snippet</b> (simplified; the real schema may differ)</summary>
+
+```json
+{
+  "lesson": "superposition-and-hadamard",
+  "steps": [
+    { "action": "narrate",   "text": "A Hadamard gate creates an equal superposition." },
+    { "action": "placeGate", "gate": "H", "qubit": 0, "moment": 0 },
+    { "action": "predict",   "question": "What are the measurement probabilities?" },
+    { "action": "execute" },
+    { "action": "validate",  "expect": { "00": 0.5, "10": 0.5 } }
+  ]
+}
+```
+
+
+
+| Benefit | Detail |
+|---|---|
+| **Lightweight** | 5 KB to 60 KB per lesson, so it works on low bandwidth |
+| **Interactive** | Teaching actions manipulate the same circuit the learner uses |
+| **Learner takeover** | Seamless switch from demonstration to hands-on |
+| **Reusable** | New lessons need no Workbench redesign and no hard-coding |
+| **Practical** | The lesson flows straight into building and running circuits |
+
+---
+
+## 🤖 Erwin: Socratic AI Companion
+
+Erwin doesn't just say "wrong." It works out **why**.
+
+```text
+Wrong Answer → Underlying Conceptual Error → Targeted Explanation → New Attempt
+```
+
+When a learner predicts an incorrect distribution, Erwin asks things like:
+
+- *What state did you expect?*
+- *Which gate changed the state?*
+- *What happens right before measurement?*
+- *Can you modify the circuit and test your hypothesis?*
+
+### Verifiable AI pipeline
+
+```mermaid
+sequenceDiagram
+    actor L as Learner
+    participant E as Erwin (AI)
+    participant Q as Quantum Engine
+    L->>E: Prediction + circuit
+    E->>Q: Execute and compare
+    Q-->>E: Verified result
+    E-->>L: Socratic question, not the answer
+    L->>L: Revise and retry
+```
+
+Generated explanations, code and optimisations are **checked against the execution engine** using deterministic checks and equivalence verification. The AI never gets to present an unverified quantum result as fact.
+
+### Multi-signal learner model
+Predictions, circuit behaviour and assessment results are combined to spot learning gaps and choose the **next** activity, so progress is evidence-driven rather than time-driven.
+
+---
+
+## 📚 Curriculum
+
+| Track | Modules |
+|---|---|
+| **Foundations** | Bits and Qubits · Superposition and Hadamard · Multi-Qubit Systems and Entanglement · Measurement and Probability |
+| **Circuit Design and Algorithms** | Gate Library · Circuit Design and Complexity · Deutsch–Jozsa · Grover Search |
+| **Advanced and Variational** | Variational Circuits · QAOA · VQE · Adaptive Execution |
+
+Each module ends with an **assessment and a practical challenge**.
+
+### Example: Learning Grover's Search
+
+Instead of **Watch Grover → Answer Quiz**, the learner goes through
+**Understand → Predict → Build → Execute → Observe → Modify → Explain → Prove**.
+They see amplitude amplification, predict which state gets amplified, run the circuit, tweak the oracle or diffusion operator, and rerun. Erwin steps in if the prediction was off, and a challenge closes it out.
+
+---
+
+## 🌍 Impact
+
+| Audience | Benefit |
+|---|---|
+| 🎓 **Students** | Hands-on guided learning that shortens the learning curve |
+| 👩‍🏫 **Educators and academics** | Adaptive teaching with real experiments and less prep effort |
+| 🧑‍💼 **Industry professionals** | Rapid, job-relevant upskilling on real or simulated backends |
+| 🏛️ **Institutions** | One scalable environment for learning, experimentation and assessment |
+| 🔭 **Quantum enthusiasts** | Accessible, visual, self-paced learning |
+
+| Dimension | Outcome |
+|---|---|
+| **Educational** | Learning by visualisation and simulation; misconceptions addressed at the root |
+| **Economic** | Lower experimentation cost; faster workforce skill development |
+| **Social** | Quantum access beyond physical QPU facilities; broader participation |
+| **Environmental** | Less physical-lab dependence; simulation-first before QPU use |
+
+
+
+| Pillar | B2G / B2B (Institutional) | B2C (Community) |
+|---|---|---|
+| **Target users** | MoE, AICTE, NQM Labs, universities | Students, learners, STEM enthusiasts |
+| **Value** | No hardware lab, teacher LMS, analytics | Interactive Workbench, Erwin AI, simulation |
+| **Revenue** | Institutional licensing, NQM programs | Freemium, Pro certification, QPU credits |
+| **Cost** | Local execution, lower cloud cost | PWA, serverless, pay-as-you-go cloud |
+| **Go-to-market** | GeM, university partnerships | Web / PWA, hackathons, communities |
+
+
+
+---
+
+## 🛡️ Feasibility & Risk Mitigation
+
+| Challenge | Our mitigation |
+|---|---|
+| **Quantum execution scalability**: exponential resource growth | **Adaptive execution**: resource-aware routing and execution limits for larger circuits |
+| **AI trust and quantum correctness**: AI may produce incorrect quantum behaviour | **Quantum verification**: deterministic checks and equivalence verification of AI-generated operations |
+| **Adaptive learning accuracy**: is the learner truly understanding? | **Multi-signal learner model**: predictions, circuit behaviour and assessments combined |
+| **Interactive teaching at scale**: avoid hard-coding every lesson | **JSON-driven lesson engine**: reusable structured lessons with the QUALUTION Cursor |
+
+**Feasibility:** ✅ Technical (proven methods, mature tech) · ✅ Operational (modular, browser-based) · ✅ Market (growing quantum workforce need) · ✅ Economic (lightweight JSON, reusable lessons, local execution)
+
+---
+
+## 🚧 Project Status & Roadmap
+
+> **Prototype is 40%+ complete.** See the demo and repository links below for the current state.
+
+<!-- Update the checkboxes below to match what is actually built before submission. -->
+
+- [x] Concept, architecture and learning model
+- [ ] Quantum Workbench (drag-and-drop + code, bidirectional sync)
+- [ ] JSON-driven lesson engine and QUALUTION Cursor
+- [ ] Circuit Analyzer and multi-backend routing
+- [ ] Erwin AI with Socratic guidance and verification
+- [ ] Student LMS, challenges and certification
+- [ ] Teacher visualisation and analytics
+
+**Future directions**
+
+- 🔌 Additional cloud quantum hardware providers, enabling a path from simulation to real QPUs
+- 🧠 Richer learner models and deeper misconception analysis
+- 👥 Real-time collaborative circuit editing and instructor-led classroom sessions
+- 📊 Population-level learning analytics for educators
+- 🏆 Expanded competency-based certification
+
+---
+
+## 🚀 Getting Started
+
+> ⚠️ **Fill in the exact commands for your stack.** The scaffold below is ready to edit.
+
+### Prerequisites
+
+- Node.js `[version]` and npm
+- Python `[version]` (if a backend is used)
+- `[Any API keys: AI provider, cloud quantum provider, database]`
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone [YOUR_REPO_URL]
+cd [YOUR_REPO_NAME]
+
+# 2. Install dependencies
+npm install
+
+# 3. Configure environment
+cp .env.example .env
+# then fill in the required values
+
+# 4. Run the development server
+npm run dev
+```
+
+Open **http://localhost:3000** in your browser.
+
+### Environment variables
+
+| Variable | Purpose |
+|---|---|
+| `[VAR_NAME]` | `[what it is for]` |
+
+---
+
+## 🧰 Tech Stack
+
+> Confirm and edit this to match your actual implementation.
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | `[e.g. React / Next.js, TypeScript]` |
+| **Workbench and visualisation** | `[e.g. canvas library, Three.js for Bloch / Q-sphere]` |
+| **Local execution** | WebAssembly, Web Workers |
+| **Offline and persistence** | PWA, IndexedDB |
+| **Quantum simulation** | Statevector, Stabilizer, MPS, cloud backend, OpenQASM |
+| **AI and learning** | Erwin (Socratic tutor), misconception engine, `[LLM provider]` |
+| **Backend and database** | `[e.g. FastAPI, Supabase / PostgreSQL]` |
+| **Deployment** | `[e.g. Vercel, Docker]` |
+
+---
+
+
+
+## 📚 References
+
+- IEEE research on the abstraction gap in quantum learning and the need to connect theory with executable programs. `[add links]`
+- IEEE workforce-development research identifying education as key to the emerging quantum workforce. `[add links]`
+- IEEE Quantum Week (QCE) papers on university, industry and research efforts to build the quantum workforce. `[add links]`
+
+---
+
+
+
+**Learn the concept. Build the circuit. Predict the result. Execute the computation. Analyze the evidence. Collaborate with others. Prove mastery.**
+
+Made with ⚛️ by **Team DADBODS** for **Smart India Hackathon 2026**
+
+</div>
