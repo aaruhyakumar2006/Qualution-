@@ -1,0 +1,618 @@
+{
+  "v": 1,
+  "id": "classical-bit-to-superposition",
+  "title": "Classical Bit → Qubit → Superposition",
+  "topic": "superposition",
+  "difficulty": "Beginner",
+  "estimatedMinutes": 8,
+  "objectives": [
+    "Understand the difference between a classical bit and a qubit",
+    "Recognise |0⟩ and |1⟩ as quantum basis states",
+    "Understand the basic idea of superposition",
+    "Understand the introductory role of the Hadamard gate",
+    "Understand the basic relationship between superposition and measurement",
+    "Prepare to test the concept in the Quantum Workbench"
+  ],
+  "defaults": {
+    "color": "#e8e8e8",
+    "mathColor": "#f5c842",
+    "strokeWidth": 2,
+    "fontSize": 1.0
+  },
+  "styles": {
+    "title":   { "scale": 1.7, "color": "#ffffff", "bold": true },
+    "heading": { "scale": 1.3, "color": "#e8e8e8", "bold": true },
+    "body":    { "scale": 1.0, "color": "#e8e8e8" },
+    "dim":     { "scale": 0.9, "color": "#aaaaaa", "italic": true },
+    "accent":  { "scale": 1.1, "color": "#f5c842", "bold": true },
+    "cta":     { "scale": 1.4, "color": "#4fc3f7", "bold": true }
+  },
+  "objects": {
+    "wire0":   { "type": "qubit-wire", "length": 340, "label": "|0⟩" },
+    "hGate":   { "type": "gate-box",   "label": "H",  "size": 42 },
+    "measure": { "type": "measure-symbol", "size": 42 }
+  },
+  "steps": [
+    {
+      "id": "board-empty",
+      "title": "Empty Board",
+      "cmds": [
+        ["p", 600]
+      ]
+    },
+
+    {
+      "id": "s1-classical-heading",
+      "title": "Classical Bit",
+      "cmds": [
+        ["m", 80, 80],
+        ["ws", "CLASSICAL BIT", 80, 80, "heading"],
+        ["p", 600],
+        ["n", "Let's start with something familiar. A classical bit."]
+      ]
+    },
+
+    {
+      "id": "s1-write-zero",
+      "title": "Write 0",
+      "cmds": [
+        ["m", 80, 180],
+        ["w", "0", 80, 180, 2.2],
+        ["p", 700],
+        ["n", "A classical bit can hold the value zero."],
+        ["p", 800]
+      ]
+    },
+
+    {
+      "id": "s1-write-one",
+      "title": "Write 1",
+      "cmds": [
+        ["m", 200, 180],
+        ["w", "1", 200, 180, 2.2],
+        ["p", 700],
+        ["n", "Or it can hold the value one."],
+        ["p", 800]
+      ]
+    },
+
+    {
+      "id": "s1-point-between",
+      "title": "Point Between Values",
+      "cmds": [
+        ["pt", 80, 180],
+        ["p", 300],
+        ["pt", 200, 180],
+        ["p", 300],
+        ["pt", 80, 180],
+        ["p", 400],
+        ["n", "These are the only two possibilities. Zero or one. Nothing in between."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s1-label-or",
+      "title": "Label OR",
+      "cmds": [
+        ["m", 140, 185],
+        ["ws", "or", 140, 185, "dim"],
+        ["p", 400],
+        ["d", "u", 80, 215, 60],
+        ["d", "u", 200, 215, 60],
+        ["p", 600]
+      ]
+    },
+
+    {
+      "id": "s1-classical-caption",
+      "title": "Classical Caption",
+      "cmds": [
+        ["m", 80, 260],
+        ["ws", "Always exactly one value.", 80, 260, "dim"],
+        ["p", 500],
+        ["n", "A classical bit is always in exactly one of these two states."],
+        ["p", 1400]
+      ]
+    },
+
+    {
+      "id": "s2-qubit-heading",
+      "title": "Qubit",
+      "cmds": [
+        ["m", 430, 80],
+        ["ws", "QUBIT", 430, 80, "heading"],
+        ["p", 600],
+        ["n", "Now let's introduce the qubit — the quantum equivalent."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s2-qubit-state-notation",
+      "title": "State Notation",
+      "cmds": [
+        ["m", 430, 160],
+        ["wm", "|\\psi\\rangle", 430, 160, 1.8],
+        ["p", 800],
+        ["pt", 430, 160],
+        ["p", 600],
+        ["n", "A qubit is described by a quantum state. We write it like this."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s2-state-notation-caption",
+      "title": "Ket Notation",
+      "cmds": [
+        ["m", 430, 230],
+        ["ws", "ket notation — Dirac", 430, 230, "dim"],
+        ["p", 500],
+        ["n", "This is called ket notation. The vertical bar and angle bracket together denote a quantum state."],
+        ["p", 1400]
+      ]
+    },
+
+    {
+      "id": "s3-basis-heading",
+      "title": "Basis States",
+      "cmds": [
+        ["m", 430, 310],
+        ["ws", "Basis States", 430, 310, "body"],
+        ["p", 600],
+        ["n", "A qubit has two special states called the computational basis states."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s3-ket-zero",
+      "title": "Ket Zero",
+      "cmds": [
+        ["m", 430, 390],
+        ["wm", "|0\\rangle", 430, 390, 1.6],
+        ["p", 700],
+        ["pt", 430, 390],
+        ["p", 500],
+        ["n", "The first is ket zero."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s3-ket-one",
+      "title": "Ket One",
+      "cmds": [
+        ["m", 560, 390],
+        ["wm", "|1\\rangle", 560, 390, 1.6],
+        ["p", 700],
+        ["pt", 560, 390],
+        ["p", 500],
+        ["n", "The second is ket one."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s3-compare-classical",
+      "title": "Compare to Classical",
+      "cmds": [
+        ["m", 430, 460],
+        ["ws", "quantum states — not just numbers", 430, 460, "dim"],
+        ["p", 600],
+        ["d", "a", 140, 180, 430, 390],
+        ["p", 400],
+        ["d", "a", 200, 180, 560, 390],
+        ["p", 600],
+        ["n", "These correspond to the classical zero and one — but they are quantum states, not just numbers."],
+        ["p", 1400]
+      ]
+    },
+
+    {
+      "id": "s3-highlight-basis",
+      "title": "Highlight Basis",
+      "cmds": [
+        ["h", [415, 375, 230, 50]],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s4-superposition-heading",
+      "title": "Superposition",
+      "cmds": [
+        ["m", 80, 510],
+        ["ws", "SUPERPOSITION", 80, 510, "title"],
+        ["p", 700],
+        ["n", "Now for the key idea. Superposition."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s4-psi-lhs",
+      "title": "State LHS",
+      "cmds": [
+        ["m", 80, 600],
+        ["wm", "|\\psi\\rangle", 80, 600, 1.4],
+        ["p", 900],
+        ["n", "A qubit in superposition is described by this equation. Let's build it step by step."],
+        ["p", 1400]
+      ]
+    },
+
+    {
+      "id": "s4-psi-equals",
+      "title": "Equals Sign",
+      "cmds": [
+        ["m", 175, 600],
+        ["wm", "|\\psi\\rangle =", 80, 600, 1.4],
+        ["p", 800]
+      ]
+    },
+
+    {
+      "id": "s4-alpha-term",
+      "title": "Alpha Term",
+      "cmds": [
+        ["m", 240, 600],
+        ["wm", "|\\psi\\rangle = \\alpha|0\\rangle", 80, 600, 1.4],
+        ["p", 900],
+        ["n", "Alpha times ket zero — the amplitude for the zero outcome."],
+        ["p", 1300]
+      ]
+    },
+
+    {
+      "id": "s4-plus-beta-term",
+      "title": "Plus Beta Term",
+      "cmds": [
+        ["m", 380, 600],
+        ["wm", "|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle", 80, 600, 1.4],
+        ["p", 1000],
+        ["n", "Plus beta times ket one — the amplitude for the one outcome."],
+        ["p", 1600]
+      ]
+    },
+
+    {
+      "id": "s4-highlight-ket0",
+      "title": "Highlight |0⟩",
+      "cmds": [
+        ["h", [175, 585, 120, 40]],
+        ["p", 700],
+        ["n", "This part represents the zero component."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s4-highlight-ket1",
+      "title": "Highlight |1⟩",
+      "cmds": [
+        ["h", [330, 585, 120, 40]],
+        ["p", 700],
+        ["n", "And this part represents the one component."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s4-highlight-full",
+      "title": "Highlight Full Equation",
+      "cmds": [
+        ["h", [65, 582, 420, 46]],
+        ["p", 800],
+        ["n", "Together, alpha and beta describe the full quantum state — a combination of both basis states simultaneously."],
+        ["p", 1800]
+      ]
+    },
+
+    {
+      "id": "s5-hadamard-heading",
+      "title": "Hadamard Gate",
+      "cmds": [
+        ["m", 820, 80],
+        ["ws", "HADAMARD GATE", 820, 80, "heading"],
+        ["p", 700],
+        ["n", "How do we create superposition? With the Hadamard gate."],
+        ["p", 1300]
+      ]
+    },
+
+    {
+      "id": "s5-circuit-wire",
+      "title": "Draw Wire",
+      "cmds": [
+        ["m", 820, 200],
+        ["o", "wire0", 820, 200],
+        ["p", 700],
+        ["n", "Here is a simple quantum circuit. We start with a qubit wire initialised to ket zero."],
+        ["p", 1400]
+      ]
+    },
+
+    {
+      "id": "s5-circuit-hgate",
+      "title": "Draw H Gate",
+      "cmds": [
+        ["m", 990, 200],
+        ["o", "hGate", 990, 200],
+        ["p", 600],
+        ["pt", 990, 200],
+        ["p", 500],
+        ["n", "We place the Hadamard gate on the wire."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s5-circuit-measure",
+      "title": "Draw Measure",
+      "cmds": [
+        ["m", 1120, 200],
+        ["o", "measure", 1120, 200],
+        ["p", 600],
+        ["n", "And at the end, a measurement."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s5-hadamard-caption",
+      "title": "Hadamard Caption",
+      "cmds": [
+        ["m", 820, 270],
+        ["ws", "H creates equal superposition", 820, 270, "dim"],
+        ["p", 500],
+        ["n", "The Hadamard gate takes ket zero and creates an equal superposition of ket zero and ket one."],
+        ["p", 1600]
+      ]
+    },
+
+    {
+      "id": "s6-h-action-lhs",
+      "title": "H|0⟩",
+      "cmds": [
+        ["m", 820, 360],
+        ["wm", "H|0\\rangle", 820, 360, 1.3],
+        ["p", 900],
+        ["n", "Let's write out what the Hadamard gate does."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s6-h-action-plus",
+      "title": "H|0⟩ = |+⟩",
+      "cmds": [
+        ["m", 960, 360],
+        ["wm", "H|0\\rangle = |{+}\\rangle", 820, 360, 1.3],
+        ["p", 900],
+        ["n", "It produces the plus state."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s6-plus-state-expansion",
+      "title": "Plus State Expansion",
+      "cmds": [
+        ["m", 820, 440],
+        ["wm", "|{+}\\rangle = \\frac{1}{\\sqrt{2}}\\bigl(|0\\rangle + |1\\rangle\\bigr)", 820, 440, 1.2],
+        ["p", 1000],
+        ["n", "The plus state is an equal superposition — one over root two, times ket zero plus ket one."],
+        ["p", 1800]
+      ]
+    },
+
+    {
+      "id": "s6-highlight-ket0-plus",
+      "title": "Highlight |0⟩ in Plus",
+      "cmds": [
+        ["h", [900, 428, 60, 36]],
+        ["p", 600],
+        ["n", "Ket zero contributes equally."],
+        ["p", 900]
+      ]
+    },
+
+    {
+      "id": "s6-highlight-ket1-plus",
+      "title": "Highlight |1⟩ in Plus",
+      "cmds": [
+        ["h", [975, 428, 60, 36]],
+        ["p", 600],
+        ["n", "And so does ket one."],
+        ["p", 900]
+      ]
+    },
+
+    {
+      "id": "s6-highlight-amplitude",
+      "title": "Highlight 1/√2",
+      "cmds": [
+        ["h", [820, 428, 80, 36]],
+        ["p", 700],
+        ["n", "The factor one over root two ensures the probabilities sum to one."],
+        ["p", 1400]
+      ]
+    },
+
+    {
+      "id": "s7-measurement-heading",
+      "title": "Measurement",
+      "cmds": [
+        ["m", 820, 530],
+        ["ws", "MEASUREMENT", 820, 530, "heading"],
+        ["p", 700],
+        ["n", "What happens when we measure a qubit in superposition?"],
+        ["p", 1300]
+      ]
+    },
+
+    {
+      "id": "s7-measurement-chain",
+      "title": "Measurement Chain",
+      "cmds": [
+        ["m", 820, 600],
+        ["ws", "superposition", 820, 600, "body"],
+        ["p", 400],
+        ["d", "a", 960, 605, 1010, 605],
+        ["p", 300],
+        ["ws", "measure", 1015, 600, "body"],
+        ["p", 400],
+        ["d", "a", 1090, 605, 1140, 605],
+        ["p", 300],
+        ["ws", "|0⟩ or |1⟩", 1145, 600, "accent"],
+        ["p", 800],
+        ["n", "Superposition collapses to one of the basis states. The outcome is random, but the probabilities are determined by the amplitudes."],
+        ["p", 1800]
+      ]
+    },
+
+    {
+      "id": "s7-measurement-pause",
+      "title": "Measurement Pause",
+      "cmds": [
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s8-summary-clear",
+      "title": "Summary — Clear",
+      "cmds": [
+        ["n", "Let's bring it all together."],
+        ["p", 800],
+        ["clr"],
+        ["p", 700]
+      ]
+    },
+
+    {
+      "id": "s8-summary-heading",
+      "title": "Summary Heading",
+      "cmds": [
+        ["m", 430, 80],
+        ["ws", "QUBIT", 430, 80, "title"],
+        ["p", 800]
+      ]
+    },
+
+    {
+      "id": "s8-summary-basis",
+      "title": "Summary Basis",
+      "cmds": [
+        ["m", 430, 180],
+        ["wm", "|0\\rangle \\;/\\; |1\\rangle", 430, 180, 1.3],
+        ["p", 700],
+        ["n", "A qubit has two basis states."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s8-summary-superposition",
+      "title": "Summary Superposition",
+      "cmds": [
+        ["m", 430, 270],
+        ["ws", "Superposition", 430, 270, "body"],
+        ["p", 600],
+        ["n", "It can exist in superposition — a combination of both."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s8-summary-hadamard",
+      "title": "Summary Hadamard",
+      "cmds": [
+        ["m", 430, 350],
+        ["ws", "Hadamard", 430, 350, "body"],
+        ["p", 600],
+        ["n", "The Hadamard gate creates equal superposition."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s8-summary-measurement",
+      "title": "Summary Measurement",
+      "cmds": [
+        ["m", 430, 430],
+        ["ws", "Measurement", 430, 430, "body"],
+        ["p", 600],
+        ["n", "Measurement collapses superposition to a definite outcome."],
+        ["p", 1000]
+      ]
+    },
+
+    {
+      "id": "s8-summary-highlight-chain",
+      "title": "Summary Highlight Chain",
+      "cmds": [
+        ["h", [415, 165, 280, 40]],
+        ["p", 500],
+        ["h", [415, 255, 200, 40]],
+        ["p", 500],
+        ["h", [415, 335, 175, 40]],
+        ["p", 500],
+        ["h", [415, 415, 200, 40]],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s9-transition-heading",
+      "title": "Practical Transition",
+      "cmds": [
+        ["m", 430, 540],
+        ["ws", "NOW LET'S TRY IT", 430, 540, "cta"],
+        ["p", 800],
+        ["n", "Now let's test this ourselves."],
+        ["p", 1200]
+      ]
+    },
+
+    {
+      "id": "s9-circuit-chain",
+      "title": "Circuit Chain",
+      "cmds": [
+        ["m", 430, 620],
+        ["wm", "|0\\rangle \\;\\rightarrow\\; H \\;\\rightarrow\\; \\text{Measure}", 430, 620, 1.2],
+        ["p", 800],
+        ["pt", 430, 620],
+        ["p", 400],
+        ["pt", 560, 620],
+        ["p", 400],
+        ["pt", 680, 620],
+        ["p", 700],
+        ["n", "Ket zero, through the Hadamard gate, then measure. This is the simplest superposition experiment."],
+        ["p", 1600]
+      ]
+    },
+
+    {
+      "id": "s9-workbench-cta",
+      "title": "Workbench CTA",
+      "cmds": [
+        ["m", 430, 660],
+        ["ws", "Open the Quantum Workbench →", 430, 660, "dim"],
+        ["p", 600],
+        ["n", "Open the Quantum Workbench and build this circuit yourself."],
+        ["p", 1800]
+      ]
+    },
+
+    {
+      "id": "finish",
+      "title": "Finish",
+      "cmds": [
+        ["p", 800]
+      ]
+    }
+  ]
+}

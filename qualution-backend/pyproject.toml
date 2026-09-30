@@ -1,0 +1,15 @@
+[tool.pyright]
+include = ["app", "tests"]
+extraPaths = [
+    ".",
+    "venv/Lib/site-packages"
+]
+pythonVersion = "3.11"
+pythonPlatform = "Windows"
+venvPath = "."
+venv = "venv"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+

@@ -1,0 +1,195 @@
+/* ═══════════════════════════════════════════════════════════════
+   IBM QUANTUM COMPOSER VERTICAL BAR CHART STYLING
+   ═══════════════════════════════════════════════════════════════ */
+
+.prob-histogram-container.ibm-composer-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  box-sizing: border-box;
+  padding: 6px 16px 12px 12px;
+}
+
+.composer-chart-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  max-width: 520px;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  margin: 0 auto;
+}
+
+/* Y-Axis Rotated Label on the Left */
+.composer-y-axis-label {
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 2px;
+}
+
+.composer-y-axis-label span {
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--wb-text-muted, #8d8d8d);
+  letter-spacing: 0.2px;
+}
+
+/* Chart Canvas Area */
+.composer-chart-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  padding-left: 36px;
+  padding-bottom: 24px;
+}
+
+/* Y-Axis Ticks & Subtle Horizontal Grid Lines */
+.composer-grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.composer-grid-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 0;
+}
+
+.composer-tick-lbl {
+  width: 32px;
+  text-align: right;
+  padding-right: 6px;
+  font-size: 10px;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  color: var(--wb-text-muted, #8d8d8d);
+}
+
+.composer-grid-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--wb-border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+[data-theme="light"] .composer-grid-line {
+  background-color: #e0e0e0;
+}
+
+/* Vertical Bars Track */
+.composer-bars-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  border-left: 1px solid var(--wb-border, #393939);
+  border-bottom: 1px solid var(--wb-border, #393939);
+  z-index: 2;
+}
+
+[data-theme="light"] .composer-bars-track {
+  border-color: #8d8d8d;
+}
+
+/* Bar Column */
+.composer-bar-col {
+  flex: 1;
+  max-width: 80px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  min-width: 0;
+}
+
+.composer-bar-slot {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+/* Blue Bar Fill */
+.composer-bar-fill {
+  width: 55%;
+  max-width: 36px;
+  min-width: 8px;
+  background-color: #0f62fe;
+  border-radius: 2px 2px 0 0;
+  transition: height 250ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 150ms ease;
+  box-shadow: 0 0 8px rgba(15, 98, 254, 0.35);
+}
+
+.composer-bar-col.hovered .composer-bar-fill {
+  background-color: #4589ff;
+  box-shadow: 0 0 12px rgba(69, 137, 255, 0.6);
+}
+
+/* Centered & Compact Basis Labels (00, 01 or 0000, 0001, etc.) */
+.composer-x-tick-label {
+  position: absolute;
+  top: 100%;
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+.composer-x-tick-label.horizontal {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.composer-x-tick-label.compact {
+  transform: rotate(-55deg);
+  transform-origin: top center;
+}
+
+.composer-x-tick-label span {
+  font-size: 10px;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  color: var(--wb-text-secondary, #c6c6c6);
+}
+
+[data-theme="light"] .composer-x-tick-label span {
+  color: #525252;
+}
+
+/* ── Compatibility Layer for Vitest Asserts ── */
+.histogram-compatibility-layer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

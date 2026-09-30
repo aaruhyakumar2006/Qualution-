@@ -1,0 +1,299 @@
+.gate-inspector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  height: 100%;
+  overflow-y: auto;
+  animation: fade-in var(--motion-normal) var(--motion-ease);
+}
+
+/* Empty State */
+.gate-inspector-empty {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-3);
+  color: var(--text-muted);
+}
+
+.gi-empty-icon {
+  font-size: 32px;
+  opacity: 0.3;
+  color: var(--accent-indigo);
+}
+
+.gi-empty-title {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+}
+
+.gi-empty-desc {
+  font-size: var(--text-sm);
+  color: var(--text-disabled);
+  line-height: 1.5;
+  max-width: 240px;
+}
+
+.gi-circuit-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.gi-metric-box {
+  background: var(--bg-tertiary, #171b21);
+  border: 1px solid var(--border-subtle, #2a3038);
+  border-radius: 4px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gi-metric-label {
+  font-size: 10px;
+  color: var(--text-muted, #727b87);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.gi-metric-value {
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--quantum-teal-text, #4eedbe);
+}
+
+/* Gate Header */
+.gi-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.gi-symbol {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-extrabold);
+  font-size: 12px;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.gi-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gi-gate-name {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gi-gate-id {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* Sections */
+.gi-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.gi-section-label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gi-value {
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  font-weight: var(--weight-semibold);
+}
+
+.gi-desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Qubit Chips */
+.gi-qubit-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.gi-qubit-chip {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+/* Angle Input */
+.gi-angle-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.gi-angle-input {
+  width: 80px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  padding: 4px 8px;
+  outline: none;
+  transition: border-color var(--motion-fast) var(--motion-ease);
+}
+
+.gi-angle-input:focus {
+  border-color: var(--border-focus);
+}
+
+.gi-angle-unit {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.gi-angle-equiv {
+  font-size: var(--text-xs);
+  color: var(--accent-amber);
+  font-family: var(--font-mono);
+}
+
+/* Matrix Toggle */
+.gi-matrix-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  padding: 0;
+  background: none;
+  border: none;
+  transition: color var(--motion-fast) var(--motion-ease);
+}
+
+.gi-matrix-toggle:hover {
+  color: var(--accent-cyan);
+}
+
+.gi-matrix {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--accent-cyan);
+  white-space: pre;
+  margin-top: var(--space-1);
+  animation: slide-in-up var(--motion-fast) var(--motion-ease);
+}
+
+/* Common Uses */
+.gi-uses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.gi-use-chip {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+/* Actions */
+.gi-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.gi-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  flex: 1;
+  padding: 6px var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all var(--motion-fast) var(--motion-ease);
+}
+
+.gi-action-btn:active {
+  transform: scale(0.97);
+}
+
+.gi-action-dupe {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.gi-action-dupe:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--accent-cyan);
+}
+
+.gi-action-delete {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+.gi-action-delete:hover {
+  background: var(--color-error);
+  color: #fff;
+  border-color: var(--color-error);
+}

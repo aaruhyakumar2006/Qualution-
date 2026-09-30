@@ -1,0 +1,699 @@
+/* ═══════════════════════════════════════════════════════════════
+   QUALUTION ERWIN HYBRID AI ASSISTANT — STYLESHEET
+   Futuristic, Glassmorphic, Neon-Accented Quantum Interface
+   ═══════════════════════════════════════════════════════════════ */
+
+.erwin-assistant-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(4, 9, 20, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 24px;
+  animation: erwin-backdrop-fade 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: auto;
+}
+
+@keyframes erwin-backdrop-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── The Main Assistant Window ── */
+.erwin-assistant-window {
+  width: 480px;
+  max-width: calc(100vw - 48px);
+  height: 640px;
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(13, 20, 36, 0.96) 0%, rgba(8, 12, 22, 0.98) 100%);
+  border: 1px solid rgba(0, 242, 255, 0.28);
+  border-radius: 16px;
+  box-shadow:
+    0 16px 48px -8px rgba(0, 0, 0, 0.8),
+    0 0 24px -4px rgba(0, 242, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: var(--wb-text-primary, #f4f7fa);
+  animation: erwin-window-slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+}
+
+@keyframes erwin-window-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.erwin-assistant-window.window-maximized {
+  width: 900px;
+  height: 85vh;
+  max-height: 850px;
+}
+
+.erwin-assistant-modal-backdrop.is-maximized {
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Header ── */
+.erwin-assistant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(18, 26, 44, 0.7);
+  border-bottom: 1px solid rgba(0, 242, 255, 0.15);
+  gap: 12px;
+}
+
+.erwin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.erwin-avatar-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.erwin-live-status-dot {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #21c79a;
+  border: 2px solid #080c16;
+  box-shadow: 0 0 8px #21c79a;
+}
+
+.erwin-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.erwin-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.erwin-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.erwin-model-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(0, 242, 255, 0.16) 0%, rgba(143, 0, 255, 0.22) 100%);
+  border: 1px solid rgba(0, 242, 255, 0.4);
+  font-size: 10px;
+  font-weight: 600;
+  color: #00f2ff;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge-icon-zap {
+  color: #00f2ff;
+}
+
+.erwin-subtitle {
+  font-size: 11px;
+  color: #8da4be;
+  font-weight: 400;
+}
+
+/* ── Header Controls ── */
+.erwin-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.erwin-select-input {
+  background: rgba(14, 21, 35, 0.85);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  color: #d1e2f5;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.erwin-select-input:hover,
+.erwin-select-input:focus {
+  border-color: #00f2ff;
+}
+
+.erwin-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #9aaec4;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.erwin-icon-btn:hover {
+  background: rgba(0, 242, 255, 0.12);
+  color: #00f2ff;
+  border-color: rgba(0, 242, 255, 0.3);
+}
+
+.erwin-icon-btn.is-active {
+  background: rgba(0, 242, 255, 0.2);
+  color: #00f2ff;
+  border-color: #00f2ff;
+}
+
+.erwin-close-btn:hover {
+  background: rgba(255, 75, 75, 0.15);
+  color: #ff5e5e;
+  border-color: rgba(255, 75, 75, 0.35);
+}
+
+/* ── 2. Hybrid Engine Strip ── */
+.erwin-hybrid-engine-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px;
+  background: rgba(8, 14, 25, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 10.5px;
+  gap: 8px;
+}
+
+.engine-strip-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #7990a8;
+}
+
+.engine-icon {
+  color: #00f2ff;
+}
+
+.engine-label {
+  font-weight: 500;
+}
+
+.engine-val {
+  color: #c9e0f7;
+  font-weight: 600;
+}
+
+/* ── 3. Mode Tabs ── */
+.erwin-mode-tabs {
+  display: flex;
+  background: rgba(12, 17, 30, 0.6);
+  padding: 6px 12px;
+  gap: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.erwin-mode-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #8da2bb;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.erwin-mode-tab:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+}
+
+.erwin-mode-tab.is-active {
+  background: rgba(0, 242, 255, 0.12);
+  border-color: rgba(0, 242, 255, 0.35);
+  color: #00f2ff;
+  font-weight: 600;
+}
+
+/* ── 4. Chat Scroll Area ── */
+.erwin-chat-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+}
+
+.erwin-chat-scroll-area::-webkit-scrollbar {
+  width: 5px;
+}
+
+.erwin-chat-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 255, 0.2);
+  border-radius: 4px;
+}
+
+.erwin-message-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.erwin-message-row.is-user-msg {
+  justify-content: flex-end;
+}
+
+.erwin-message-row.is-erwin-msg {
+  justify-content: flex-start;
+}
+
+.erwin-msg-avatar {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.erwin-msg-bubble {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.55;
+  position: relative;
+  word-break: break-word;
+}
+
+.is-user-msg .erwin-msg-bubble {
+  background: linear-gradient(135deg, rgba(0, 115, 230, 0.3) 0%, rgba(15, 98, 254, 0.2) 100%);
+  border: 1px solid rgba(0, 242, 255, 0.35);
+  color: #f0f7ff;
+  border-bottom-right-radius: 2px;
+}
+
+.is-erwin-msg .erwin-msg-bubble {
+  background: rgba(18, 26, 44, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #00f2ff;
+  color: #dbe7f5;
+  border-bottom-left-radius: 2px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.erwin-msg-content p {
+  margin: 0 0 8px 0;
+}
+
+.erwin-msg-content p:last-child {
+  margin-bottom: 0;
+}
+
+.erwin-msg-content strong {
+  color: #ffffff;
+}
+
+.erwin-msg-content code {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: #00f2ff;
+}
+
+.erwin-msg-content pre {
+  background: rgba(4, 8, 16, 0.8);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.erwin-msg-content ul,
+.erwin-msg-content ol {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+
+.erwin-msg-content li {
+  margin-bottom: 4px;
+}
+
+/* ── Reasoning Accordion ── */
+.erwin-reasoning-accordion {
+  margin-top: 10px;
+  background: rgba(6, 12, 22, 0.6);
+  border: 1px solid rgba(0, 242, 255, 0.18);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.erwin-reasoning-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: #8bb3dc;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.erwin-reasoning-toggle:hover {
+  background: rgba(0, 242, 255, 0.08);
+  color: #00f2ff;
+}
+
+.reasoning-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.erwin-reasoning-body {
+  padding: 8px 10px 10px;
+  font-size: 11.5px;
+  color: #a4bed9;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-tag {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 10.5px;
+  margin-bottom: 2px;
+}
+
+.nvidia-tag {
+  color: #76b900; /* NVIDIA Green */
+}
+
+.groq-tag {
+  color: #f55036; /* Groq Orange/Red */
+}
+
+.step-text {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.step-facts-list {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.reasoning-telemetry {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  font-size: 10px;
+  color: #728da8;
+}
+
+/* ── Actions Bar ── */
+.erwin-msg-actions-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.erwin-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #8da4be;
+  font-size: 10.5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.erwin-action-btn:hover {
+  background: rgba(0, 242, 255, 0.1);
+  color: #00f2ff;
+  border-color: rgba(0, 242, 255, 0.3);
+}
+
+/* ── Thinking Indicator ── */
+.erwin-thinking-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(18, 26, 44, 0.6);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  border-radius: 10px;
+  width: fit-content;
+  animation: erwin-pulse-glow 1.5s infinite ease-in-out;
+}
+
+@keyframes erwin-pulse-glow {
+  0%, 100% { border-color: rgba(0, 242, 255, 0.2); }
+  50% { border-color: rgba(0, 242, 255, 0.6); box-shadow: 0 0 12px rgba(0, 242, 255, 0.2); }
+}
+
+.pulsing-orbit-ring {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 242, 255, 0.3);
+  border-top-color: #00f2ff;
+  border-radius: 50%;
+  animation: erwin-spin 0.8s linear infinite;
+}
+
+@keyframes erwin-spin {
+  to { transform: rotate(360deg); }
+}
+
+.thinking-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.thinking-primary-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #00f2ff;
+}
+
+.thinking-sub-text {
+  font-size: 10.5px;
+  color: #7994b2;
+}
+
+/* ── Streaming Delta Cursor ── */
+.erwin-typing-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 4px;
+  background: #00f2ff;
+  animation: erwin-blink 0.8s infinite;
+  vertical-align: middle;
+}
+
+@keyframes erwin-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── 5. Quick Inquiries Chips ── */
+.erwin-quick-chips-wrapper {
+  padding: 8px 14px;
+  background: rgba(10, 16, 28, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.quick-chips-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: #7fa1c4;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.quick-chips-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 6px;
+  padding-bottom: 2px;
+}
+
+.quick-chips-row::-webkit-scrollbar {
+  height: 3px;
+}
+
+.quick-chips-row::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 255, 0.15);
+}
+
+.erwin-quick-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  color: #c0d7ef;
+  font-size: 11px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.erwin-quick-chip:hover:not(:disabled) {
+  background: rgba(0, 242, 255, 0.12);
+  border-color: rgba(0, 242, 255, 0.4);
+  color: #00f2ff;
+  transform: translateY(-1px);
+}
+
+.erwin-quick-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chip-arrow {
+  color: #00f2ff;
+  opacity: 0.7;
+}
+
+/* ── 6. Input Form ── */
+.erwin-input-form {
+  padding: 12px 14px 14px;
+  background: rgba(12, 18, 32, 0.95);
+  border-top: 1px solid rgba(0, 242, 255, 0.15);
+}
+
+.erwin-input-container {
+  display: flex;
+  align-items: center;
+  background: rgba(6, 10, 18, 0.85);
+  border: 1px solid rgba(0, 242, 255, 0.25);
+  border-radius: 10px;
+  padding: 4px 6px 4px 12px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.erwin-input-container:focus-within {
+  border-color: #00f2ff;
+  box-shadow: 0 0 16px rgba(0, 242, 255, 0.25);
+}
+
+.erwin-text-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: #ffffff;
+  padding: 6px 0;
+}
+
+.erwin-text-input::placeholder {
+  color: #5d7591;
+  font-size: 12px;
+}
+
+.erwin-send-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #00f2ff 0%, #0072ff 100%);
+  border: none;
+  color: #040914;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.erwin-send-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
+}
+
+.erwin-send-button:disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: #4f6377;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .erwin-assistant-modal-backdrop {
+    padding: 0;
+  }
+  .erwin-assistant-window {
+    width: 100vw;
+    max-width: 100vw;
+    height: 90vh;
+    max-height: 90vh;
+    border-radius: 16px 16px 0 0;
+  }
+}

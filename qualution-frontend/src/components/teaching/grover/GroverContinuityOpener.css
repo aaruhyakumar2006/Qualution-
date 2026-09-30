@@ -1,0 +1,117 @@
+.grover-continuity-opener {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(8, 20, 37, 0.95);
+  border: 1px solid rgba(0, 242, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 15px rgba(0, 242, 255, 0.15);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 6px 12px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 40;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: groverOpenerSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes groverOpenerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grover-opener-erwin-avatar {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  background: linear-gradient(135deg, #102a43 0%, #00f2ff22 100%);
+  border: 1.5px solid #00f2ff;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.grover-opener-erwin-avatar .erwin-sparkle {
+  color: #00f2ff;
+}
+
+.grover-opener-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.grover-opener-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.grover-opener-speaker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #00f2ff;
+}
+
+.grover-opener-tag {
+  font-size: 10px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.grover-opener-message p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #d8e3fb;
+}
+
+.grover-theory-link-btn {
+  background: transparent;
+  border: none;
+  color: #00f2ff;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.grover-theory-link-btn:hover {
+  color: #38bdf8;
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.4);
+}
+
+.grover-opener-close-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.grover-opener-close-btn:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.1);
+}

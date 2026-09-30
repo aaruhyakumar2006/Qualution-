@@ -1,0 +1,114 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+.conflict-modal-dialog {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  width: 400px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+}
+
+.conflict-header {
+  padding: 12px 16px;
+  background-color: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.conflict-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.conflict-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.conflict-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.circuit-diff-box {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diff-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.diff-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.diff-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  word-break: break-all;
+}
+
+.diff-val.current {
+  background-color: rgba(244, 63, 94, 0.1);
+  color: #fecdd3;
+  border-left: 2px solid var(--accent-rose);
+}
+
+.diff-val.parsed {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #a7f3d0;
+  border-left: 2px solid var(--accent-emerald);
+}
+
+.diff-arrow {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.conflict-footer {
+  padding: 12px 16px;
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-confirm-sync {
+  background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+  color: #ffffff;
+}
+
+.btn-confirm-sync:hover {
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+}

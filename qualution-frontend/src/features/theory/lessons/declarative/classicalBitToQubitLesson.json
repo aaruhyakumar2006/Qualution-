@@ -1,0 +1,257 @@
+{
+  "version": 1,
+  "id": "classical-bit-to-qubit",
+  "title": "Classical Bit → Qubit",
+  "description": "A synchronized masterclass tracing the transition from classical binary logic to quantum superposition and the Hadamard transformation.",
+  "concepts": ["classical-bit", "qubit", "superposition", "hadamard-gate", "measurement"],
+  "misconceptions": ["superposition-not-mixture", "measurement-deterministic", "hadamard-inverts-classical"],
+  "defaults": {
+    "duration": 1.5,
+    "color": "#F8FAFC"
+  },
+  "actions": [
+    {
+      "type": "NARRATE",
+      "text": "A classical bit has one definite value: zero or one. Today, we bridge the gap between classical computing and the quantum world."
+    },
+    {
+      "type": "WRITE",
+      "id": "heading-main",
+      "text": "FROM CLASSICAL BIT TO QUANTUM QUBIT",
+      "x": 230,
+      "y": 70,
+      "duration": 3.5,
+      "style": {
+        "fontSize": 34,
+        "fontWeight": "bold",
+        "color": "#38BDF8"
+      }
+    },
+    {
+      "type": "UNDERLINE",
+      "id": "ul-main",
+      "x": 230,
+      "y": 110,
+      "width": 820,
+      "duration": 1.0,
+      "color": "#0284C7"
+    },
+    {
+      "type": "PAUSE",
+      "duration": 0.5
+    },
+    {
+      "type": "CAPTION",
+      "id": "cap-step1",
+      "text": "Classical Computing: Deterministic | Quantum Computing: Superposition & Interference"
+    },
+    {
+      "type": "NARRATE",
+      "text": "In classical computing, a bit is deterministic. Like a physical light switch, it exists in only one definite state: either state zero, or state one."
+    },
+    {
+      "type": "WRITE",
+      "id": "col1-title",
+      "text": "1. Classical Bit (Deterministic):",
+      "x": 100,
+      "y": 150,
+      "duration": 2.2,
+      "style": {
+        "fontSize": 22,
+        "fontWeight": "bold",
+        "color": "#94A3B8"
+      }
+    },
+    {
+      "type": "DRAW",
+      "id": "box-classical",
+      "shape": "rect",
+      "x": 100,
+      "y": 190,
+      "w": 380,
+      "h": 140,
+      "filled": true,
+      "duration": 1.5,
+      "style": {
+        "color": "#475569",
+        "strokeWidth": 2.0
+      }
+    },
+    {
+      "type": "WRITE",
+      "id": "text-classical-val",
+      "text": "State is strictly 0 OR 1",
+      "x": 130,
+      "y": 230,
+      "duration": 2.0,
+      "style": {
+        "fontSize": 22,
+        "color": "#F8FAFC"
+      }
+    },
+    {
+      "type": "WRITE",
+      "id": "text-classical-example",
+      "text": "Switch is either Open or Closed",
+      "x": 130,
+      "y": 275,
+      "duration": 1.8,
+      "style": {
+        "fontSize": 18,
+        "color": "#94A3B8"
+      }
+    },
+    {
+      "type": "PAUSE",
+      "duration": 0.5
+    },
+    {
+      "type": "NARRATE",
+      "text": "A quantum bit, or qubit, breaks this limitation. It can exist in a linear superposition of both zero and one simultaneously."
+    },
+    {
+      "type": "WRITE",
+      "id": "col2-title",
+      "text": "2. Quantum Qubit (Superposition):",
+      "x": 580,
+      "y": 150,
+      "duration": 2.2,
+      "style": {
+        "fontSize": 22,
+        "fontWeight": "bold",
+        "color": "#A78BFA"
+      }
+    },
+    {
+      "type": "DRAW",
+      "id": "box-qubit",
+      "shape": "rect",
+      "x": 580,
+      "y": 190,
+      "w": 600,
+      "h": 140,
+      "filled": true,
+      "duration": 1.5,
+      "style": {
+        "color": "#7C3AED",
+        "strokeWidth": 2.5
+      }
+    },
+    {
+      "type": "MATH",
+      "id": "math-qubit-superpos",
+      "expression": "|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle \\quad (|\\alpha|^2 + |\\beta|^2 = 1)",
+      "x": 600,
+      "y": 230,
+      "duration": 2.8,
+      "style": {
+        "scale": 1.15,
+        "fontSize": 22,
+        "color": "#F5C842"
+      }
+    },
+    {
+      "type": "WRITE",
+      "id": "text-qubit-exp",
+      "text": "Both basis states exist simultaneously with amplitudes α, β",
+      "x": 600,
+      "y": 285,
+      "duration": 2.5,
+      "style": {
+        "fontSize": 17,
+        "color": "#CBD5E1"
+      }
+    },
+    {
+      "type": "HIGHLIGHT",
+      "id": "hl-qubit-box",
+      "x": 570,
+      "y": 180,
+      "width": 620,
+      "height": 160,
+      "duration": 0.8,
+      "color": "rgba(124, 58, 237, 0.2)"
+    },
+    {
+      "type": "PAUSE",
+      "duration": 0.5
+    },
+    {
+      "type": "NARRATE",
+      "text": "To create superposition, we apply a Hadamard gate. The Hadamard transforms state zero into the plus state with equal fifty percent probabilities."
+    },
+    {
+      "type": "WRITE",
+      "id": "sec2-title",
+      "text": "3. The Hadamard Gate (H):",
+      "x": 100,
+      "y": 380,
+      "duration": 2.0,
+      "style": {
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "color": "#34D399"
+      }
+    },
+    {
+      "type": "MATH",
+      "id": "math-hadamard-matrix",
+      "expression": "H|0\\rangle = \\frac{|0\\rangle + |1\\rangle}{\\sqrt{2}} = |+\\rangle",
+      "x": 100,
+      "y": 440,
+      "duration": 3.0,
+      "style": {
+        "scale": 1.25,
+        "fontSize": 24,
+        "color": "#F5C842"
+      }
+    },
+    {
+      "type": "DRAW",
+      "id": "circ-hadamard",
+      "shape": "circle",
+      "cx": 820,
+      "cy": 450,
+      "r": 50,
+      "duration": 1.2,
+      "style": {
+        "color": "#38BDF8",
+        "strokeWidth": 2.5
+      }
+    },
+    {
+      "type": "PAUSE",
+      "duration": 0.5
+    },
+    {
+      "type": "NARRATE",
+      "text": "Upon measurement, the superposition immediately collapses into a single classical outcome with equal fifty percent probability."
+    },
+    {
+      "type": "WRITE",
+      "id": "sec3-measure",
+      "text": "4. Measurement Collapse: P(0) = 50%,  P(1) = 50%",
+      "x": 100,
+      "y": 550,
+      "duration": 3.0,
+      "style": {
+        "fontSize": 24,
+        "fontWeight": "bold",
+        "color": "#38BDF8"
+      }
+    },
+    {
+      "type": "UNDERLINE",
+      "id": "ul-measure",
+      "x": 100,
+      "y": 590,
+      "width": 640,
+      "duration": 1.0,
+      "color": "#0284C7"
+    },
+    {
+      "type": "PAUSE",
+      "duration": 1.5
+    }
+  ]
+}

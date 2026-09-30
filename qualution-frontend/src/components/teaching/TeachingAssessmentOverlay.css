@@ -1,0 +1,283 @@
+/**
+ * TeachingAssessmentOverlay.css
+ *
+ * Academic dark styling for the Phase 15 Final Concept Assessment modal overlay.
+ */
+
+.assessment-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 15, 29, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: assessment-fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes assessment-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.assessment-card {
+  background: #0F172A;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 14px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(99, 102, 241, 0.15);
+  width: 100%;
+  max-width: 580px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #F8FAFC;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+}
+
+.assessment-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assessment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  color: #818CF8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.assessment-question {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #F8FAFC;
+}
+
+.assessment-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assessment-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  color: #E2E8F0;
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.assessment-option:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.7);
+  border-color: rgba(99, 102, 241, 0.5);
+  transform: translateX(2px);
+}
+
+.assessment-option:focus-visible {
+  border-color: #818CF8;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.35);
+}
+
+.assessment-option.selected {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #818CF8;
+  color: #FFFFFF;
+}
+
+.assessment-option.correct-reveal {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-color: #10B981 !important;
+  color: #FFFFFF !important;
+}
+
+.assessment-option.incorrect-selected {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: #EF4444 !important;
+  color: #FFFFFF !important;
+}
+
+.option-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  font-size: 12px;
+  font-weight: 700;
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+.assessment-option.selected .option-letter {
+  background: #6366F1;
+  border-color: #818CF8;
+  color: #FFFFFF;
+}
+
+.assessment-option.correct-reveal .option-letter {
+  background: #10B981;
+  border-color: #10B981;
+  color: #FFFFFF;
+}
+
+.assessment-option.incorrect-selected .option-letter {
+  background: #EF4444;
+  border-color: #EF4444;
+  color: #FFFFFF;
+}
+
+.option-text {
+  flex: 1;
+}
+
+.assessment-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.assessment-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: #6366F1;
+  border: none;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.assessment-submit-btn:hover:not(:disabled) {
+  background: #4F46E5;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.assessment-submit-btn:disabled {
+  background: rgba(51, 65, 85, 0.5);
+  color: #64748B;
+  cursor: not-allowed;
+}
+
+.assessment-feedback-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  animation: assessment-fade-in 0.2s ease-out;
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.feedback-header.correct {
+  color: #34D399;
+}
+
+.feedback-header.incorrect {
+  color: #F87171;
+}
+
+.feedback-icon {
+  flex-shrink: 0;
+}
+
+.feedback-explanation {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #CBD5E1;
+}
+
+.feedback-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.assessment-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 8px;
+  color: #CBD5E1;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.assessment-retry-btn:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #F8FAFC;
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.assessment-continue-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #10B981;
+  border: none;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.assessment-continue-btn:hover {
+  background: #059669;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}

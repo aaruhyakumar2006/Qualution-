@@ -1,0 +1,148 @@
+{
+  "video_type": "animated_educational_demo",
+  "reference_style": "match the uploaded reference video: dark canvas, centered white text, thin cyan line graphics, circular cursor/pen indicator, hand-drawn arrow movement, minimal UI, smooth slow teaching animation",
+  "title": "Grover's Algorithm",
+  "duration_seconds": 45,
+  "aspect_ratio": "16:9",
+  "visual_style": {
+    "background": "dark charcoal black with a very subtle dotted grid",
+    "primary_text": "clean bold white",
+    "accent": "bright cyan",
+    "graphics": "thin cyan strokes",
+    "cursor": "small white glowing pen/cursor with cyan circular focus ring",
+    "animation": "smooth, deliberate, human-like drawing",
+    "camera": "fixed centered screen view",
+    "no": [
+      "3D characters",
+      "stock footage",
+      "large icons",
+      "colorful backgrounds",
+      "slide transitions",
+      "complex UI",
+      "unnecessary decoration"
+    ]
+  },
+  "scenes": [
+    {
+      "time": "0-4s",
+      "visual": "empty dark canvas",
+      "text": "Let's understand Grover's algorithm.",
+      "text_position": "center",
+      "animation": "text fades in gently",
+      "cursor": "cyan circle appears below the text and slowly moves"
+    },
+    {
+      "time": "4-8s",
+      "text": "We want to find one state.",
+      "visual": "four states appear horizontally",
+      "states": [
+        "|00⟩",
+        "|01⟩",
+        "|10⟩",
+        "|11⟩"
+      ],
+      "animation": "states appear one by one",
+      "cursor": "moves between the states and stops on |11⟩"
+    },
+    {
+      "time": "8-12s",
+      "text": "Our target is |11⟩.",
+      "visual": "cursor draws a thin cyan circle around |11⟩ and draws an arrow toward it",
+      "animation": "hand-drawn",
+      "emphasis": "subtle cyan glow around |11⟩"
+    },
+    {
+      "time": "12-17s",
+      "text": "First, we create a superposition.",
+      "visual": "two horizontal quantum wires are drawn from left to right",
+      "circuit": [
+        "q0 ─────────",
+        "q1 ─────────"
+      ],
+      "cursor": "draws each wire naturally"
+    },
+    {
+      "time": "17-22s",
+      "text": "Apply a Hadamard gate to both qubits.",
+      "visual": "cursor draws an H gate box on q0, then another H gate box on q1",
+      "circuit": [
+        "q0 ──[H]────",
+        "q1 ──[H]────"
+      ],
+      "cursor": "cyan circle follows the drawing and pauses after each gate"
+    },
+    {
+      "time": "22-27s",
+      "text": "Now all four states have equal probability.",
+      "visual": "four simple probability bars are hand-drawn",
+      "probabilities": {
+        "00": "25%",
+        "01": "25%",
+        "10": "25%",
+        "11": "25%"
+      },
+      "cursor": "points to each bar one by one",
+      "animation": "bars grow smoothly from zero"
+    },
+    {
+      "time": "27-32s",
+      "text": "The oracle marks the state we are searching for.",
+      "visual": "cursor moves to the circuit and draws the oracle section around the relevant gates",
+      "circuit": [
+        "q0 ──[H]────●────",
+        "q1 ──[H]────X────"
+      ],
+      "cursor": "draws a thin cyan outline around the oracle and points toward |11⟩",
+      "annotation": "Oracle"
+    },
+    {
+      "time": "32-37s",
+      "text": "Then the diffuser amplifies its amplitude.",
+      "visual": "cursor draws the diffuser section after the oracle",
+      "circuit": [
+        "q0 ──[H]────[Oracle]────[Diffuser]────",
+        "q1 ──[H]────[Oracle]────[Diffuser]────"
+      ],
+      "animation": "diffuser appears gate-by-gate",
+      "cursor": "follows every gate placement"
+    },
+    {
+      "time": "37-42s",
+      "text": "The probability of our target becomes much larger.",
+      "visual": "probability bars animate from equal heights toward a dominant |11⟩ bar",
+      "cursor": "moves to the |11⟩ bar and draws a cyan arrow toward it",
+      "qsphere": "briefly show the corresponding state representation beside the circuit"
+    },
+    {
+      "time": "42-45s",
+      "text": "Measure, and we find the marked state.",
+      "visual": "measurement symbols appear at the end of the circuit and |11⟩ becomes the final highlighted result",
+      "cursor": "moves to the measurement and then to |11⟩",
+      "ending_text": "Grover: Superposition → Oracle → Diffuser → Measurement"
+    }
+  ],
+  "animation_rules": {
+    "text_and_cursor_are_synchronized": true,
+    "cursor_always_demonstrates_what_is_being_explained": true,
+    "draw_instead_of_instantly_appearing": true,
+    "use_hand_drawn_arrow_motion": true,
+    "use_cyan_circle_cursor": true,
+    "keep_everything_centered": true,
+    "maintain_large_negative_space": true,
+    "never_show_all_information_at_once": true,
+    "each_concept_appears_only_when_explained": true,
+    "smooth_timing": true
+  },
+  "narration_style": {
+    "voice": "calm intelligent AI instructor",
+    "pace": "slow and conversational",
+    "tone": "clear, confident, curious",
+    "synchronization": "cursor and drawings must follow narration exactly"
+  },
+  "final_frame": {
+    "background": "same dark canvas",
+    "center_text": "Grover's Algorithm",
+    "subtext": "Create → Mark → Amplify → Measure",
+    "cursor": "rests beside the final result"
+  }
+}

@@ -1,0 +1,195 @@
+/* ════════════════════════════════════════════════════════════════════════
+   TeachingCursor.css — Phase 2 Rebuilt
+   Academic Teaching Cursor: visible, intentional, robust positioning.
+   Hotspot: tip at (0, 0).
+   ════════════════════════════════════════════════════════════════════════ */
+
+.teaching-cursor-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  /* Smooth movement via CSS transitions */
+  transition: left 800ms cubic-bezier(0.25, 0.1, 0.25, 1),
+              top 800ms cubic-bezier(0.25, 0.1, 0.25, 1),
+              opacity 200ms ease;
+  will-change: left, top;
+}
+
+/* When rendered directly in global screen/IDE overlay fallback */
+.teaching-cursor-container.is-screen-coords {
+  position: fixed;
+}
+
+/* When instant positioning (teleport/setPosition) is requested */
+.teaching-cursor-container.is-instant {
+  transition: opacity 200ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .teaching-cursor-container {
+    transition: none !important;
+  }
+}
+
+/* ── Academic pointer arrow ───────────────────────────────────────────── */
+
+.teaching-cursor-arrow {
+  display: block;
+  /* Hotspot anchored strictly at the tip of the arrow (0, 0) */
+  transform-origin: 0 0;
+  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Clear drop shadow for depth and separation from dark background */
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.75));
+}
+
+.teaching-cursor-arrow.clicking {
+  transform: scale(0.92);
+}
+
+/* Subtle academic focus pulse at tip when pointing/spotlight */
+.teaching-cursor-tip-dot {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--wb-status-cyan, #1192e8);
+  box-shadow: 0 0 8px var(--wb-status-cyan, #1192e8);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ── Text label below cursor ─────────────────────────────────────────── */
+
+.teaching-cursor-label {
+  position: absolute;
+  top: 32px;
+  left: 16px;
+  background: rgba(10, 15, 30, 0.95);
+  color: #e2e8f0;
+  border: 1px solid var(--wb-status-cyan-glow, rgba(17, 146, 232, 0.4));
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
+/* ── Drag ghost badge ────────────────────────────────────────────────── */
+
+.teaching-cursor-drag-ghost {
+  position: absolute;
+  top: 24px;
+  left: 18px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 6px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  border-radius: 6px;
+  color: #111827;
+  font-weight: 800;
+  font-size: 14px;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+/* ── Drop Overshoot-and-Settle Spring Animation (Phase 2 Lifecycle) ──── */
+@keyframes dropOvershootSettle {
+  0% {
+    transform: scale(1.05);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1.0);
+  }
+}
+
+.teaching-cursor-container.is-dropping .teaching-cursor-drag-ghost {
+  animation: dropOvershootSettle 220ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.teaching-cursor-container.is-dropping .teaching-cursor-arrow {
+  animation: dropOvershootSettle 220ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Lift and Fade After Drop (Phase 8 Lifecycle) ──── */
+.teaching-cursor-container.is-lifting {
+  opacity: 0 !important;
+  transform: translate(24px, -24px) scale(1.1) !important;
+  transition: opacity 250ms ease-out, transform 250ms ease-out !important;
+}
+
+/* ── Annotation overlays ─────────────────────────────────────────────── */
+
+.teaching-cursor-annotation-circle {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  pointer-events: none;
+  animation: draw-circle 0.8s ease-out forwards;
+}
+
+@keyframes draw-circle {
+  to { stroke-dashoffset: 0; }
+}
+
+.teaching-cursor-annotation-underline {
+  position: absolute;
+  top: 15px;
+  left: -10px;
+  pointer-events: none;
+  animation: draw-line 0.5s ease-out forwards;
+}
+
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+.teaching-cursor-annotation-arrow {
+  position: absolute;
+  top: -40px;
+  left: -60px;
+  pointer-events: none;
+  animation: draw-arrow 0.6s ease-out forwards;
+}
+
+@keyframes draw-arrow {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── Spotlight ───────────────────────────────────────────────────────── */
+
+.cursor-spotlight-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 64px;
+  background: radial-gradient(
+    circle,
+    var(--wb-status-cyan-glow, rgba(17, 146, 232, 0.25)) 0%,
+    transparent 70%
+  );
+  transform: translate(-32px, -32px);
+  border-radius: 50%;
+  pointer-events: none;
+}

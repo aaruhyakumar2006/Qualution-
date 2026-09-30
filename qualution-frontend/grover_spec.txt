@@ -1,0 +1,60 @@
+<USER_REQUEST>
+QUALUTION — LESSON 8: GROVER'S SEARCH — FULL FEATURE BUILD
+Execute phase by phase. STOP at every HUMAN CHECKPOINT and wait for my "continue".
+Each phase has an estimate. If you pass 1.5x the estimate, stop and report. Never silently cut scope.
+
+==================== A. GROUND RULES ====================
+1. Extend the existing Qualution frontend. Reuse teachingController, the Sprint 1 lesson pattern
+   (checkpoints, comparisonRule, completion criteria), validateAndDiagnoseGroverOracle,
+   executionRouter, circuitAnalyzer, groverVerification, the 3-tier TutorPanel, ErwinAvatar,
+   and the Dexie progress DB. Do not build parallel systems.
+2. Architecture: the REAL live Workbench only. Flow per step is Predict -> Build -> Simulate ->
+   Observe -> Explain. The learner places every gate. NO JSON lesson scripting, NO scripted cursor,
+   NO DOM clone/replica, NO rrweb, NO Playwright in product code.
+3. Simulator-derived values (probabilities, amplitudes, metrics, routing reason) must come from a
+   real run of the learner's actual circuit. Never hardcode them. Explanatory constants such as the
+   scaling table may be static. Never write "0ms"; report real measured ms.
+4. Visual quality: --wb-* tokens only, one primary CTA per screen, no new ad-hoc colours,
+   IBM-Composer-level clarity. Tests passing is NOT proof of quality. Wherever a checkpoint says
+   SCREENSHOT, attach real screenshots of the running app.
+5. Edge/offline: local engines make zero network requests. Lazy-load this lesson's code.
+
+==================== B. KNOWN DEFECTS (fix in Phase 1) ====================
+B1. Wrong overshoot number. After a SECOND round (oracle+diffusion) all four outcomes are ~25%
+    (state returns to uniform). The old figure of 6.25% is WRONG. Grep the whole repo, tutor text,
+    fixtures and tests for "6.25" and correct every hit.
+B2. Full-state views vs router. This lesson needs SIGNED amplitudes mid-circuit, but the router
+    sends Clifford circuits to Stabilizer, which returns no stateve
+<truncated 13332 bytes>
+ld with its diagnosis, then the correct build.
+P6 Stage 3 (three chunks + behavioral validation + diagnoses). Est 40 min. CHECKPOINT (SCREENSHOTS).
+P7 Stages 4-5 (measure, run, Analyzer metrics, overshoot preset and real 25% result). Est 35 min.
+   CHECKPOINT (SCREENSHOTS): histogram at 100% and the flat 25% histogram.
+P8 Stage 6, assessment, XP/badge, Dexie persistence, idempotent awards. Est 30 min.
+P9 Erwin, Tutor panel tiers, narration and Analyzer wiring. Est 30 min.
+P10 Visual QA and edge: full playthrough with SCREENSHOTS at every stage; 4-6x CPU throttle
+    playthrough; confirm zero network requests for local engines; resize the window mid-lesson.
+    Est 35 min. Report real observations, not assumptions.
+P11 Full regression suite, dead-code cleanup, final report. Est 20 min.
+STRETCH S1: amplitude bars with a dashed average line (4 bars, transform/opacity animation only). Est 30 min.
+STRETCH S2: transfer challenge. Est 30 min.
+Estimated core total: about 6.5-7 hours of active work.
+
+==================== H. FINAL REPORT (plain, no padding) ====================
+1) Phase-by-phase actual vs estimated time. 2) Screenshots per stage. 3) Real numbers: metrics,
+P(11) at one round, the four values at two rounds, payload size, throttled-run observations.
+4) Test totals. 5) Every rough edge left, by stage. 6) Anything descoped, stated plainly.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-09-28T05:59:41+05:30.
+
+The user's current state is as follows:
+Active Document: e:\SIH140-finals-winner-26\jinkichan\qualution-frontend\src\App.tsx (LANGUAGE_TSX)
+Cursor is on line: 400
+Other open documents:
+- e:\SIH140-finals-winner-26\jinkichan\qualution-frontend\src\App.tsx (LANGUAGE_TSX)
+- e:\SIH140-finals-winner-26\jinkichan\qualution-frontend\public\video-analyzer.html (LANGUAGE_HTML)
+Browser State:
+  Page 7510053BB542355FE63963828923CDDD (Qualution Studio — Quantum Computing IDE) - http://localhost:5173/#learn [ACTIVE]
+    Viewport: 1536x826, Page Height: 825
+</ADDITIONAL_METADATA>

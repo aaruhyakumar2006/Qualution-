@@ -1,0 +1,33 @@
+/* ════════════════════════════════════════════════════════════════════════
+   BoardTextLayer.css
+   PHASE 3: Progressive Chalkboard Typography Styles
+   ════════════════════════════════════════════════════════════════════════ */
+
+.board-text-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.board-text-item {
+  position: absolute;
+  white-space: pre-wrap;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  line-height: 1.25;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Academic chalkboard handwritten feel: crisp chalk with subtle ambient bloom */
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.6);
+
+  will-change: clip-path;
+  transform-origin: left top;
+}

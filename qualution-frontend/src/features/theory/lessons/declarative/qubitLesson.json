@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "id": "qubit-superposition-lesson",
+  "title": "What is a Quantum Qubit?",
+  "description": "Comprehensive exploration of quantum superposition, Dirac bra-ket notation, and probability amplitudes.",
+  "concepts": ["qubit", "superposition", "probability-amplitudes"],
+  "misconceptions": ["superposition-not-mixture", "measurement-deterministic"],
+  "defaults": {
+    "duration": 1.5,
+    "color": "#F8FAFC"
+  },
+  "actions": [
+    {
+      "type": "WRITE",
+      "id": "qubit-title",
+      "text": "THE QUANTUM QUBIT & SUPERPOSITION",
+      "x": 260,
+      "y": 80,
+      "duration": 1.6,
+      "style": {
+        "fontSize": 34,
+        "fontWeight": "bold",
+        "color": "#A78BFA"
+      }
+    },
+    {
+      "type": "UNDERLINE",
+      "id": "ul-qubit-title",
+      "x": 260,
+      "y": 120,
+      "width": 760,
+      "color": "#7C3AED"
+    },
+    {
+      "type": "NARRATE",
+      "text": "Unlike a classical bit, a quantum bit or qubit can exist in a linear combination of both state zero and state one simultaneously.",
+      "duration": 5.5
+    },
+    {
+      "type": "CAPTION",
+      "id": "cap-qubit-intro",
+      "text": "A qubit uses quantum mechanical principles: Superposition and Phase."
+    },
+    {
+      "type": "WRITE",
+      "id": "ket-heading",
+      "text": "1. Dirac Ket Notation & State Vector:",
+      "x": 140,
+      "y": 170,
+      "duration": 1.2,
+      "style": {
+        "fontSize": 24,
+        "fontWeight": "600",
+        "color": "#E2E8F0"
+      }
+    },
+    {
+      "type": "MATH",
+      "id": "math-statevector",
+      "expression": "|\\psi\\rangle = \\alpha |0\\rangle + \\beta |1\\rangle \\quad (\\alpha, \\beta \\in \\mathbb{C})",
+      "x": 140,
+      "y": 220,
+      "duration": 1.8,
+      "style": {
+        "scale": 1.3,
+        "fontSize": 24,
+        "color": "#F5C842"
+      }
+    },
+    {
+      "type": "HIGHLIGHT",
+      "id": "hl-statevector",
+      "x": 130,
+      "y": 210,
+      "width": 640,
+      "height": 55,
+      "color": "rgba(245, 200, 66, 0.2)"
+    },
+    {
+      "type": "NARRATE",
+      "text": "The coefficients alpha and beta are complex probability amplitudes representing the quantum state.",
+      "duration": 4.8
+    },
+    {
+      "type": "WRITE",
+      "id": "norm-heading",
+      "text": "2. Normalization Constraint (Total Probability = 100%):",
+      "x": 140,
+      "y": 310,
+      "duration": 1.2,
+      "style": {
+        "fontSize": 24,
+        "fontWeight": "600",
+        "color": "#E2E8F0"
+      }
+    },
+    {
+      "type": "MATH",
+      "id": "math-normalization",
+      "expression": "|\\alpha|^2 + |\\beta|^2 = 1 \\implies P(0) = |\\alpha|^2, \\quad P(1) = |\\beta|^2",
+      "x": 140,
+      "y": 360,
+      "duration": 1.8,
+      "style": {
+        "scale": 1.25,
+        "fontSize": 24,
+        "color": "#38BDF8"
+      }
+    },
+    {
+      "type": "NARRATE",
+      "text": "By the Born rule, the squared magnitude of alpha gives the probability of measuring zero, and beta squared gives the probability of measuring one.",
+      "duration": 5.8
+    },
+    {
+      "type": "DRAW",
+      "id": "circle-bloch-preview",
+      "shape": "circle",
+      "cx": 880,
+      "cy": 300,
+      "r": 70,
+      "filled": true,
+      "duration": 1.2,
+      "style": {
+        "color": "#38BDF8",
+        "strokeWidth": 2.5
+      }
+    },
+    {
+      "type": "DRAW",
+      "id": "arrow-state-vector",
+      "shape": "arrow",
+      "x1": 880,
+      "y1": 300,
+      "x2": 930,
+      "y2": 250,
+      "arrowSize": 14,
+      "duration": 1.0,
+      "style": {
+        "color": "#F5C842",
+        "strokeWidth": 3.0
+      }
+    },
+    {
+      "type": "WRITE",
+      "id": "label-bloch-state",
+      "text": "|ψ⟩ on Bloch Sphere",
+      "x": 800,
+      "y": 390,
+      "duration": 1.0,
+      "style": {
+        "fontSize": 18,
+        "color": "#CBD5E1"
+      }
+    },
+    {
+      "type": "NARRATE",
+      "text": "Geometrically, any single qubit pure state lives on the surface of the three-dimensional Bloch Sphere.",
+      "duration": 4.5
+    },
+    {
+      "type": "PAUSE",
+      "duration": 1.5
+    }
+  ]
+}

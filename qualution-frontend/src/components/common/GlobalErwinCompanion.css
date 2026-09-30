@@ -1,0 +1,138 @@
+/* ═══════════════════════════════════════════════════════════════
+   QUALUTION GLOBAL ERWIN COMPANION — BALL PHYSICS EDITION
+   GPU Compositor-only transforms (translate3d + rotate + scale).
+   Tokens: --space-6 (24px), --space-2 (8px), --space-3 (12px)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Fixed anchor: bottom-left corner */
+.erwin-global-anchor {
+  position: fixed;
+  bottom: var(--space-6, 24px);
+  left: var(--space-6, 24px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2, 8px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Fullscreen shield during active drag */
+.erwin-drag-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: transparent;
+  cursor: grabbing !important;
+  pointer-events: all;
+}
+
+/* ── Drag wrapper: translate3d ONLY (RAF or CSS-transition free) ── */
+.erwin-drag-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2, 8px);
+  pointer-events: auto;
+  touch-action: none;
+  will-change: transform;
+  /* No transition here — position is always set by JS/RAF */
+}
+
+.erwin-drag-wrapper.is-dragging {
+  cursor: grabbing !important;
+}
+
+/* ── Avatar wrapper: rotate + scale applied inline by JS ── */
+.erwin-global-avatar-wrap {
+  pointer-events: auto;
+  cursor: grab;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform, filter;
+  transform-origin: 50% 50%;
+}
+
+.erwin-global-avatar-wrap:not(.is-dragging):hover {
+  filter: brightness(1.15) drop-shadow(0 0 10px rgba(0, 242, 255, 0.4));
+}
+
+.erwin-global-avatar-wrap.is-assistant-active {
+  filter: drop-shadow(0 0 14px rgba(0, 242, 255, 0.65));
+}
+
+.erwin-global-avatar-wrap.is-assistant-active::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid #00f2ff;
+  animation: erwin-ring-pulse 2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes erwin-ring-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 0.3; }
+}
+
+.erwin-global-avatar-wrap.is-dragging {
+  cursor: grabbing;
+}
+
+/* ── Suppress idle float/pulse animations during drag/flight ── */
+.erwin-motion-suspended,
+.erwin-motion-suspended * {
+  animation: none !important;
+}
+
+/* ── Speech bubble ── */
+.erwin-global-bubble {
+  pointer-events: auto;
+  max-width: 280px;
+  background: var(--wb-bg-surface-elevated, #1e232d);
+  color: var(--wb-text-primary, #f4f7fa);
+  border: 1px solid var(--wb-border-strong, #3b4452);
+  border-radius: 8px;
+  padding: var(--space-2, 8px) var(--space-3, 12px);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  animation: erwin-bubble-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  position: relative;
+  cursor: pointer;
+}
+
+.erwin-global-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 20px;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  border-right: 1px solid var(--wb-border-strong, #3b4452);
+  border-bottom: 1px solid var(--wb-border-strong, #3b4452);
+  transform: rotate(45deg);
+}
+
+.erwin-global-bubble--idle     { border-left: 3px solid var(--wb-status-cyan, #1192e8); }
+.erwin-global-bubble--correct,
+.erwin-global-bubble--success  { border-left: 3px solid var(--wb-status-success, #21c79a); }
+.erwin-global-bubble--incorrect,
+.erwin-global-bubble--warning  { border-left: 3px solid var(--wb-status-danger, #e05252); }
+.erwin-global-bubble--thinking { border-left: 3px solid var(--wb-accent, #0f62fe); }
+
+@keyframes erwin-bubble-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

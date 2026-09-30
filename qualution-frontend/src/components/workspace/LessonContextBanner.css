@@ -1,0 +1,401 @@
+/**
+ * LessonContextBanner.css
+ *
+ * Academic dark styling for the Workbench theory context banner and Phase 14
+ * experiment result explanation & prediction comparison.
+ */
+
+.lesson-context-banner {
+  margin: 12px 16px 8px 16px;
+  padding: 14px 18px;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(56, 189, 248, 0.08);
+  backdrop-filter: blur(12px);
+  color: #F8FAFC;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  animation: lcb-fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+}
+
+@keyframes lcb-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lcb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lcb-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lcb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  background: rgba(56, 189, 248, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 6px;
+  color: #38BDF8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lcb-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #F8FAFC;
+}
+
+.lcb-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lcb-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 6px;
+  color: #94A3B8;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lcb-back-button:hover {
+  background: rgba(51, 65, 85, 0.9);
+  color: #F8FAFC;
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.lcb-dismiss-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #64748B;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lcb-dismiss-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #CBD5E1;
+}
+
+.lcb-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lcb-formula-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 6px;
+  align-self: flex-start;
+}
+
+.lcb-formula-label {
+  font-size: 12px;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.lcb-formula-math .katex {
+  font-size: 1.1em;
+  color: #38BDF8;
+}
+
+.lcb-formula-code {
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: #38BDF8;
+}
+
+.lcb-prediction-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 6px;
+}
+
+.lcb-prediction-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #34D399;
+}
+
+.lcb-correct-icon {
+  color: #34D399;
+  flex-shrink: 0;
+}
+
+.lcb-info-icon {
+  color: #FBBF24;
+  flex-shrink: 0;
+}
+
+.lcb-prediction-label {
+  color: #E2E8F0;
+}
+
+.lcb-prediction-explanation {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #94A3B8;
+}
+
+.lcb-prompt-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #CBD5E1;
+}
+
+/* Simulating State */
+.lcb-running-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px dashed rgba(56, 189, 248, 0.4);
+  border-radius: 6px;
+  font-size: 13px;
+  color: #38BDF8;
+}
+
+.lcb-spin-icon {
+  animation: lcb-spin 1s linear infinite;
+}
+
+@keyframes lcb-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Experiment Results */
+.lcb-result-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 8px;
+}
+
+.lcb-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lcb-result-title-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lcb-result-icon {
+  color: #818CF8;
+}
+
+.lcb-result-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #E2E8F0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lcb-shots-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: #A5B4FC;
+  background: rgba(99, 102, 241, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.lcb-distribution-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.lcb-dist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.lcb-dist-state {
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+  color: #38BDF8;
+  width: 32px;
+}
+
+.lcb-dist-bar-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.lcb-dist-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38BDF8, #818CF8);
+  border-radius: 4px;
+  transition: width 0.4s ease-out;
+}
+
+.lcb-dist-val {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  color: #CBD5E1;
+  width: 95px;
+  text-align: right;
+}
+
+.lcb-comparison-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #34D399;
+}
+
+.lcb-check-icon {
+  flex-shrink: 0;
+  color: #34D399;
+}
+
+/* KaTeX Mathematical Explanation */
+.lcb-explanation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+}
+
+.lcb-explanation-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lcb-explain-icon {
+  color: #38BDF8;
+}
+
+.lcb-explanation-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #F8FAFC;
+}
+
+.lcb-math-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.lcb-math-card {
+  padding: 6px 12px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lcb-math-card .katex-display {
+  margin: 2px 0;
+}
+
+.lcb-math-card .katex {
+  font-size: 1.05em;
+  color: #E2E8F0;
+}
+
+.lcb-explanation-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #94A3B8;
+}
+
+/* Run Hint */
+.lcb-run-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  border-radius: 6px;
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.lcb-run-hint strong {
+  color: #38BDF8;
+}

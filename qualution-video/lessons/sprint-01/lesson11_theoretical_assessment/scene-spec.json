@@ -1,0 +1,615 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-assessment",
+  "lessonTitle": "Sprint 1 Theoretical Assessment",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 215,
+  "fps": 30,
+  "totalFrames": 6450,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Evaluate comprehensive theoretical mastery across all 10 Sprint 1 concepts.",
+    "Test mathematical statevector calculations and Born's rule evaluations.",
+    "Verify understanding of gate unitary identities and matrix products.",
+    "Assess diagnostic ability to predict measurement outcomes from circuit diagrams.",
+    "Award Sprint 1 Quantum Foundations certification on passing."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Comprehensive Sprint 1 assessment guidelines",
+      "Scoring rubric: 80% passing threshold",
+      "Multi-concept synthesis problems",
+      "Step-by-step mathematical reasoning checks",
+      "Sprint 2 curriculum preview: Entanglement & Multi-Qubit Circuits"
+    ],
+    "topicsDeferred": [
+      "Multi-qubit operations (Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Sprint 1 Milestone Assessment",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Welcome to the Sprint 1 Theoretical Assessment. This rigorous 10-question examination evaluates your complete theoretical mastery of quantum computing fundamentals.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Welcome to the Sprint 1 Theoretical Assessment.",
+          "startFrame": 1,
+          "endFrame": 300
+        },
+        {
+          "text": "Test your mastery across 10 rigorous quantum theory problems.",
+          "startFrame": 301,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 11: SPRINT 1 THEORETICAL ASSESSMENT",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "Official Qualification & Competency Certification",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Establish high academic standards and solemnity for the certification exam.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Assessment Structure & Topics",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "The assessment spans five core competency areas: Qubit State Vectors, Computational Basis Orthogonality, Born's Rule Calculations, Single-Qubit Gate Identities, and Circuit Time Traces.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Five core competencies: State Vectors, Basis Vectors, Born's Rule,",
+          "startFrame": 601,
+          "endFrame": 960
+        },
+        {
+          "text": "Gate Identities, and Circuit Time Evolution.",
+          "startFrame": 961,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_topics_title",
+          "text": "Assessment Competency Matrix",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_t1",
+          "text": "1. State Space & Normalization (|\u03b1|\u00b2 + |\u03b2|\u00b2 = 1)",
+          "role": "body",
+          "position": [
+            0.0,
+            1.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_t2",
+          "text": "2. Born's Rule & Probability Distributions (P = |\u27e8x|\u03c8\u27e9|\u00b2)",
+          "role": "body",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_t3",
+          "text": "3. Unitary Gate Matrices & Wave Interference (HZH = X)",
+          "role": "body",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Break down the exam rubric clearly.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Strategy for Quantum Calculations",
+      "durationSeconds": 35,
+      "startFrame": 1351,
+      "endFrame": 2400,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "When solving quantum problems: First, always verify normalization. Second, keep track of complex phases before applying measurement. And third, remember that circuit gates apply from left to right, but multiply from right to left!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Key Strategy 1: Check state normalization first.",
+          "startFrame": 1351,
+          "endFrame": 1680
+        },
+        {
+          "text": "Key Strategy 2: Track complex relative phases carefully before measuring.",
+          "startFrame": 1681,
+          "endFrame": 2040
+        },
+        {
+          "text": "Key Strategy 3: Apply operators in reverse matrix multiplication order.",
+          "startFrame": 2041,
+          "endFrame": 2400
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_strat_title",
+          "text": "Exam Problem-Solving Strategy",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_s1",
+          "text": "Rule 1: Always check normalization: |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1",
+          "role": "body",
+          "position": [
+            0.0,
+            0.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_s2",
+          "text": "Rule 2: Trace phase interference before computing probabilities",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_s3",
+          "text": "Rule 3: U_total = U_n \u00b7 ... \u00b7 U_2 \u00b7 U_1",
+          "role": "body",
+          "position": [
+            0.0,
+            -1.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Equip student with high-confidence problem-solving heuristics.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "Passing Criteria & Certification",
+      "durationSeconds": 30,
+      "startFrame": 2401,
+      "endFrame": 3300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To earn your Sprint 1 Quantum Foundations Certificate and unlock Sprint 2, you must achieve a score of 80 percent or higher. You will receive detailed explanations and feedback for every answer.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Passing Threshold: 80% (8 out of 10 correct answers).",
+          "startFrame": 2401,
+          "endFrame": 2820
+        },
+        {
+          "text": "Instant auto-grading with complete step-by-step solutions and feedback.",
+          "startFrame": 2821,
+          "endFrame": 3300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_criteria",
+          "text": "Passing Threshold: 80% (8/10 Correct)",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_unlock",
+          "text": "Unlocks: Sprint 2 \u2014 Entanglement & Multi-Qubit Systems",
+          "role": "subheader",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2401,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Explain passing score and progression incentive.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "Preview of Sprint 2: Quantum Entanglement",
+      "durationSeconds": 40,
+      "startFrame": 3301,
+      "endFrame": 4500,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Once you pass, Sprint 2 awaits! You will leave the single-qubit world behind to explore Einstein's 'spooky action at a distance'\u2014quantum entanglement, Bell states, CNOT gates, and Grover's search algorithm.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Coming next in Sprint 2: Quantum Entanglement and Multi-Qubit Circuits!",
+          "startFrame": 3301,
+          "endFrame": 3840
+        },
+        {
+          "text": "Build Bell states, harness CNOT gates, and discover quantum teleportation.",
+          "startFrame": 3841,
+          "endFrame": 4500
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_s2_title",
+          "text": "NEXT: SPRINT 2 \u2014 QUANTUM ENTANGLEMENT",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_bell",
+          "text": "|\u03a6\u207a\u27e9 = (|00\u27e9 + |11\u27e9) / \u221a2",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_cnot",
+          "text": "Controlled-NOT (CNOT) & Two-Qubit Tensor Products",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3301,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Build intense excitement for Sprint 2.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "Begin Your Assessment",
+      "durationSeconds": 35,
+      "startFrame": 4501,
+      "endFrame": 5550,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Take a deep breath, trust your understanding, and answer the questions below with care. The quantum universe is governed by elegance, symmetry, and math. Begin your assessment now!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Trust your understanding and read each question carefully.",
+          "startFrame": 4501,
+          "endFrame": 4980
+        },
+        {
+          "text": "Begin your Sprint 1 Theoretical Assessment now. Good luck!",
+          "startFrame": 4981,
+          "endFrame": 5550
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_begin_title",
+          "text": "BEGIN SPRINT 1 ASSESSMENT",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_quote",
+          "text": "\"Those who are not shocked when they first come across quantum theory cannot possibly have understood it.\" \u2014 Niels Bohr",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4501,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Inspire and initiate assessment.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Summary & Closing",
+      "durationSeconds": 30,
+      "startFrame": 5551,
+      "endFrame": 6450,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "This concludes the video curriculum for Sprint 1. Review any past lessons anytime, and proceed directly to the interactive assessment below. Best of luck from the QUALUTION team!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "This concludes the Sprint 1 video curriculum.",
+          "startFrame": 5551,
+          "endFrame": 5970
+        },
+        {
+          "text": "Proceed to the assessment below. Best of luck!",
+          "startFrame": 5971,
+          "endFrame": 6450
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_closing",
+          "text": "QUALUTION: QUANTUM EDUCATION PLATFORM",
+          "role": "header",
+          "position": [
+            0.0,
+            1.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_goodluck",
+          "text": "Complete the Assessment Below to Earn Your Credential",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5551,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Final wrap up.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

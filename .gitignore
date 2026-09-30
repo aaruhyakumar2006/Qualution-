@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+*/node_modules/
+qualution-frontend/node_modules/
+
+# Python Virtual Environments
+venv/
+.venv/
+*/venv/
+qualution-backend/venv/
+backend/venv/
+
+# Environment variables & secrets
+.env
+.env.*
+*.env
+!.env.example
+!qualution-frontend/.env.example
+!backend/.env.example
+
+# Python Cache & Testing
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*/.pytest_cache/
+
+# Video Renders & Frame Sequences (Heavy build artifacts)
+qualution-video/renders/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

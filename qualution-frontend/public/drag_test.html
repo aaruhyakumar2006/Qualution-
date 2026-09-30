@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Qualution Drag Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #0f1419; color: white; }
+        .gate { 
+            width: 60px; 
+            height: 60px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 10px; 
+            cursor: grab;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            user-select: none;
+        }
+        .gate:active { cursor: grabbing; }
+        .circuit { 
+            margin-top: 30px;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .slot { 
+            width: 60px; 
+            height: 60px; 
+            border: 2px dashed #30363d; 
+            margin: 5px;
+            display: inline-block;
+            border-radius: 4px;
+            vertical-align: middle;
+        }
+        .slot.drag-over {
+            background: rgba(17, 146, 232, 0.18);
+            border: 2px solid #1192e8;
+            box-shadow: 0 0 10px rgba(17, 146, 232, 0.4);
+        }
+        .status { 
+            margin: 20px 0; 
+            padding: 10px; 
+            background: #161b22; 
+            border-left: 4px solid #00d2ff;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Qualution Drag & Drop Test</h1>
+    
+    <div class="status" id="status">Status: Ready to test</div>
+    
+    <h2>Gate Palette (Drag from here):</h2>
+    <div class="gate" draggable="true" data-gate="h">H</div>
+    <div class="gate" draggable="true" data-gate="x">X</div>
+    <div class="gate" draggable="true" data-gate="z">Z</div>
+    
+    <div class="circuit">
+        <h3>Circuit (Drop here):</h3>
+        <div class="slot" data-qubit="0" data-col="0"></div>
+        <div class="slot" data-qubit="0" data-col="1"></div>
+        <div class="slot" data-qubit="0" data-col="2"></div>
+        <br>
+        <div class="slot" data-qubit="1" data-col="0"></div>
+        <div class="slot" data-qubit="1" data-col="1"></div>
+        <div class="slot" data-qubit="1" data-col="2"></div>
+    </div>
+    
+    <script>
+        const gates = document.querySelectorAll('.gate');
+        const slots = document.querySelectorAll('.slot');
+        const status = document.getElementById('status');
+        
+        gates.forEach(gate => {
+            gate.addEventListener('dragstart', (e) => {
+                const gateType = e.target.dataset.gate;
+                e.dataTransfer.setData('application/qualution-gate', gateType);
+                e.dataTransfer.effectAllowed = 'copy';
+                e.target.style.opacity = '0.5';
+                status.textContent = `Dragging ${gateType.toUpperCase()} gate...`;
+                console.log('✅ Drag started:', gateType);
+            });
+            
+            gate.addEventListener('dragend', (e) => {
+                e.target.style.opacity = '1';
+                status.textContent = 'Drag ended';
+            });
+        });
+        
+        slots.forEach(slot => {
+            slot.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                slot.classList.add('drag-over');
+                const qubit = slot.dataset.qubit;
+                const col = slot.dataset.col;
+                status.textContent = `Hovering over qubit ${qubit}, column ${col}`;
+            });
+            
+            slot.addEventListener('dragleave', () => {
+                slot.classList.remove('drag-over');
+            });
+            
+            slot.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const gateType = e.dataTransfer.getData('application/qualution-gate');
+                const qubit = slot.dataset.qubit;
+                const col = slot.dataset.col;
+                
+                slot.textContent = gateType.toUpperCase();
+                slot.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                slot.style.color = 'white';
+                slot.style.display = 'inline-flex';
+                slot.style.alignItems = 'center';
+                slot.style.justifyContent = 'center';
+                slot.style.fontWeight = 'bold';
+                slot.classList.remove('drag-over');
+                
+                status.textContent = `✅ SUCCESS: Placed ${gateType.toUpperCase()} at qubit ${qubit}, column ${col}`;
+                console.log('✅ Drop success:', { gateType, qubit, col });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,680 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-qubits-states",
+  "lessonTitle": "Qubits & Quantum States",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 220,
+  "fps": 30,
+  "totalFrames": 6600,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Explain the physical representation of quantum two-level systems.",
+    "Understand Dirac bra-ket notation for state vectors |0\u27e9 and |1\u27e9.",
+    "Interpret the statevector equation |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9.",
+    "Recognize complex probability amplitudes \u03b1 and \u03b2.",
+    "Understand the normalization constraint |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.",
+    "Visualize state vectors on the 3D Bloch sphere representation."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Two-level quantum systems (photons, trapped ions, superconductors)",
+      "Dirac ket notation |\u03c8\u27e9",
+      "Column vector representation of computational basis states",
+      "Linear combinations of basis states",
+      "Normalization condition |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1",
+      "Introduction to the Bloch sphere sphere surface"
+    ],
+    "topicsDeferred": [
+      "Full Born rule collapse dynamics (Lesson 5)",
+      "Relative vs global phase geometry (Lesson 7)",
+      "Matrix representations of quantum gates (Lesson 8)",
+      "Entanglement and multi-qubit tensor products (Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Quantum Continuum",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In the classical realm, information is rigidly binary: a switch is on or off, a transistor is charged or uncharged. But nature at the microscopic scale is not discrete\u2014it is continuous.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "In the classical realm, information is rigidly binary: 0 or 1.",
+          "startFrame": 1,
+          "endFrame": 270
+        },
+        {
+          "text": "At the microscopic scale, quantum physical systems behave continuously.",
+          "startFrame": 271,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 2: QUBITS & QUANTUM STATES",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "The Continuous Spectrum of Quantum Information",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Hook the learner by contrasting discrete classical switches with continuous quantum physical systems.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Physical Realizations of Qubits",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Any quantum system with two distinct, measurable energy levels can serve as a qubit. Examples include the spin of an electron, the polarization of a photon, or artificial atoms built from superconducting Josephson junctions.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Any two-level quantum system can serve as a physical qubit.",
+          "startFrame": 601,
+          "endFrame": 930
+        },
+        {
+          "text": "Examples: electron spin, photon polarization, or superconducting circuits.",
+          "startFrame": 931,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_types",
+          "text": "Physical Two-Level Quantum Systems",
+          "role": "header",
+          "position": [
+            -5.0,
+            3.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_spin",
+          "text": "Spin-1/2 Particles (Up / Down)",
+          "role": "body",
+          "position": [
+            -5.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_super",
+          "text": "Superconducting Transmon Qubits",
+          "role": "body",
+          "position": [
+            -5.0,
+            1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Ground mathematical abstractions in real experimental quantum hardware physics.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Dirac Notation & State Vectors",
+      "durationSeconds": 30,
+      "startFrame": 1351,
+      "endFrame": 2250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To mathematically capture quantum states, physicist Paul Dirac introduced bra-ket notation. We write the state of our qubit as a ket vector, denoted |\u03c8\u27e9, which lives in a two-dimensional complex Hilbert space.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Physicist Paul Dirac introduced ket notation: |\u03c8\u27e9.",
+          "startFrame": 1351,
+          "endFrame": 1710
+        },
+        {
+          "text": "A single qubit state lives in a 2-dimensional complex vector space.",
+          "startFrame": 1711,
+          "endFrame": 2250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_dirac",
+          "text": "|\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_hilbert",
+          "text": "State Vector in Hilbert Space \u2102\u00b2",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -1.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce Dirac notation and formal column vector space conventions.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "The Basis Vectors |0\u27e9 and |1\u27e9",
+      "durationSeconds": 25,
+      "startFrame": 2251,
+      "endFrame": 3000,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "The standard computational basis consists of two orthogonal column vectors: |0\u27e9 represented as [1, 0] transpose, and |1\u27e9 represented as [0, 1] transpose. Any arbitrary state is a linear combination of these two axes.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Computational basis: |0\u27e9 = [1, 0]\u1d40 and |1\u27e9 = [0, 1]\u1d40.",
+          "startFrame": 2251,
+          "endFrame": 2640
+        },
+        {
+          "text": "Any state is a linear superposition: |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9.",
+          "startFrame": 2641,
+          "endFrame": 3000
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_b0",
+          "text": "|0\u27e9 = [ 1, 0 ]\u1d40",
+          "role": "formula",
+          "position": [
+            -3.5,
+            0.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_b1",
+          "text": "|1\u27e9 = [ 0, 1 ]\u1d40",
+          "role": "formula",
+          "position": [
+            3.5,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Connect Dirac notation directly to standard linear algebra matrix/vector notation.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "Complex Probability Amplitudes",
+      "durationSeconds": 30,
+      "startFrame": 3001,
+      "endFrame": 3900,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "The coefficients \u03b1 and \u03b2 are not probabilities themselves\u2014they are complex numbers known as probability amplitudes. Each amplitude contains both a magnitude and an intrinsic quantum phase angle.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Coefficients \u03b1 and \u03b2 are complex probability amplitudes (\u03b1, \u03b2 \u2208 \u2102).",
+          "startFrame": 3001,
+          "endFrame": 3420
+        },
+        {
+          "text": "Each amplitude possesses both a magnitude and a quantum phase.",
+          "startFrame": 3421,
+          "endFrame": 3900
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_amp",
+          "text": "\u03b1, \u03b2 \u2208 \u2102",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_polar",
+          "text": "\u03b1 = r\u2080 e^(i\u03b8\u2080),  \u03b2 = r\u2081 e^(i\u03b8\u2081)",
+          "role": "formula",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3001,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Clarify the distinction between probability amplitudes and classical probabilities.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "The Normalization Constraint",
+      "durationSeconds": 25,
+      "startFrame": 3901,
+      "endFrame": 4650,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Because total probability must always equal 100%, quantum states obey the strict normalization constraint: the absolute square of \u03b1 plus the absolute square of \u03b2 must equal exactly one.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Total probability must equal 1: |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.",
+          "startFrame": 3901,
+          "endFrame": 4260
+        },
+        {
+          "text": "Measurement guarantees one of the two computational basis outcomes.",
+          "startFrame": 4261,
+          "endFrame": 4650
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_norm",
+          "text": "|\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.0",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_cons",
+          "text": "Law of Conservation of Quantum Probability",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3901,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Derive and emphasize the fundamental probability normalization invariant.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Bloch Sphere Visualization",
+      "durationSeconds": 35,
+      "startFrame": 4651,
+      "endFrame": 5700,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Because of normalization and global phase invariance, every pure single-qubit state maps to a unique point on the surface of a three-dimensional unit sphere called the Bloch Sphere. |0\u27e9 sits at the North Pole, and |1\u27e9 at the South Pole.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Pure single-qubit states map to points on the 3D Bloch Sphere.",
+          "startFrame": 4651,
+          "endFrame": 5130
+        },
+        {
+          "text": "North Pole represents |0\u27e9; South Pole represents |1\u27e9.",
+          "startFrame": 5131,
+          "endFrame": 5700
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_bloch",
+          "text": "The Bloch Sphere Representation",
+          "role": "header",
+          "position": [
+            -5.0,
+            3.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_north",
+          "text": "North Pole: |0\u27e9",
+          "role": "body",
+          "position": [
+            3.5,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_south",
+          "text": "South Pole: |1\u27e9",
+          "role": "body",
+          "position": [
+            3.5,
+            -2.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4651,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce the geometric representation of single-qubit state space.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-08",
+      "title": "Key Takeaways & Summary",
+      "durationSeconds": 30,
+      "startFrame": 5701,
+      "endFrame": 6600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In summary: a qubit is a physical two-level quantum system represented as |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9. Its complex amplitudes dictate probabilities upon measurement, constrained to total unity. Next, we explore the computational basis in depth.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Summary: |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9 with |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.",
+          "startFrame": 5701,
+          "endFrame": 6120
+        },
+        {
+          "text": "Next up: diving into the computational basis and vector orthogonality.",
+          "startFrame": 6121,
+          "endFrame": 6600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 2 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sum1",
+          "text": "1. Qubit: 2-level quantum state in \u2102\u00b2",
+          "role": "body",
+          "position": [
+            0.0,
+            1.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sum2",
+          "text": "2. State: |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9",
+          "role": "body",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sum3",
+          "text": "3. Normalization: |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_8_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_8_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_8_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5701,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Reinforce core concepts and transition smoothly to Lesson 3.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+[tool.pyright]
+include = ["qualution-backend/app", "qualution-backend/tests"]
+extraPaths = [
+    "qualution-backend",
+    "qualution-backend/venv/Lib/site-packages"
+]
+pythonVersion = "3.11"
+pythonPlatform = "Windows"
+venvPath = "qualution-backend"
+venv = "venv"
