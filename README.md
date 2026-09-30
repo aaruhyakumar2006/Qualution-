@@ -505,7 +505,55 @@ Open **http://localhost:3000** in your browser.
 ---
 
 
+Benchmarks
 
+Qualution routes each circuit to the engine that suits it. These benchmarks show why: a dense statevector cannot leave the low-30s of qubits on ordinary hardware, while the Stabilizer and MPS engines keep going into the hundreds and thousands.
+
+Highlights
+Result	Number
+Largest MPS circuit simulated	2,000 qubits, 1,000 shots in 574.72 ms, under 10 MB
+MPS accuracy on this benchmark	Truncation error 0.000000, fidelity 1.000000 at every size
+Largest Stabilizer circuit simulated	1,000 qubits, tableau memory 3.82 MB
+Dense statevector for comparison	30 qubits needs 16 GiB; 50 qubits needs 16 PiB (2ⁿ × 16 bytes)
+Test setup
+Item	Value
+Hardware	[CPU model, cores, RAM]
+OS and runtime	[OS, Python or Node version]
+Library versions	[Qiskit / Aer / your engine version]
+Circuit family (MPS)	Nearest-neighbor bounded entanglement
+Circuit family (Stabilizer)	[e.g. random Clifford circuit, depth D]
+Shots (MPS)	1,000
+MPS bond dimension limit χ	[χ]
+Runs and statistic	[e.g. median of 10 runs after 1 warm-up]
+Reproduce	[command, e.g. python benchmarks/run_mps.py]
+MPS engine: 1,000 shots, nearest-neighbor bounded entanglement
+Qubits	Time	Truncation error	Fidelity	Memory
+25	16.73 ms	0.000000	1.000000	< 1 MB
+30	29.85 ms	0.000000	1.000000	< 1 MB
+50	26.13 ms	0.000000	1.000000	< 1 MB
+100	39.87 ms	0.000000	1.000000	< 1 MB
+200	89.11 ms	0.000000	1.000000	< 2 MB
+500	94.63 ms	0.000000	1.000000	< 3 MB
+1,000	219.16 ms	0.000000	1.000000	< 5 MB
+2,000	574.72 ms	0.000000	1.000000	< 10 MB
+
+Runtime grows roughly in proportion to qubit count (100 → 2,000 qubits is a 20× increase in size and a 14× increase in time), and memory stays in single-digit megabytes. Small differences between neighboring sizes (for example 30 vs 50 qubits) are within run-to-run timing noise.
+
+Stabilizer engine: tableau simulation
+Qubits	Single shot	100 shots	Tableau memory
+10	0.14 ms	2.68 ms	441 B
+50	0.59 ms	28.64 ms	9.96 KB
+100	3.49 ms	193.81 ms	39.45 KB
+500	214.31 ms	24.54 s	978.52 KB
+1,000	1.91 s	190.87 s	3.82 MB
+
+Tableau memory follows (2n + 1)² bytes, so it grows quadratically and stays under 4 MB at 1,000 qubits.
+
+Scope and honest limits
+MPS is efficient only when entanglement stays bounded. Highly entangled circuits need a large bond dimension, and the router sends those elsewhere.
+Stabilizer covers Clifford circuits only. In the current implementation each shot is simulated independently, so time scales linearly with shots; reusing the final tableau for sampling is a planned optimization.
+Statevector is exact and used for small and general circuits. Its memory doubles with every added qubit, and the workbench shows the requirement before running.
+Timings depend on the hardware above and should be read as relative behavior across engines, not absolute records.
 
 
 
