@@ -401,7 +401,7 @@ The analyzer weighs qubit count, gate type, entanglement, and complexity, then *
 
 Qualution routes each circuit to the engine that suits it. These benchmarks show why: a dense statevector cannot leave the low-30s of qubits on ordinary hardware, while the Stabilizer and MPS engines keep going into the hundreds and thousands.
 
-![Qualution benchmark results](docs/images/benchmarks.png)
+
 
 ### Highlights
 
