@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "id": "qubit-superposition-checkpoint",
+  "title": "Qubit & Superposition Masterclass",
+  "description": "Interactive theory lesson with teacher video board, real-time math, progressive drawings, prediction checkpoint, quantum workbench experiment, and mastery assessment.",
+  "concepts": ["qubit", "superposition", "hadamard-gate", "measurement", "born-rule"],
+  "misconceptions": ["superposition-not-mixture", "measurement-deterministic", "hadamard-inverts-classical"],
+  "defaults": {
+    "duration": 1.5,
+    "color": "#F8FAFC"
+  },
+  "actions": [
+    {
+      "type": "NARRATE",
+      "text": "The Hadamard gate transforms zero into an equal superposition of zero and one."
+    },
+    {
+      "type": "WRITE",
+      "id": "heading-superposition",
+      "text": "QUANTUM SUPERPOSITION & HADAMARD GATE",
+      "x": 180,
+      "y": 65,
+      "duration": 3.0,
+      "style": {
+        "fontSize": 32,
+        "fontWeight": "bold",
+        "color": "#38BDF8"
+      }
+    },
+    {
+      "type": "MATH",
+      "id": "hadamard-eq",
+      "expression": "H|0\\rangle = \\frac{1}{\\sqrt{2}}|0\\rangle + \\frac{1}{\\sqrt{2}}|1\\rangle = |+\\rangle",
+      "x": 160,
+      "y": 140,
+      "duration": 3.0,
+      "style": {
+        "scale": 1.3,
+        "fontSize": 24,
+        "color": "#F5C842"
+      }
+    },
+    {
+      "type": "HIGHLIGHT",
+      "id": "hl-hadamard",
+      "x": 150,
+      "y": 130,
+      "width": 780,
+      "height": 55,
+      "duration": 0.8,
+      "color": "rgba(245, 200, 66, 0.2)"
+    },
+    {
+      "type": "PAUSE",
+      "duration": 0.5
+    },
+    {
+      "type": "NARRATE",
+      "text": "If we measure a qubit in this superposition state across 1000 repeated shots, what will we observe?"
+    },
+    {
+      "type": "CHECKPOINT",
+      "id": "measure-plus",
+      "question": "What do you expect to observe when |+⟩ is measured?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Always 0"
+        },
+        {
+          "id": "b",
+          "text": "Always 1"
+        },
+        {
+          "id": "c",
+          "text": "50% 0 and 50% 1"
+        },
+        {
+          "id": "d",
+          "text": "Measurement is impossible"
+        }
+      ],
+      "correct": "c",
+      "explanation": "The |+⟩ state is an equal superposition of |0⟩ and |1⟩, so measurement produces 0 or 1 with equal probability."
+    },
+    {
+      "type": "NARRATE",
+      "text": "Now let's test this idea in the Quantum Workbench."
+    },
+    {
+      "type": "WRITE",
+      "id": "result-conclusion",
+      "text": "EQUAL PROBABILITY: 50% |0⟩ + 50% |1⟩",
+      "x": 120,
+      "y": 240,
+      "duration": 2.5,
+      "style": {
+        "fontSize": 24,
+        "color": "#34D399"
+      }
+    },
+    {
+      "type": "MATH",
+      "id": "math-prob-calc",
+      "expression": "P(0) = |\\alpha|^2 = \\frac{1}{2} = 50\\%, \\quad P(1) = |\\beta|^2 = \\frac{1}{2} = 50\\%",
+      "x": 120,
+      "y": 300,
+      "duration": 3.0,
+      "style": {
+        "scale": 1.2,
+        "fontSize": 23,
+        "color": "#38BDF8"
+      }
+    },
+    {
+      "type": "WORKBENCH",
+      "id": "try-hadamard-superposition",
+      "title": "Hadamard Gate & Superposition",
+      "description": "Build a circuit with one qubit, apply the Hadamard gate, and observe the 50/50 measurement distribution.",
+      "formula": "H|0\\rangle = |+\\rangle",
+      "setup": {
+        "qubits": 1,
+        "gates": [
+          {
+            "gate": "h",
+            "qubit": 0
+          }
+        ],
+        "measure": true,
+        "shots": 1000
+      },
+      "explanation": {
+        "title": "Why did this happen?",
+        "math": [
+          "H|0\\rangle = |+\\rangle",
+          "|+\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle + |1\\rangle)",
+          "P(0) = |\\langle 0 | + \\rangle|^2 = \\frac{1}{2}",
+          "P(1) = |\\langle 1 | + \\rangle|^2 = \\frac{1}{2}"
+        ],
+        "text": "The Hadamard gate creates an equal superposition of |0⟩ and |1⟩. Measurement samples this state repeatedly, yielding approximately 50% |0⟩ and 50% |1⟩ with natural statistical fluctuation across finite shots."
+      }
+    },
+    {
+      "type": "ASSESSMENT",
+      "id": "superposition-final",
+      "concept": "superposition",
+      "question": "What happens when |0⟩ is transformed by a Hadamard gate and measured repeatedly?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Always 0"
+        },
+        {
+          "id": "b",
+          "text": "Always 1"
+        },
+        {
+          "id": "c",
+          "text": "Approximately equal numbers of 0 and 1"
+        },
+        {
+          "id": "d",
+          "text": "Measurement cannot occur"
+        }
+      ],
+      "correct": "c",
+      "explanation": "The Hadamard gate transforms |0⟩ into |+⟩, an equal superposition of |0⟩ and |1⟩. Repeated measurement therefore produces approximately equal frequencies of the two outcomes."
+    }
+  ]
+}

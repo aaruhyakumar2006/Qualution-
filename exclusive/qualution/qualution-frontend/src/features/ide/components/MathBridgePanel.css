@@ -1,0 +1,66 @@
+.math-bridge-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--ide-bg);
+  color: var(--ide-text-primary);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.math-bridge-header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--ide-border);
+  padding-bottom: 12px;
+}
+
+.math-bridge-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ide-text-primary);
+}
+
+.math-bridge-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ide-text-secondary);
+}
+
+.math-bridge-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.math-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.math-section h4 {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ide-text-secondary);
+  font-weight: 600;
+}
+
+.math-equation {
+  background-color: var(--ide-bg-secondary);
+  border: 1px solid var(--ide-border);
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.math-equation.final-state {
+  border-color: var(--ide-accent, #0f62fe);
+  box-shadow: 0 0 0 1px var(--ide-accent, #0f62fe) inset;
+}

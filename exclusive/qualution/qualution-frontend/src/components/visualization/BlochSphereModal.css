@@ -1,0 +1,101 @@
+﻿/* BlochSphereModal — full-screen overlay, same pattern as OptimizationStudio */
+
+.bloch-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.bloch-modal-window {
+  background: var(--bg-primary, #0d1117);
+  border: 1px solid var(--border-color, #30363d);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  animation: blochModalPop 0.15s ease-out;
+  overflow: hidden;
+}
+
+@keyframes blochModalPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.bloch-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color, #30363d);
+  flex-shrink: 0;
+}
+
+.bloch-modal-title-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bloch-modal-icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(88, 166, 255, 0.15);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  color: var(--accent-cyan, #58a6ff);
+  flex-shrink: 0;
+}
+
+.bloch-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #e6edf3);
+  margin: 0;
+}
+
+.bloch-modal-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary, #8b949e);
+  display: block;
+  margin-top: 2px;
+}
+
+.bloch-modal-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text-secondary, #8b949e);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.bloch-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-color, #30363d);
+  color: var(--text-primary, #e6edf3);
+}
+
+.bloch-modal-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 500px;
+  padding: 16px;
+}

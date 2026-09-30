@@ -1,0 +1,269 @@
+{
+  "summary": {
+    "passed": 19,
+    "failed": 0,
+    "warnings": 0
+  },
+  "tests": [
+    {
+      "name": "GET /api/v1/health",
+      "status": "PASS",
+      "details": {
+        "status": "ok",
+        "service": "qualution-backend"
+      }
+    },
+    {
+      "name": "GET /api/v1/backends",
+      "status": "PASS",
+      "details": {
+        "total_backends": 4,
+        "backend_names": [
+          "qiskit_aer",
+          "pennylane",
+          "cirq",
+          "qbraid"
+        ]
+      }
+    },
+    {
+      "name": "Unified Run (2-qubit Bell shots)",
+      "status": "PASS",
+      "details": {
+        "backend": "qiskit_aer",
+        "counts": {
+          "00": 522,
+          "11": 502
+        },
+        "routing_reason": "Selected default backend 'qiskit_aer' (no prior benchmark latency data cached for this circuit signature)."
+      }
+    },
+    {
+      "name": "Unified Run (2-qubit Bell statevector)",
+      "status": "PASS",
+      "details": {
+        "backend": "qiskit_aer",
+        "amplitudes_count": 4,
+        "probabilities": {
+          "00": 0.5,
+          "01": 0.0,
+          "10": 0.0,
+          "11": 0.5
+        }
+      }
+    },
+    {
+      "name": "1000 Qubits Clifford Simulation (Shots)",
+      "status": "PASS",
+      "details": {
+        "backend": "clifford_stabilizer",
+        "execution_time_ms": 12486.59,
+        "client_elapsed_sec": 12.543,
+        "counts_count": 100
+      }
+    },
+    {
+      "name": "1000 Qubits Statevector Memory Rejection",
+      "status": "PASS",
+      "details": {
+        "status_code": 400,
+        "detail": {
+          "detail": "Circuit (1000 qubits) exceeds maximum statevector safety limit (16 qubits). It is Clifford-compatible and can run via 'shots' mode with the Stabilizer backend (Aaronson-Gottesman tableau, <1 MB, polynomial time) without memory limits."
+        }
+      }
+    },
+    {
+      "name": "1000 Qubits Circuit Metrics (/metrics & /analyze)",
+      "status": "PASS",
+      "details": {
+        "qubits": 1000,
+        "depth": 2,
+        "gate_count": 2
+      }
+    },
+    {
+      "name": "Codegen (qiskit) [Direct & Generic]",
+      "status": "PASS",
+      "details": {
+        "code_length": 449
+      }
+    },
+    {
+      "name": "Codegen (cirq) [Direct & Generic]",
+      "status": "PASS",
+      "details": {
+        "code_length": 549
+      }
+    },
+    {
+      "name": "Codegen (pennylane) [Direct & Generic]",
+      "status": "PASS",
+      "details": {
+        "code_length": 385
+      }
+    },
+    {
+      "name": "Codeparse (qiskit) [Direct & Generic]",
+      "status": "PASS",
+      "details": {
+        "qubits": 2,
+        "gate_count": 2
+      }
+    },
+    {
+      "name": "Codeparse (cirq) [Direct & Generic]",
+      "status": "PASS",
+      "details": {
+        "qubits": 2,
+        "gate_count": 2
+      }
+    },
+    {
+      "name": "Circuit Optimization (Cancel Inverse H-H)",
+      "status": "PASS",
+      "details": {
+        "original_gate_count": 3,
+        "optimized_gate_count": 1,
+        "improvements": {
+          "gate_count_reduction": 2,
+          "gate_count_reduction_percent": 66.67,
+          "depth_reduction": 1,
+          "depth_reduction_percent": 50.0,
+          "two_qubit_gate_reduction": 0,
+          "two_qubit_gate_reduction_percent": 0.0
+        }
+      }
+    },
+    {
+      "name": "Benchmark Route (/benchmarks & /benchmark)",
+      "status": "PASS",
+      "details": {
+        "results_count": 1,
+        "fastest": null
+      }
+    },
+    {
+      "name": "AI Environment Endpoint",
+      "status": "PASS",
+      "details": {
+        "connectivity": "online",
+        "latency_ms": null,
+        "bandwidth_mbps": null,
+        "local_ai": {
+          "available": false,
+          "model": null
+        },
+        "nvidia": {
+          "available": false
+        },
+        "groq": {
+          "available": false
+        },
+        "deterministic": {
+          "available": true
+        },
+        "checked_at": 1790679938.305
+      }
+    },
+    {
+      "name": "AI Tutor Endpoint",
+      "status": "PASS",
+      "details": {
+        "status_code": 200,
+        "detail": {
+          "status": "configuration_error",
+          "answer": null,
+          "fallback_answer": "### \ud83c\udf00 Quantum Superposition (Hadamard Gate)\n\nApplying a Hadamard gate ($H$) transforms computational basis state $|0\\rangle$ into:\n$$|+\\rangle = \\frac{|0\\rangle + |1\\rangle}{\\sqrt{2}}$$\n\nThe qubit now possesses equal probability amplitudes of $\\frac{1}{\\sqrt{2}}$, yielding a 50% chance of measuring $|0\\rangle$ and a 50% chance of measuring $|1\\rangle$.",
+          "retryable": false,
+          "error_code": "CONFIGURATION_ERROR",
+          "error_message": "NVIDIA configuration is invalid or missing.",
+          "latency_ms": 0.0,
+          "actions": [
+            {
+              "type": "open_state",
+              "label": "Inspect Statevector Amplitudes"
+            },
+            {
+              "type": "open_bloch",
+              "label": "View 3D Bloch Sphere"
+            },
+            {
+              "type": "open_optimize",
+              "label": "Open Circuit Optimization Studio"
+            }
+          ],
+          "context_used": [
+            "circuit_structure",
+            "qubit_count",
+            "deterministic_rules"
+          ],
+          "reasoning_provider": "fallback",
+          "response_optimizer": null,
+          "confidence": "high",
+          "follow_up": "Why do these probabilities appear?",
+          "visualization_hint": "Inspect the Statevector Amplitudes and 3D Bloch Sphere to observe the phase shifts.",
+          "code": null,
+          "technical_analysis": "### \ud83c\udf00 Quantum Superposition (Hadamard Gate)\n\nApplying a Hadamard gate ($H$) transforms computational basis state $|0\\rangle$ into:\n$$|+\\rangle = \\frac{|0\\rangle + |1\\rangle}{\\sqrt{2}}$$\n\nThe qubit now possesses equal probability amplitudes of $\\frac{1}{\\sqrt{2}}$, yielding a 50% chance of measuring $|0\\rangle$ and a 50% chance of measuring $|1\\rangle$.",
+          "facts": [
+            "Quantum state evolution is unitary U(t), strictly preserving total probability |||psi>||^2 = 1.",
+            "The circuit spans a 4-dimensional complex Hilbert state space across 2 qubit(s)."
+          ],
+          "suggestions": [
+            "Why do these probabilities appear?",
+            "What happens if I add an X gate?",
+            "Can this circuit be simplified?"
+          ],
+          "provider": "local_fallback",
+          "simplified_by": null,
+          "timings": {
+            "request_start": 1790679938.309,
+            "provider_start": 1790679938.309,
+            "first_provider_response": 1790679938.309,
+            "first_token": null,
+            "provider_complete": 1790679938.309,
+            "groq_start": null,
+            "groq_complete": null,
+            "final_response": 1790679938.309,
+            "total_latency_ms": 0.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Onboarding Endpoints (/questions & /status)",
+      "status": "PASS",
+      "details": {
+        "question_count": 5,
+        "status": {
+          "is_onboarded": false,
+          "level": null,
+          "overall_mastery": 0.0,
+          "recommended_path": [],
+          "profile": null
+        }
+      }
+    },
+    {
+      "name": "Negative Rotation Angles Simulation",
+      "status": "PASS",
+      "details": {
+        "backend": "qiskit_aer",
+        "counts": {
+          "11": 216,
+          "00": 217,
+          "10": 33,
+          "01": 34
+        }
+      }
+    },
+    {
+      "name": "3-Qubit Toffoli (CCX) Execution",
+      "status": "PASS",
+      "details": {
+        "counts": {
+          "111": 100
+        }
+      }
+    }
+  ]
+}

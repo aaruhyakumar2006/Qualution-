@@ -1,0 +1,299 @@
+/* ═══════════════════════════════════════════════════════════════
+   CERTIFICATE GENERATION MODAL & SYNTHESIS STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+.cgm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 15, 0.88);
+  backdrop-filter: blur(16px);
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.cgm-modal-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1180px;
+  background: #040914;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 16px;
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.9),
+    0 0 50px rgba(56, 189, 248, 0.2);
+  padding: 2rem;
+  color: #f8fafc;
+  overflow: hidden;
+  max-height: 94vh;
+  overflow-y: auto;
+}
+
+.cgm-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.cgm-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* ── Synthesis Progress HUD ── */
+.cgm-synthesis-hud {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.cgm-synthesis-atom {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.cgm-atom-icon {
+  color: #38bdf8;
+  animation: cgm-spin 8s linear infinite;
+  z-index: 2;
+  filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.8));
+}
+
+.cgm-atom-glow {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, transparent 70%);
+  animation: cgm-pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes cgm-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cgm-pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+.cgm-synthesis-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #ffd700;
+  margin-bottom: 0.4rem;
+}
+
+.cgm-synthesis-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+}
+
+.cgm-synthesis-sub {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  max-width: 580px;
+  line-height: 1.5;
+  margin: 0 0 2rem;
+}
+
+/* ── Stepper Cards Grid ── */
+.cgm-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 2rem;
+}
+
+.cgm-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 10px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.cgm-step-item.active {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: rgba(14, 118, 168, 0.15);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+}
+
+.cgm-step-item.done {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.cgm-step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.cgm-step-item.active .cgm-step-dot {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+}
+
+.cgm-step-item.done .cgm-step-dot {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.cgm-step-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.cgm-step-desc {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  margin-top: 0.1rem;
+}
+
+/* ── Progress Bar ── */
+.cgm-progress-bar-wrap {
+  width: 100%;
+  max-width: 900px;
+  height: 8px;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.cgm-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #10b981, #ffd700);
+  transition: width 0.4s ease;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+}
+
+.cgm-progress-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 900px;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+/* ── Completed View & Confetti ── */
+.cgm-completed-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.cgm-completed-banner {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.cgm-banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #f59e0b;
+  margin-bottom: 0.5rem;
+}
+
+.cgm-banner-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.35rem;
+}
+
+.cgm-banner-sub {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+/* Confetti Rain */
+.cgm-confetti-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.cgm-confetti-piece {
+  position: absolute;
+  top: -10px;
+  width: 8px;
+  height: 14px;
+  opacity: 0.9;
+  transform-origin: left top;
+  animation: cgm-fall 3.5s linear infinite;
+}
+
+@keyframes cgm-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(900px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .cgm-steps-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

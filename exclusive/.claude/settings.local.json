@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m uvicorn app.main:app --host 127.0.0.1 --port 8000)",
+      "Bash(curl -s http://127.0.0.1:8000/api/v1/health)",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/api/v1/circuits/run -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(python -m json.tool)",
+      "Bash(npm run *)",
+      "Bash(git checkout *)",
+      "Read(//tmp/**)",
+      "Bash(pkill -9 -f \"vite.*5179\")",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(curl -s http://localhost:5179)",
+      "WebFetch(domain:www.youtube.com)",
+      "Bash(npm install *)"
+    ]
+  }
+}

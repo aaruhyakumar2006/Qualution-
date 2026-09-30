@@ -1,0 +1,657 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-computational-basis",
+  "lessonTitle": "The Computational Basis",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 230,
+  "fps": 30,
+  "totalFrames": 6900,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Define orthogonal computational basis states in Hilbert space.",
+    "Understand inner products and vector orthonormality \u27e8i|j\u27e9 = \u03b4_ij.",
+    "Decompose arbitrary quantum states onto orthogonal basis axes.",
+    "Understand quantum measurement as projection onto basis vectors.",
+    "Connect computational basis vectors to physical hardware readout registers."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Z-basis computational states {|0\u27e9, |1\u27e9}",
+      "Bra vectors \u27e80| and \u27e81| as conjugate transposes",
+      "Inner products and orthonormality: \u27e80|0\u27e9 = 1, \u27e80|1\u27e9 = 0",
+      "Completeness relation |0\u27e9\u27e80| + |1\u27e9\u27e81| = I",
+      "Projective measurement onto the Z-axis"
+    ],
+    "topicsDeferred": [
+      "Alternative basis sets like X-basis {|+\u27e9, |-\u27e9} (Lesson 4 & 7)",
+      "Unitary transformations rotating basis axes (Lesson 8)",
+      "Multi-qubit product basis states (Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "Coordinate Systems of Quantum Reality",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To measure and navigate physical space, we rely on coordinate axes: X, Y, and Z. In quantum computing, the computational basis serves as the foundational coordinate system for all quantum information.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Every vector space requires a reference coordinate system.",
+          "startFrame": 1,
+          "endFrame": 300
+        },
+        {
+          "text": "The computational basis defines the primary reference frame of quantum computing.",
+          "startFrame": 301,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 3: THE COMPUTATIONAL BASIS",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "Reference Frames & Orthonormal Coordinates",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Establish coordinate system analogy for computational basis vectors.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "The Z-Basis: |0\u27e9 and |1\u27e9",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "By international convention, the standard computational basis corresponds to measurement along the Z-axis of the Bloch sphere. We denote these standard eigenstates as ket zero and ket one.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "The computational basis aligns with the Z-axis of measurement.",
+          "startFrame": 601,
+          "endFrame": 960
+        },
+        {
+          "text": "Eigenstates are denoted |0\u27e9 and |1\u27e9.",
+          "startFrame": 961,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_basis",
+          "text": "Standard Z-Basis: B = { |0\u27e9, |1\u27e9 }",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_zaxis",
+          "text": "\u03c3_z |0\u27e9 = +1|0\u27e9,   \u03c3_z |1\u27e9 = -1|1\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Formalize the Z-basis eigenstates and Pauli-Z eigenvalues.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Bra Vectors and Dual Space",
+      "durationSeconds": 30,
+      "startFrame": 1351,
+      "endFrame": 2250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "For every ket vector |\u03c8\u27e9 in our Hilbert space, there is a corresponding dual vector called a bra, written \u27e8\u03c8|. Mathematically, the bra is formed by taking the complex conjugate transpose of the column ket.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "For every ket |\u03c8\u27e9, the dual bra vector is \u27e8\u03c8| = (|\u03c8\u27e9)\u2020.",
+          "startFrame": 1351,
+          "endFrame": 1770
+        },
+        {
+          "text": "The bra vector is the conjugate transpose row vector.",
+          "startFrame": 1771,
+          "endFrame": 2250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_bra0",
+          "text": "\u27e80| = [ 1, 0 ]",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_bra1",
+          "text": "\u27e81| = [ 0, 1 ]",
+          "role": "formula",
+          "position": [
+            0.0,
+            -0.4,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce bra vectors and conjugate transpose operations.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "The Inner Product & Orthonormality",
+      "durationSeconds": 35,
+      "startFrame": 2251,
+      "endFrame": 3300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "When a bra and ket meet, they form a bracket\u2014an inner product representing geometric overlap. The computational basis states are orthonormal: \u27e80|0\u27e9 equals one, \u27e81|1\u27e9 equals one, but \u27e80|1\u27e9 equals zero.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "A bra and ket form an inner product: \u27e8\u03c6|\u03c8\u27e9.",
+          "startFrame": 2251,
+          "endFrame": 2700
+        },
+        {
+          "text": "Orthonormality: \u27e80|0\u27e9 = 1, \u27e81|1\u27e9 = 1, and \u27e80|1\u27e9 = 0.",
+          "startFrame": 2701,
+          "endFrame": 3300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_ortho",
+          "text": "\u27e8i|j\u27e9 = \u03b4_ij (Kronecker Delta)",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_overlap",
+          "text": "\u27e80|0\u27e9 = 1 (Identical) | \u27e80|1\u27e9 = 0 (Orthogonal)",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Demonstrate the mathematical definition and geometric meaning of orthogonality.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "Decomposition of Arbitrary States",
+      "durationSeconds": 30,
+      "startFrame": 3301,
+      "endFrame": 4200,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Because {|0\u27e9, |1\u27e9} spans the entire two-dimensional space, we can project any state vector onto our basis using inner products. The amplitude \u03b1 is simply \u27e80|\u03c8\u27e9, and \u03b2 is \u27e81|\u03c8\u27e9.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Any state decomposes as: |\u03c8\u27e9 = \u27e80|\u03c8\u27e9|0\u27e9 + \u27e81|\u03c8\u27e9|1\u27e9.",
+          "startFrame": 3301,
+          "endFrame": 3720
+        },
+        {
+          "text": "Amplitudes \u03b1 = \u27e80|\u03c8\u27e9 and \u03b2 = \u27e81|\u03c8\u27e9 measure projection onto each basis axis.",
+          "startFrame": 3721,
+          "endFrame": 4200
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_decomp",
+          "text": "\u03b1 = \u27e80|\u03c8\u27e9,   \u03b2 = \u27e81|\u03c8\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_proj",
+          "text": "|\u03c8\u27e9 = |0\u27e9\u27e80|\u03c8\u27e9 + |1\u27e9\u27e81|\u03c8\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            -0.6,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3301,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Show how projection onto basis vectors extracts probability amplitudes.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "The Completeness Identity",
+      "durationSeconds": 25,
+      "startFrame": 4201,
+      "endFrame": 4950,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "By summing the outer products of our orthonormal basis, we obtain the identity operator: |0\u27e9\u27e80| + |1\u27e9\u27e81| equals the identity matrix I. This completeness relation ensures quantum operations preserve total geometry.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Outer product sum: |0\u27e9\u27e80| + |1\u27e9\u27e81| = I.",
+          "startFrame": 4201,
+          "endFrame": 4560
+        },
+        {
+          "text": "Completeness guarantees that probability is conserved across the space.",
+          "startFrame": 4561,
+          "endFrame": 4950
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_id",
+          "text": "|0\u27e9\u27e80| + |1\u27e9\u27e81| = I = [ [1, 0], [0, 1] ]",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4201,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce projection operators and the completeness relation.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Physical Readout in the Z-Basis",
+      "durationSeconds": 35,
+      "startFrame": 4951,
+      "endFrame": 6000,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In physical quantum hardware\u2014whether transmon microwave resonators or ion-trap lasers\u2014readout devices measure qubits directly in this computational Z-basis, collapsing quantum superposition into classical bits.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Quantum hardware measurement devices operate in the Z-basis.",
+          "startFrame": 4951,
+          "endFrame": 5430
+        },
+        {
+          "text": "Measurement projects the qubit onto either |0\u27e9 or |1\u27e9.",
+          "startFrame": 5431,
+          "endFrame": 6000
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_meas",
+          "text": "Physical Readout & Wavefunction Collapse",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_m0",
+          "text": "Outcome 0: State collapses to |0\u27e9",
+          "role": "body",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_m1",
+          "text": "Outcome 1: State collapses to |1\u27e9",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4951,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Tie mathematical basis projection directly to physical quantum computer measurement.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-08",
+      "title": "Summary & Next Steps",
+      "durationSeconds": 30,
+      "startFrame": 6001,
+      "endFrame": 6900,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "We have seen that the computational basis provides the orthonormal coordinates for quantum computation: \u27e8i|j\u27e9 = \u03b4_ij. Next, we discover what happens when a qubit occupies both states simultaneously: Superposition.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Summary: Orthonormal basis {|0\u27e9, |1\u27e9} spans all single-qubit states.",
+          "startFrame": 6001,
+          "endFrame": 6420
+        },
+        {
+          "text": "Next: creating and manipulating quantum Superposition.",
+          "startFrame": 6421,
+          "endFrame": 6900
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 3 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_s1",
+          "text": "1. Computational Basis = Standard Z-Axis Coordinate Frame",
+          "role": "body",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_s2",
+          "text": "2. Orthonormality: \u27e80|0\u27e9 = 1, \u27e81|1\u27e9 = 1, \u27e80|1\u27e9 = 0",
+          "role": "body",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_s3",
+          "text": "3. Amplitude extraction via projection: \u03b1 = \u27e80|\u03c8\u27e9, \u03b2 = \u27e81|\u03c8\u27e9",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_8_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_8_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_8_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 6001,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Wrap up computational basis concepts and preview superposition.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

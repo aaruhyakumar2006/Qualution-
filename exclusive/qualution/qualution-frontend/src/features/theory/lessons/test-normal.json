@@ -1,0 +1,113 @@
+{
+  "v": 1,
+  "id": "test-normal",
+  "title": "Superposition: The Qubit State",
+  "topic": "superposition",
+  "difficulty": "Beginner",
+  "estimatedMinutes": 4,
+  "objectives": [
+    "Understand what superposition means for a qubit",
+    "Recognise the Dirac notation for quantum states",
+    "Distinguish a qubit from a classical bit"
+  ],
+  "defaults": {
+    "color": "#e8e8e8",
+    "mathColor": "#f5c842",
+    "strokeWidth": 2,
+    "fontSize": 1.0
+  },
+  "styles": {
+    "title":   { "scale": 1.7, "color": "#ffffff", "bold": true },
+    "heading": { "scale": 1.3, "color": "#e8e8e8", "bold": true },
+    "body":    { "scale": 1.0, "color": "#e8e8e8" },
+    "caption": { "scale": 0.85, "color": "#aaaaaa", "italic": true }
+  },
+  "objects": {
+    "qubitLine": { "type": "qubit-wire", "length": 500, "label": "|ψ⟩" },
+    "hGate":     { "type": "gate-box",   "label": "H",  "size": 44 },
+    "measure":   { "type": "measure-symbol", "size": 44 }
+  },
+  "steps": [
+    {
+      "id": "intro",
+      "title": "Introduction",
+      "cmds": [
+        ["m", 100, 80],
+        ["n", "Welcome. Today we explore superposition — the defining property of a qubit."],
+        ["m", 200, 130],
+        ["ws", "Superposition", 200, 130, "title"],
+        ["p", 700]
+      ]
+    },
+    {
+      "id": "classical-bit",
+      "title": "Classical Bit",
+      "cmds": [
+        ["n", "A classical bit holds exactly one value: zero or one."],
+        ["m", 200, 230],
+        ["ws", "Classical bit: 0 or 1", 200, 230, "heading"],
+        ["p", 500],
+        ["d", "r", 200, 270, 90, 55],
+        ["w", "0", 230, 288, 1.5],
+        ["p", 300],
+        ["d", "r", 360, 270, 90, 55],
+        ["w", "1", 390, 288, 1.5],
+        ["p", 600]
+      ]
+    },
+    {
+      "id": "qubit-intro",
+      "title": "The Qubit",
+      "cmds": [
+        ["n", "A qubit can exist in a superposition of both basis states simultaneously."],
+        ["m", 200, 390],
+        ["ws", "A qubit can be both at once:", 200, 390, "body"],
+        ["p", 500],
+        ["wm", "|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle", 200, 450, 1.5],
+        ["p", 900]
+      ]
+    },
+    {
+      "id": "highlight-equation",
+      "title": "Highlight State",
+      "cmds": [
+        ["n", "The coefficients alpha and beta are complex probability amplitudes."],
+        ["h", [180, 430, 560, 65]],
+        ["p", 1200]
+      ]
+    },
+    {
+      "id": "constraint",
+      "title": "Normalisation",
+      "cmds": [
+        ["n", "The probabilities must sum to one. This is the normalisation constraint."],
+        ["m", 200, 540],
+        ["ws", "Constraint:", 200, 540, "caption"],
+        ["wm", "|\\alpha|^2 + |\\beta|^2 = 1", 200, 575, 1.3],
+        ["p", 800]
+      ]
+    },
+    {
+      "id": "circuit-demo",
+      "title": "Hadamard Gate",
+      "cmds": [
+        ["n", "The Hadamard gate creates an equal superposition from the zero state."],
+        ["m", 200, 640],
+        ["o", "qubitLine", 200, 640],
+        ["o", "hGate", 450, 640],
+        ["o", "measure", 620, 640],
+        ["p", 1000]
+      ]
+    },
+    {
+      "id": "summary",
+      "title": "Summary",
+      "cmds": [
+        ["n", "To summarise: a qubit lives in a superposition until it is measured."],
+        ["m", 200, 130],
+        ["d", "u", 200, 155, 280],
+        ["p", 800]
+      ]
+    }
+  ]
+}

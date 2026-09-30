@@ -1,0 +1,881 @@
+/**
+ * t3-measurement-and-born-rule.ts
+ *
+ * BOARD LESSON: "Measurement & The Born Rule"
+ *
+ * This lesson explains how quantum measurement works, introducing
+ * the Born Rule for calculating measurement probabilities.
+ *
+ * Learning flow:
+ * 1. What happens during measurement?
+ * 2. Wavefunction collapse
+ * 3. The Born Rule formula
+ * 4. Why repeated shots are necessary
+ * 5. Deterministic vs probabilistic outcomes
+ * 6. Practice connection
+ *
+ * Coordinate system: 1200 × 700 logical units.
+ */
+
+import type { BoardLessonScript } from '../boardTypes';
+
+export const t3MeasurementAndBornRule: BoardLessonScript = {
+  id: 't3-measurement-and-born-rule',
+  title: 'Measurement & The Born Rule',
+  topic: 'Measurement',
+  difficulty: 'Beginner',
+  estimatedMinutes: 6,
+  learningObjectives: [
+    'Understand computational basis measurement and state collapse',
+    'Apply the Born Rule to calculate measurement probabilities',
+    'Explain why repeated shots are necessary to reconstruct distributions',
+    'Differentiate between deterministic and probabilistic outcomes',
+  ],
+  transitionToLessonId: 's1-initialize-measure',
+  transitionLabel: 'Practice Measurement in Lab',
+  steps: [
+    // ──────────────────────────────────────────────────────────────────────
+    // Step 1: Opening
+    // ──────────────────────────────────────────────────────────────────────
+    {
+      id: 't3-s01-opening',
+      title: 'Quantum Measurement',
+      narration:
+        'Measurement is the bridge between the quantum world and the classical world. Let us explore what happens when we measure a qubit.',
+      actions: [
+        { type: 'MOVE_CURSOR', x: 100, y: 70 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'QUANTUM MEASUREMENT',
+          x: 80,
+          y: 60,
+          fontSize: 38,
+          color: '#fbbf24',
+          fontWeight: 'bold',
+          duration: 900,
+        },
+        {
+          type: 'DRAW_UNDERLINE',
+          x: 80,
+          y: 102,
+          width: 520,
+          color: '#f59e0b',
+          strokeWidth: 3,
+          duration: 500,
+        },
+        { type: 'PAUSE', duration: 700 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'The bridge from quantum to classical information',
+          x: 80,
+          y: 140,
+          fontSize: 22,
+          color: '#fcd34d',
+          fontStyle: 'italic',
+          duration: 1000,
+        },
+        { type: 'PAUSE', duration: 800 },
+      ],
+    },
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Step 2: The measurement process
+    // ──────────────────────────────────────────────────────────────────────
+    {
+      id: 't3-s02-measurement-process',
+      title: 'The Measurement Process',
+      narration:
+        'Measurement is an irreversible physical operation that forces a quantum superposition to choose one of the basis states. This process is known as wavefunction collapse.',
+      actions: [
+        { type: 'MOVE_CURSOR', x: 100, y: 210 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'What happens during measurement?',
+          x: 80,
+          y: 200,
+          fontSize: 26,
+          color: '#c084fc',
+          fontWeight: 'bold',
+          duration: 900,
+        },
+        { type: 'PAUSE', duration: 600 },
+
+        // Before measurement
+        {
+          type: 'WRITE_TEXT',
+          text: 'BEFORE:',
+          x: 100,
+          y: 260,
+          fontSize: 22,
+          color: '#7dd3fc',
+          fontWeight: 'bold',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: '|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle',
+          x: 220,
+          y: 255,
+          scale: 1.3,
+          color: '#e8e8e8',
+          duration: 800,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '(superposition state)',
+          x: 220,
+          y: 295,
+          fontSize: 17,
+          color: '#94a3b8',
+          fontStyle: 'italic',
+          duration: 600,
+        },
+        { type: 'PAUSE', duration: 800 },
+
+        // Arrow down
+        {
+          type: 'DRAW_ARROW',
+          x1: 320,
+          y1: 325,
+          x2: 320,
+          y2: 375,
+          color: '#fbbf24',
+          strokeWidth: 3,
+          duration: 400,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: 'MEASURE',
+          x: 350,
+          y: 340,
+          fontSize: 18,
+          color: '#fbbf24',
+          fontWeight: 'bold',
+          duration: 400,
+        },
+        { type: 'PAUSE', duration: 600 },
+
+        // After measurement - two possibilities
+        {
+          type: 'WRITE_TEXT',
+          text: 'AFTER:',
+          x: 100,
+          y: 400,
+          fontSize: 22,
+          color: '#7dd3fc',
+          fontWeight: 'bold',
+          duration: 500,
+        },
+        {
+          type: 'DRAW_RECT',
+          x: 210,
+          y: 380,
+          w: 150,
+          h: 70,
+          color: '#4ade80',
+          strokeWidth: 2,
+          fillColor: 'rgba(74, 222, 128, 0.1)',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: '|0\\rangle',
+          x: 255,
+          y: 405,
+          scale: 1.4,
+          color: '#4ade80',
+          duration: 400,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: 'OR',
+          x: 390,
+          y: 408,
+          fontSize: 22,
+          color: '#94a3b8',
+          fontStyle: 'italic',
+          duration: 300,
+        },
+        {
+          type: 'DRAW_RECT',
+          x: 440,
+          y: 380,
+          w: 150,
+          h: 70,
+          color: '#fb923c',
+          strokeWidth: 2,
+          fillColor: 'rgba(251, 146, 60, 0.1)',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: '|1\\rangle',
+          x: 485,
+          y: 405,
+          scale: 1.4,
+          color: '#fb923c',
+          duration: 400,
+        },
+        { type: 'PAUSE', duration: 900 },
+
+        // Key insight
+        {
+          type: 'DRAW_RECT',
+          x: 70,
+          y: 480,
+          w: 650,
+          h: 75,
+          color: 'rgba(251, 191, 36, 0.3)',
+          strokeWidth: 2,
+          fillColor: 'rgba(251, 191, 36, 0.05)',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '⟶  Measurement is IRREVERSIBLE',
+          x: 90,
+          y: 500,
+          fontSize: 20,
+          color: '#fbbf24',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '   The superposition collapses to a definite state.',
+          x: 90,
+          y: 530,
+          fontSize: 18,
+          color: '#fcd34d',
+          duration: 800,
+        },
+        { type: 'PAUSE', duration: 1200 },
+      ],
+    },
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Step 3: The Born Rule
+    // ──────────────────────────────────────────────────────────────────────
+    {
+      id: 't3-s03-born-rule',
+      title: 'The Born Rule',
+      narration:
+        'Formulated by physicist Max Born in nineteen twenty-six, the Born Rule states that the probability of obtaining outcome x is equal to the squared magnitude of the corresponding amplitude.',
+      actions: [
+        { type: 'MOVE_CURSOR', x: 650, y: 210 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'THE BORN RULE',
+          x: 630,
+          y: 200,
+          fontSize: 32,
+          color: '#f472b6',
+          fontWeight: 'bold',
+          duration: 800,
+        },
+        {
+          type: 'DRAW_UNDERLINE',
+          x: 630,
+          y: 235,
+          width: 320,
+          color: '#ec4899',
+          strokeWidth: 3,
+          duration: 400,
+        },
+        { type: 'PAUSE', duration: 600 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'How to calculate measurement probabilities:',
+          x: 630,
+          y: 270,
+          fontSize: 20,
+          color: '#cbd5e1',
+          duration: 900,
+        },
+        { type: 'PAUSE', duration: 500 },
+
+        // Formula
+        {
+          type: 'DRAW_RECT',
+          x: 620,
+          y: 310,
+          w: 550,
+          h: 140,
+          color: 'rgba(244, 114, 182, 0.3)',
+          strokeWidth: 2,
+          fillColor: 'rgba(244, 114, 182, 0.08)',
+          duration: 600,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: 'P(0) = |\\alpha|^2 = |\\langle 0|\\psi\\rangle|^2',
+          x: 650,
+          y: 340,
+          scale: 1.5,
+          color: '#4ade80',
+          duration: 900,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: 'P(1) = |\\beta|^2 = |\\langle 1|\\psi\\rangle|^2',
+          x: 650,
+          y: 395,
+          scale: 1.5,
+          color: '#fb923c',
+          duration: 900,
+        },
+        { type: 'PAUSE', duration: 1000 },
+
+        // Key point
+        {
+          type: 'WRITE_TEXT',
+          text: 'Key insight: Amplitudes can be negative or complex,',
+          x: 630,
+          y: 480,
+          fontSize: 19,
+          color: '#f9a8d4',
+          duration: 900,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: 'but probabilities are always real numbers ∈ [0, 1].',
+          x: 630,
+          y: 510,
+          fontSize: 19,
+          color: '#f9a8d4',
+          duration: 900,
+        },
+        { type: 'PAUSE', duration: 1200 },
+      ],
+    },
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Step 4: Example calculation
+    // ──────────────────────────────────────────────────────────────────────
+    {
+      id: 't3-s04-example',
+      title: 'Worked Example',
+      narration:
+        'Let us work through an example. If a qubit is in state alpha equals zero point six times ket zero, plus beta equals zero point eight times ket one, what are the measurement probabilities?',
+      actions: [
+        { type: 'CLEAR_BOARD', animated: true },
+        { type: 'PAUSE', duration: 500 },
+        { type: 'MOVE_CURSOR', x: 100, y: 70 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'WORKED EXAMPLE',
+          x: 80,
+          y: 60,
+          fontSize: 36,
+          color: '#10b981',
+          fontWeight: 'bold',
+          duration: 800,
+        },
+        {
+          type: 'DRAW_UNDERLINE',
+          x: 80,
+          y: 100,
+          width: 360,
+          color: '#059669',
+          strokeWidth: 3,
+          duration: 400,
+        },
+        { type: 'PAUSE', duration: 600 },
+
+        // Given state
+        {
+          type: 'WRITE_TEXT',
+          text: 'Given:',
+          x: 80,
+          y: 150,
+          fontSize: 24,
+          color: '#60a5fa',
+          fontWeight: 'bold',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: '|\\psi\\rangle = 0.6|0\\rangle + 0.8|1\\rangle',
+          x: 180,
+          y: 145,
+          scale: 1.6,
+          color: '#e8e8e8',
+          duration: 1000,
+        },
+        { type: 'PAUSE', duration: 900 },
+
+        // Step 1: P(0)
+        {
+          type: 'WRITE_TEXT',
+          text: 'Step 1: Calculate P(0)',
+          x: 80,
+          y: 230,
+          fontSize: 22,
+          color: '#4ade80',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: 'P(0) = |\\alpha|^2 = (0.6)^2',
+          x: 100,
+          y: 270,
+          scale: 1.4,
+          color: '#e8e8e8',
+          duration: 800,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: 'P(0) = 0.36 = 36\\%',
+          x: 100,
+          y: 315,
+          scale: 1.5,
+          color: '#4ade80',
+          duration: 700,
+        },
+        { type: 'PAUSE', duration: 900 },
+
+        // Step 2: P(1)
+        {
+          type: 'WRITE_TEXT',
+          text: 'Step 2: Calculate P(1)',
+          x: 80,
+          y: 385,
+          fontSize: 22,
+          color: '#fb923c',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: 'P(1) = |\\beta|^2 = (0.8)^2',
+          x: 100,
+          y: 425,
+          scale: 1.4,
+          color: '#e8e8e8',
+          duration: 800,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: 'P(1) = 0.64 = 64\\%',
+          x: 100,
+          y: 470,
+          scale: 1.5,
+          color: '#fb923c',
+          duration: 700,
+        },
+        { type: 'PAUSE', duration: 900 },
+
+        // Verification
+        {
+          type: 'WRITE_TEXT',
+          text: 'Step 3: Verify normalization',
+          x: 80,
+          y: 540,
+          fontSize: 22,
+          color: '#a78bfa',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: 'P(0) + P(1) = 0.36 + 0.64 = 1.0 \\;\\checkmark',
+          x: 100,
+          y: 580,
+          scale: 1.4,
+          color: '#10b981',
+          duration: 900,
+        },
+        { type: 'PAUSE', duration: 1200 },
+
+        // Visual representation
+        {
+          type: 'DRAW_RECT',
+          x: 650,
+          y: 180,
+          w: 180,
+          h: 150,
+          color: '#4ade80',
+          strokeWidth: 2,
+          fillColor: 'rgba(74, 222, 128, 0.15)',
+          duration: 600,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '36%',
+          x: 710,
+          y: 240,
+          fontSize: 32,
+          color: '#4ade80',
+          fontWeight: 'bold',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: 'get 0',
+          x: 705,
+          y: 300,
+          fontSize: 20,
+          color: '#cbd5e1',
+          duration: 400,
+        },
+
+        {
+          type: 'DRAW_RECT',
+          x: 860,
+          y: 180,
+          w: 180,
+          h: 270,
+          color: '#fb923c',
+          strokeWidth: 2,
+          fillColor: 'rgba(251, 146, 60, 0.15)',
+          duration: 600,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '64%',
+          x: 920,
+          y: 300,
+          fontSize: 32,
+          color: '#fb923c',
+          fontWeight: 'bold',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: 'get 1',
+          x: 915,
+          y: 360,
+          fontSize: 20,
+          color: '#cbd5e1',
+          duration: 400,
+        },
+        { type: 'PAUSE', duration: 1500 },
+      ],
+    },
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Step 5: Why we need shots
+    // ──────────────────────────────────────────────────────────────────────
+    {
+      id: 't3-s05-shots',
+      title: 'Why Repeated Shots?',
+      narration:
+        'A single measurement run returns only a single binary digit: zero or one. It does not output the values of alpha or beta directly. To reconstruct the underlying probability distribution, we must repeat the circuit many times.',
+      actions: [
+        { type: 'MOVE_CURSOR', x: 100, y: 150 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'WHY REPEATED MEASUREMENTS?',
+          x: 80,
+          y: 140,
+          fontSize: 28,
+          color: '#60a5fa',
+          fontWeight: 'bold',
+          duration: 900,
+        },
+        {
+          type: 'DRAW_UNDERLINE',
+          x: 80,
+          y: 172,
+          width: 550,
+          color: '#3b82f6',
+          strokeWidth: 2,
+          duration: 400,
+        },
+        { type: 'PAUSE', duration: 600 },
+
+        // Single shot
+        {
+          type: 'WRITE_TEXT',
+          text: 'Single measurement:',
+          x: 100,
+          y: 220,
+          fontSize: 22,
+          color: '#cbd5e1',
+          duration: 700,
+        },
+        {
+          type: 'DRAW_RECT',
+          x: 330,
+          y: 205,
+          w: 90,
+          h: 45,
+          color: '#94a3b8',
+          strokeWidth: 2,
+          fillColor: 'rgba(148, 163, 184, 0.1)',
+          duration: 400,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '0',
+          x: 360,
+          y: 217,
+          fontSize: 28,
+          color: '#4ade80',
+          fontWeight: 'bold',
+          duration: 300,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: 'or',
+          x: 445,
+          y: 217,
+          fontSize: 20,
+          color: '#94a3b8',
+          duration: 200,
+        },
+        {
+          type: 'DRAW_RECT',
+          x: 490,
+          y: 205,
+          w: 90,
+          h: 45,
+          color: '#94a3b8',
+          strokeWidth: 2,
+          fillColor: 'rgba(148, 163, 184, 0.1)',
+          duration: 400,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '1',
+          x: 520,
+          y: 217,
+          fontSize: 28,
+          color: '#fb923c',
+          fontWeight: 'bold',
+          duration: 300,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '⟶  Only one bit of information!',
+          x: 620,
+          y: 217,
+          fontSize: 19,
+          color: '#f87171',
+          duration: 700,
+        },
+        { type: 'PAUSE', duration: 900 },
+
+        // Many shots
+        {
+          type: 'WRITE_TEXT',
+          text: '1000 measurements (shots):',
+          x: 100,
+          y: 310,
+          fontSize: 22,
+          color: '#cbd5e1',
+          duration: 800,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '≈ 360 times we get 0',
+          x: 120,
+          y: 350,
+          fontSize: 19,
+          color: '#4ade80',
+          duration: 600,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '≈ 640 times we get 1',
+          x: 120,
+          y: 380,
+          fontSize: 19,
+          color: '#fb923c',
+          duration: 600,
+        },
+        { type: 'PAUSE', duration: 700 },
+        {
+          type: 'DRAW_ARROW',
+          x1: 460,
+          y1: 365,
+          x2: 550,
+          y2: 365,
+          color: '#10b981',
+          strokeWidth: 2,
+          duration: 400,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: 'Reconstructs the distribution!',
+          x: 570,
+          y: 355,
+          fontSize: 19,
+          color: '#10b981',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        { type: 'PAUSE', duration: 1000 },
+
+        // Law of large numbers
+        {
+          type: 'DRAW_RECT',
+          x: 70,
+          y: 440,
+          w: 700,
+          h: 100,
+          color: 'rgba(96, 165, 250, 0.3)',
+          strokeWidth: 2,
+          fillColor: 'rgba(96, 165, 250, 0.05)',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '⟶  Law of Large Numbers',
+          x: 90,
+          y: 465,
+          fontSize: 20,
+          color: '#60a5fa',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '   As shots → ∞, empirical frequency converges to true probability.',
+          x: 90,
+          y: 495,
+          fontSize: 18,
+          color: '#93c5fd',
+          duration: 900,
+        },
+        { type: 'PAUSE', duration: 1300 },
+      ],
+    },
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Step 6: Deterministic vs probabilistic
+    // ──────────────────────────────────────────────────────────────────────
+    {
+      id: 't3-s06-deterministic-vs-probabilistic',
+      title: 'Deterministic vs Probabilistic',
+      narration:
+        'When a qubit is in a pure basis state like ket zero or ket one, measurement is deterministic: we get the same outcome every time. But when in superposition, measurement becomes probabilistic.',
+      actions: [
+        { type: 'MOVE_CURSOR', x: 800, y: 180 },
+        {
+          type: 'WRITE_TEXT',
+          text: 'DETERMINISTIC',
+          x: 780,
+          y: 170,
+          fontSize: 24,
+          color: '#10b981',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        {
+          type: 'DRAW_RECT',
+          x: 770,
+          y: 205,
+          w: 340,
+          h: 110,
+          color: 'rgba(16, 185, 129, 0.3)',
+          strokeWidth: 2,
+          fillColor: 'rgba(16, 185, 129, 0.08)',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: '|0\\rangle \\xrightarrow{\\text{measure}} 0 \\;(100\\%)',
+          x: 790,
+          y: 230,
+          scale: 1.3,
+          color: '#10b981',
+          duration: 800,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: '|1\\rangle \\xrightarrow{\\text{measure}} 1 \\;(100\\%)',
+          x: 790,
+          y: 275,
+          scale: 1.3,
+          color: '#10b981',
+          duration: 800,
+        },
+        { type: 'PAUSE', duration: 900 },
+
+        {
+          type: 'WRITE_TEXT',
+          text: 'PROBABILISTIC',
+          x: 780,
+          y: 360,
+          fontSize: 24,
+          color: '#f59e0b',
+          fontWeight: 'bold',
+          duration: 700,
+        },
+        {
+          type: 'DRAW_RECT',
+          x: 770,
+          y: 395,
+          w: 380,
+          h: 100,
+          color: 'rgba(245, 158, 11, 0.3)',
+          strokeWidth: 2,
+          fillColor: 'rgba(245, 158, 11, 0.08)',
+          duration: 500,
+        },
+        {
+          type: 'WRITE_MATH',
+          latex: '|{+}\\rangle \\xrightarrow{\\text{measure}} \\begin{cases} 0 & (50\\%) \\\\ 1 & (50\\%) \\end{cases}',
+          x: 785,
+          y: 420,
+          scale: 1.2,
+          color: '#f59e0b',
+          duration: 1000,
+        },
+        { type: 'PAUSE', duration: 1500 },
+      ],
+    },
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Step 7: Summary
+    // ──────────────────────────────────────────────────────────────────────
+    {
+      id: 't3-s07-summary',
+      title: 'Summary',
+      narration:
+        'To summarize: measurement collapses superposition to a definite state. The Born Rule gives us the probabilities. And we need many shots to reconstruct the distribution.',
+      actions: [
+        { type: 'MOVE_CURSOR', x: 120, y: 100 },
+        {
+          type: 'WRITE_TEXT',
+          text: '✓ Measurement collapses superposition → definite state',
+          x: 100,
+          y: 90,
+          fontSize: 20,
+          color: '#10b981',
+          duration: 1000,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '✓ Born Rule: P(x) = |amplitude|²',
+          x: 100,
+          y: 125,
+          fontSize: 20,
+          color: '#10b981',
+          duration: 900,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '✓ Repeated shots reconstruct probability distributions',
+          x: 100,
+          y: 160,
+          fontSize: 20,
+          color: '#10b981',
+          duration: 1000,
+        },
+        {
+          type: 'WRITE_TEXT',
+          text: '✓ Basis states → deterministic, Superpositions → probabilistic',
+          x: 100,
+          y: 195,
+          fontSize: 20,
+          color: '#10b981',
+          duration: 1100,
+        },
+        { type: 'PAUSE', duration: 1500 },
+      ],
+    },
+  ],
+};

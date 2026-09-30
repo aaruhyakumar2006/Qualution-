@@ -1,0 +1,23 @@
+/**
+ * BoardEmphasisLayer.css
+ *
+ * PHASE 6: Styles for the SVG emphasis layer.
+ */
+
+.board-emphasis-layer {
+  pointer-events: none;
+}
+
+.board-emphasis-layer line,
+.board-emphasis-layer rect {
+  vector-effect: non-scaling-stroke;
+}
+
+@keyframes emphasis-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+.emphasis-highlight-pulse {
+  animation: emphasis-pulse 1.1s ease-in-out infinite;
+}

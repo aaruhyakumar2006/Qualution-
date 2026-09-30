@@ -1,0 +1,58 @@
+.twoqubit-modal-dialog {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  width: 320px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+}
+
+.selection-prompt {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.qubit-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.qubit-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.qubit-option-btn:hover {
+  border-color: var(--accent-purple);
+  background-color: var(--bg-tertiary);
+}
+
+.qubit-option-btn.active {
+  border-color: var(--accent-purple);
+  background-color: rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+}
+
+.qubit-btn-label {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.qubit-btn-role {
+  font-size: 10px;
+  color: var(--accent-purple);
+  font-weight: 600;
+  text-transform: uppercase;
+}

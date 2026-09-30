@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grover's Algorithm - Hand Drawn Canvas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+
+    :root {
+      --bg: #070b14;
+      --cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.4);
+      --text: #ffffff;
+      --text-dim: #8892b0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at center, rgba(0, 240, 255, 0.03) 0%, transparent 100%),
+                        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #header {
+      position: absolute;
+      top: 30px;
+      left: 40px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #header::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    /* Main Typography */
+    #narration {
+      position: absolute;
+      top: 15%;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      width: 80%;
+    }
+
+    /* Cursor */
+    #cursor {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 2px solid var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--cyan-glow), inset 0 0 10px var(--cyan-glow);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: top 1s cubic-bezier(0.25, 1, 0.5, 1), left 1s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 9999;
+    }
+    
+    #cursor::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      background: var(--text);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Search Space */
+    #search-space {
+      display: flex;
+      gap: 60px;
+      font-family: 'Space Mono', monospace;
+      font-size: 32px;
+      position: absolute;
+      top: 35%;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .state {
+      position: relative;
+      padding: 10px;
+      transition: all 0.5s ease;
+    }
+
+    .state.highlight {
+      color: var(--cyan);
+      text-shadow: 0 0 15px var(--cyan-glow);
+    }
+
+    .state.highlight::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -15px;
+      right: -15px;
+      bottom: -10px;
+      border: 1px solid var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 20px var(--cyan-glow) inset;
+      animation: drawCircle 1s forwards;
+    }
+
+    @keyframes drawCircle {
+      from { clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%); }
+      to { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%); }
+    }
+
+    /* Circuit */
+    #circuit-area {
+      position: absolute;
+      top: 50%;
+      width: 800px;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 60px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .wire {
+      position: relative;
+      width: 0%;
+      height: 1px;
+      background: var(--cyan);
+      box-shadow: 0 0 5px var(--cyan);
+      transition: width 2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .wire-label {
+      position: absolute;
+      left: -40px;
+      top: -12px;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-dim);
+    }
+
+    .gate {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--cyan);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      color: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan-glow);
+      top: -20px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .gate.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Probabilities */
+    #probabilities {
+      position: absolute;
+      bottom: 10%;
+      display: flex;
+      gap: 40px;
+      align-items: flex-end;
+      height: 100px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .bar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+    }
+
+    .bar {
+      width: 30px;
+      height: 0%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan-glow);
+      transition: height 1s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .oracle-box, .diffuser-box {
+      position: absolute;
+      border: 1px dashed var(--cyan);
+      box-shadow: 0 0 15px var(--cyan-glow) inset;
+      top: -40px;
+      bottom: -40px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--cyan);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header">QUALUTION THEORY ENGINE ACTIVE // HAND-DRAWN RENDERER</div>
+  
+  <div id="cursor"></div>
+  
+  <div id="narration"></div>
+
+  <div id="search-space">
+    <div class="state" id="s00">|00⟩</div>
+    <div class="state" id="s01">|01⟩</div>
+    <div class="state" id="s10">|10⟩</div>
+    <div class="state" id="s11">|11⟩</div>
+  </div>
+
+  <div id="circuit-area">
+    <div class="wire" id="wire0"><div class="wire-label">q0</div></div>
+    <div class="wire" id="wire1"><div class="wire-label">q1</div></div>
+    
+    <div class="oracle-box" id="oracle-box" style="left: 200px; width: 100px;">Oracle</div>
+    <div class="diffuser-box" id="diffuser-box" style="left: 350px; width: 300px;">Diffuser</div>
+  </div>
+
+  <div id="probabilities">
+    <div class="bar-container"><div class="bar" id="b00"></div>|00⟩</div>
+    <div class="bar-container"><div class="bar" id="b01"></div>|01⟩</div>
+    <div class="bar-container"><div class="bar" id="b10"></div>|10⟩</div>
+    <div class="bar-container"><div class="bar" id="b11" style="background: white; box-shadow: 0 0 15px white;"></div><span style="color:var(--cyan)">|11⟩</span></div>
+  </div>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const narration = document.getElementById('narration');
+    
+    // Wait function
+    const wait = ms => new Promise(res => setTimeout(res, ms));
+
+    // Move cursor helper
+    function moveCursorTo(elId, offsetX = 0, offsetY = 0) {
+      if(elId === 'center') {
+        cursor.style.left = '50%';
+        cursor.style.top = '50%';
+        return;
+      }
+      const el = document.getElementById(elId);
+      if(!el) return;
+      const rect = el.getBoundingClientRect();
+      cursor.style.left = (rect.left + rect.width / 2 + offsetX) + 'px';
+      cursor.style.top = (rect.top + rect.height / 2 + offsetY) + 'px';
+    }
+
+    async function typeText(text) {
+      narration.style.opacity = 1;
+      narration.innerHTML = '';
+      let current = '';
+      for(let i=0; i<text.length; i++) {
+        current += text[i];
+        narration.innerHTML = current;
+        await wait(40); // typing speed
+      }
+    }
+
+    function addGate(wireId, gateName, leftPos) {
+      const wire = document.getElementById(wireId);
+      const gate = document.createElement('div');
+      gate.className = 'gate';
+      gate.style.left = leftPos + 'px';
+      gate.innerText = gateName;
+      wire.appendChild(gate);
+      // trigger reflow
+      void gate.offsetWidth;
+      gate.classList.add('show');
+      return gate;
+    }
+
+    async function runTimeline() {
+      // Scene 1: Empty canvas
+      cursor.style.left = '50%';
+      cursor.style.top = '70%';
+      await typeText("Let's understand Grover's algorithm.");
+      await wait(1500);
+
+      // Scene 2: Four states
+      document.getElementById('search-space').style.opacity = 1;
+      await typeText("We want to find one state.");
+      await wait(1000);
+      moveCursorTo('s00', 0, 40); await wait(500);
+      moveCursorTo('s01', 0, 40); await wait(500);
+      moveCursorTo('s10', 0, 40); await wait(500);
+      moveCursorTo('s11', 0, 40); await wait(500);
+
+      // Scene 3: Target state
+      await typeText("Our target is |11⟩.");
+      document.getElementById('s11').classList.add('highlight');
+      moveCursorTo('s11');
+      await wait(1500);
+
+      // Scene 4: Superposition / Circuit
+      document.getElementById('search-space').style.opacity = 0;
+      await typeText("First, we create a superposition.");
+      document.getElementById('circuit-area').style.opacity = 1;
+      
+      // Draw wires
+      moveCursorTo('wire0', -300, 0);
+      document.getElementById('wire0').style.width = '100%';
+      await wait(1000);
+      moveCursorTo('wire1', -300, 0);
+      document.getElementById('wire1').style.width = '100%';
+      await wait(1000);
+
+      // Scene 5: Hadamard
+      await typeText("Apply a Hadamard gate to both qubits.");
+      moveCursorTo('wire0', -200, 0); await wait(1000);
+      addGate('wire0', 'H', 80);
+      
+      moveCursorTo('wire1', -200, 0); await wait(1000);
+      addGate('wire1', 'H', 80);
+      await wait(1000);
+
+      // Scene 6: Probabilities
+      await typeText("Now all four states have equal probability.");
+      document.getElementById('probabilities').style.opacity = 1;
+      moveCursorTo('b00'); await wait(500);
+      document.getElementById('b00').style.height = '25%';
+      document.getElementById('b01').style.height = '25%';
+      document.getElementById('b10').style.height = '25%';
+      document.getElementById('b11').style.height = '25%';
+      moveCursorTo('b11'); await wait(1500);
+
+      // Scene 7: Oracle
+      await typeText("The oracle marks the state we are searching for.");
+      moveCursorTo('oracle-box');
+      document.getElementById('oracle-box').style.opacity = 1;
+      addGate('wire0', '•', 230);
+      addGate('wire1', 'X', 230); // CZ / Oracle representation
+      await wait(1500);
+
+      // Scene 8: Diffuser
+      await typeText("Then the diffuser amplifies its amplitude.");
+      moveCursorTo('diffuser-box');
+      document.getElementById('diffuser-box').style.opacity = 1;
+      
+      addGate('wire0', 'H', 370); addGate('wire1', 'H', 370); await wait(300);
+      addGate('wire0', 'X', 440); addGate('wire1', 'X', 440); await wait(300);
+      addGate('wire0', '•', 510); addGate('wire1', 'X', 510); await wait(300);
+      addGate('wire0', 'H', 580); addGate('wire1', 'H', 580); await wait(1000);
+
+      // Scene 9: Amplification
+      await typeText("The probability of our target becomes much larger.");
+      moveCursorTo('b11');
+      document.getElementById('b00').style.height = '0%';
+      document.getElementById('b01').style.height = '0%';
+      document.getElementById('b10').style.height = '0%';
+      document.getElementById('b11').style.height = '100%';
+      await wait(1500);
+
+      // Scene 10: Measurement
+      await typeText("Measure, and we find the marked state.");
+      addGate('wire0', 'M', 700);
+      addGate('wire1', 'M', 700);
+      moveCursorTo('wire0', 300, 0); await wait(500);
+      
+      await wait(1500);
+      await typeText("Grover: Superposition → Oracle → Diffuser → Measurement");
+      moveCursorTo('center');
+    }
+
+    // Start
+    setTimeout(runTimeline, 1000);
+
+  </script>
+</body>
+</html>

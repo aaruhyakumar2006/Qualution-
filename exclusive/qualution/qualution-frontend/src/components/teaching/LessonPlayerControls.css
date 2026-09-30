@@ -1,0 +1,132 @@
+/* ════════════════════════════════════════════════════════════════════════
+   LessonPlayerControls.css
+   Phase 10: Minimal lesson playback controls
+   ════════════════════════════════════════════════════════════════════════ */
+
+.lesson-player-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: rgba(8, 10, 20, 0.92);
+  border-top: 1px solid rgba(100, 120, 200, 0.14);
+  user-select: none;
+  -webkit-user-select: none;
+  flex-shrink: 0;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+
+.lpc-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(220, 230, 255, 0.85);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, opacity 120ms ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.lpc-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.lpc-btn:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.20);
+}
+
+.lpc-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.lpc-btn--play {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 180, 255, 0.15);
+  color: rgba(0, 200, 255, 0.9);
+  border-radius: 50%;
+}
+
+.lpc-btn--play:hover:not(:disabled) {
+  background: rgba(0, 180, 255, 0.28);
+  color: #00d4ff;
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────────── */
+
+.lpc-progress {
+  flex: 1;
+  min-width: 60px;
+  padding: 6px 0;
+  cursor: default; /* read-only in Phase 10 */
+}
+
+.lpc-progress__track {
+  position: relative;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: visible;
+}
+
+.lpc-progress__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0, 180, 255, 0.7), rgba(0, 220, 255, 0.9));
+  border-radius: 2px;
+  transition: width 80ms linear;
+  will-change: width;
+}
+
+.lpc-progress__thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 220, 255, 0.95);
+  box-shadow: 0 0 6px rgba(0, 200, 255, 0.5);
+  transition: left 80ms linear;
+  will-change: left;
+  pointer-events: none;
+}
+
+/* ── Time display ─────────────────────────────────────────────────────── */
+
+.lpc-time {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(180, 195, 220, 0.7);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.lpc-time__current {
+  color: rgba(200, 215, 240, 0.9);
+}
+
+.lpc-time__sep {
+  color: rgba(150, 165, 190, 0.5);
+}
+
+/* ── Completed badge ──────────────────────────────────────────────────── */
+
+.lpc-completed {
+  font-size: 11px;
+  color: rgba(80, 220, 140, 0.9);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
+}

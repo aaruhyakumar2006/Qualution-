@@ -1,0 +1,123 @@
+{
+  "lesson_id": "classical-vs-qubit",
+  "duration_ms": 99624,
+  "keyframes": [
+    {
+      "keyframe_id": "kf-01-hook",
+      "start_ms": 0,
+      "duration_ms": 14712,
+      "narration": "Every computer you have ever touched speaks in {{bits}}. At its core, a bit is the simplest {{switch}} imaginable: it is either completely off, or completely on. Zero, or one. Nothing in between.",
+      "highlight_words": ["bits", "switch"],
+      "visual": {
+        "type": "bit_flip",
+        "params": {
+          "bit_count": 1,
+          "initial_state": 0,
+          "flip_at_ms": 10800
+        }
+      },
+      "transition": "fade"
+    },
+    {
+      "keyframe_id": "kf-02-classical-deep-dive",
+      "start_ms": 14712,
+      "duration_ms": 21120,
+      "narration": "Classical bits are completely {{deterministic}}. When you inspect a bit, its {{state}} is never a mystery. Flip the switch, and it moves from zero to one. Flip it again, and it returns to zero. Right now, billions of these tiny switches inside your device are locked into fixed, predictable states.",
+      "highlight_words": ["deterministic", "state"],
+      "visual": {
+        "type": "bit_flip",
+        "params": {
+          "bit_count": 4,
+          "bits": [
+            { "position": 0, "initial": 0, "flip_at_ms": 8800 },
+            { "position": 1, "initial": 1, "flip_at_ms": 11800 },
+            { "position": 2, "initial": 0, "flip_at_ms": 14800 },
+            { "position": 3, "initial": 1, "flip_at_ms": 17300 }
+          ]
+        }
+      },
+      "transition": "slide"
+    },
+    {
+      "keyframe_id": "kf-03-tension",
+      "start_ms": 35832,
+      "duration_ms": 9912,
+      "narration": "For nearly a century, every algorithm and machine we built depended on that rigid rule. But what if a {{switch}} could be something more than just on or off?",
+      "highlight_words": ["switch"],
+      "visual": {
+        "type": "text_only",
+        "params": {
+          "align": "center",
+          "size": "large"
+        }
+      },
+      "transition": "fade"
+    },
+    {
+      "keyframe_id": "kf-04-qubit-intro",
+      "start_ms": 45744,
+      "duration_ms": 17088,
+      "narration": "Meet the {{qubit}}. In quantum physics, a qubit does not have to choose zero or one right away. It exists in {{superposition}} — a smooth blend of both possibilities at once. It only commits to a single value the moment you perform a {{measurement}}.",
+      "highlight_words": ["qubit", "superposition", "measurement"],
+      "visual": {
+        "type": "qubit_sphere",
+        "params": {
+          "mode": "superposition",
+          "theta": 0.7854,
+          "phi_animate": true,
+          "rotate_speed_deg_per_s": 45
+        }
+      },
+      "transition": "fade"
+    },
+    {
+      "keyframe_id": "kf-05-comparison",
+      "start_ms": 62832,
+      "duration_ms": 16752,
+      "narration": "Side by side, the contrast is unmistakable. A classical {{bit}} is a rigid switch, locked to either zero or one. A {{qubit}} is a sphere of possibilities — pointing anywhere across a continuous surface until {{measurement}} snaps it back to reality.",
+      "highlight_words": ["bit", "qubit", "measurement"],
+      "visual": {
+        "type": "comparison_table",
+        "params": {
+          "columns": ["Property", "Classical Bit", "Quantum Qubit"],
+          "rows": [
+            ["Possible states", "0 or 1", "α|0⟩ + β|1⟩"],
+            ["On measurement", "Unchanged", "Collapses to 0 or 1"]
+          ]
+        }
+      },
+      "transition": "slide"
+    },
+    {
+      "keyframe_id": "kf-06-entanglement-teaser",
+      "start_ms": 79584,
+      "duration_ms": 9648,
+      "narration": "And when two {{qubits}} interact, they can become {{entangled}} — mysteriously linking their fates so measuring one reveals the other across any distance in the universe.",
+      "highlight_words": ["qubits", "entangled"],
+      "visual": {
+        "type": "qubit_sphere",
+        "params": {
+          "mode": "entangled_pair",
+          "sphere_count": 2,
+          "link_color": "#38bdf8",
+          "rotate_speed_deg_per_s": 30
+        }
+      },
+      "transition": "fade"
+    },
+    {
+      "keyframe_id": "kf-07-conclusion",
+      "start_ms": 89232,
+      "duration_ms": 10392,
+      "narration": "You now hold the core foundation separating classical computing from the quantum frontier. Next, let's step into the lab and manipulate our very first {{qubit}}.",
+      "highlight_words": ["qubit"],
+      "visual": {
+        "type": "qubit_sphere",
+        "params": {
+          "mode": "superposition"
+        }
+      },
+      "transition": "fade"
+    }
+  ]
+}

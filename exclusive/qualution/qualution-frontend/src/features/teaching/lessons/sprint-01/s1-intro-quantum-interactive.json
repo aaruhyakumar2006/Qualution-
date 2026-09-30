@@ -1,0 +1,129 @@
+{
+  "id": "s1-intro-quantum-interactive",
+  "title": "Difference Between Traditional Computing and Quantum Computing",
+  "sprint": 1,
+  "difficulty": "Beginner",
+  "estimatedMinutes": 8,
+  "xpReward": 150,
+  "learningObjectives": [
+    "Understand traditional bits and classical states.",
+    "Understand qubits and quantum superposition.",
+    "Recognize the difference between probabilities and amplitudes."
+  ],
+  "prerequisites": [],
+  "conceptTags": ["quantum", "intro", "bit", "qubit", "superposition"],
+  "summary": "An interactive exploration of how quantum computing fundamentally differs from traditional computing.",
+  "starterCircuit": {
+    "qubits": 1,
+    "classical_bits": 1,
+    "gates": []
+  },
+  "steps": [
+    {
+      "id": "intro-problem",
+      "stepNumber": 1,
+      "title": "Information Representation",
+      "explanation": "Introduction to the question.",
+      "narrationText": "How does a computer represent information?",
+      "actions": [
+        { "type": "SHOW_TEXT", "text": "How does a computer represent information?", "title": "Information" },
+        { "type": "wait", "durationMs": 1000 }
+      ]
+    },
+    {
+      "id": "classical-bit",
+      "stepNumber": 2,
+      "title": "The Classical Bit",
+      "explanation": "Explain classical bits.",
+      "narrationText": "In traditional computing, information is stored in a classical bit, which has two definite states: 0 or 1.",
+      "actions": [
+        { "type": "SHOW_TEXT", "text": "Classical BIT: 0 or 1", "title": "Traditional Computing" },
+        { "type": "wait", "durationMs": 1500 }
+      ]
+    },
+    {
+      "id": "classical-logic",
+      "stepNumber": 3,
+      "title": "Classical Logic",
+      "explanation": "How classical logic manipulates bits.",
+      "narrationText": "Classical logic manipulates these bits using definite operations, meaning the computer is always in one single definite state at a time. This is a limitation when solving complex problems.",
+      "actions": [
+        { "type": "SHOW_TEXT", "text": "Logic Gates: AND, OR, NOT", "title": "Definite States" },
+        { "type": "wait", "durationMs": 1500 }
+      ]
+    },
+    {
+      "id": "quantum-qubit",
+      "stepNumber": 4,
+      "title": "The Qubit",
+      "explanation": "Introduce the Qubit.",
+      "narrationText": "Now, let's transition to the quantum computing model. Quantum computers use QUBITS.",
+      "actions": [
+        { "type": "SHOW_TEXT", "text": "QUBIT", "title": "Quantum Computing" },
+        { "type": "SHOW_CIRCUIT" },
+        { "type": "initialize_qubits", "qubits": 1, "classicalBits": 1 },
+        { "type": "wait", "durationMs": 1000 }
+      ]
+    },
+    {
+      "id": "quantum-state",
+      "stepNumber": 5,
+      "title": "Quantum State",
+      "explanation": "Show the math of a qubit.",
+      "narrationText": "A qubit exists in a quantum state represented as alpha zero plus beta one, where alpha and beta are quantum amplitudes, not just probabilities.",
+      "actions": [
+        { "type": "SHOW_MATH", "formula": "|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle" },
+        { "type": "wait", "durationMs": 1500 }
+      ]
+    },
+    {
+      "id": "superposition",
+      "stepNumber": 6,
+      "title": "Superposition",
+      "explanation": "Introduce H gate.",
+      "narrationText": "Let's put our qubit into superposition using a Hadamard gate.",
+      "actions": [
+        { "type": "ADD_GATE", "gate": "h", "targets": [0], "column": 0 },
+        { "type": "wait", "durationMs": 1000 },
+        { "type": "SHOW_MATH", "formula": "|0\\rangle \\xrightarrow{H} \\frac{|0\\rangle + |1\\rangle}{\\sqrt{2}}" },
+        { "type": "wait", "durationMs": 1000 },
+        { "type": "run_simulation" },
+        { "type": "SHOW_QSPHERE" }
+      ]
+    },
+    {
+      "id": "prediction-measurement",
+      "stepNumber": 7,
+      "title": "Prediction Checkpoint",
+      "explanation": "Ask about measurement.",
+      "narrationText": "The quantum state contains amplitudes and phases, but what happens when we measure it?",
+      "actions": [],
+      "checkpoint": {
+        "id": "predict-measurement",
+        "prompt": "What does measurement produce?",
+        "question": "What is the result of measuring a qubit in superposition?",
+        "options": [
+          { "id": "both", "label": "Both 0 and 1 simultaneously" },
+          { "id": "classical", "label": "A single classical outcome (0 or 1)", "isCorrect": true },
+          { "id": "amplitude", "label": "The quantum amplitude" }
+        ],
+        "correctOptionIndex": 1,
+        "explanation": "Correct! Quantum computing doesn't just mean being 'both 0 and 1'. Measurement forces the qubit to collapse into a single classical outcome."
+      }
+    },
+    {
+      "id": "measurement-result",
+      "stepNumber": 8,
+      "title": "Measurement Result",
+      "explanation": "Show the collapse.",
+      "narrationText": "Exactly! Measurement produces a classical outcome, while the quantum state underneath contains amplitudes and phases. This rich state space is what gives quantum computing its power.",
+      "actions": [
+        { "type": "ADD_GATE", "gate": "measure", "targets": [0], "column": 1 },
+        { "type": "wait", "durationMs": 500 },
+        { "type": "run_simulation" },
+        { "type": "SHOW_RESULT" },
+        { "type": "wait", "durationMs": 1500 }
+      ]
+    }
+  ]
+}

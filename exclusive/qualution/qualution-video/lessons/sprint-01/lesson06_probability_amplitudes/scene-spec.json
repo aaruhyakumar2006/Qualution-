@@ -1,0 +1,601 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-probability-amplitudes",
+  "lessonTitle": "Probability Amplitudes & Phases",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 210,
+  "fps": 30,
+  "totalFrames": 6300,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Deconstruct complex numbers into polar form: r e^(i\u03b8).",
+    "Understand why amplitudes can cancel through destructive interference.",
+    "Differentiate global phase e^(i\u03b3) from relative phase e^(i\u03c6).",
+    "Prove why global phase is physically unobservable: |e^(i\u03b3)\u03c8|\u00b2 = |\u03c8|\u00b2.",
+    "Map single-qubit state space using spherical coordinates (\u03b8, \u03c6)."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "Complex numbers z = a + bi = r e^(i\u03b8)",
+      "Absolute value squared |z|\u00b2 = a\u00b2 + b\u00b2",
+      "Negative and imaginary amplitudes",
+      "Global phase invariance |e^(i\u03b3)\u03b1|\u00b2 = |\u03b1|\u00b2",
+      "Relative phase parameterization: |\u03c8\u27e9 = cos(\u03b8/2)|0\u27e9 + e^(i\u03c6)sin(\u03b8/2)|1\u27e9"
+    ],
+    "topicsDeferred": [
+      "Full wave interference demonstrations using Mach-Zehnder (Lesson 7)",
+      "Phase kickback in multi-qubit circuits (Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Secret Currency of Quantum Computing",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Classical probabilities can only be positive real numbers between zero and one. But quantum mechanics runs on a richer currency: complex numbers that can be positive, negative, or imaginary.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Classical probabilities are strictly non-negative real numbers: p \u2208 [0, 1].",
+          "startFrame": 1,
+          "endFrame": 300
+        },
+        {
+          "text": "Quantum amplitudes are complex numbers (\u2102) capable of wave cancellation.",
+          "startFrame": 301,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 6: PROBABILITY AMPLITUDES & PHASES",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "The Complex Arithmetic Underlying Quantum Advantage",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Hook learner with the mathematical power of complex amplitudes vs real probabilities.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Complex Numbers in Polar Form",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Any complex amplitude \u03b1 can be written in rectangular form as a + bi, or in polar form as r times e to the power of i theta. Here, r is the magnitude, and theta is the phase angle.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Rectangular form: \u03b1 = a + bi.  Polar form: \u03b1 = r e^(i\u03b8).",
+          "startFrame": 601,
+          "endFrame": 960
+        },
+        {
+          "text": "r represents the amplitude magnitude; \u03b8 represents the phase angle.",
+          "startFrame": 961,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_polar",
+          "text": "\u03b1 = a + bi = r \u00b7 e^(i\u03b8)",
+          "role": "formula",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_mag",
+          "text": "Magnitude: r = \u221a(a\u00b2 + b\u00b2)  |  Phase: \u03b8 = arctan(b/a)",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.6,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Review Euler's formula and polar decomposition of complex amplitudes.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Why Negative Amplitudes Matter",
+      "durationSeconds": 30,
+      "startFrame": 1351,
+      "endFrame": 2250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Consider the state |+\u27e9 with amplitude +1/\u221a2, and |-\u27e9 with amplitude -1/\u221a2 for state |1\u27e9. Both square to 1/2 upon measurement. But before measurement, adding +1/\u221a2 and -1/\u221a2 results in zero\u2014complete cancellation!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "|+1/\u221a2|\u00b2 = 1/2, and |-1/\u221a2|\u00b2 = 1/2. Measurement probabilities are identical.",
+          "startFrame": 1351,
+          "endFrame": 1770
+        },
+        {
+          "text": "Yet amplitudes can add constructively (1) or destructively cancel to 0!",
+          "startFrame": 1771,
+          "endFrame": 2250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_cancel",
+          "text": "Destructive Amplitude Interference",
+          "role": "header",
+          "position": [
+            0.0,
+            2.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_math",
+          "text": "(+1/\u221a2) + (-1/\u221a2) = 0",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Demonstrate destructive cancellation mathematically.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "Global Phase Invariance",
+      "durationSeconds": 30,
+      "startFrame": 2251,
+      "endFrame": 3150,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "What happens if we multiply the entire quantum state by a phase factor e to the i gamma? When we calculate measurement probabilities, the phase factor conjugates to one and vanishes. Global phase is physically undetectable!",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Multiplying a state by e^(i\u03b3): |\u03c8'\u27e9 = e^(i\u03b3)|\u03c8\u27e9.",
+          "startFrame": 2251,
+          "endFrame": 2640
+        },
+        {
+          "text": "Probability: |e^(i\u03b3)\u03c8|\u00b2 = |e^(i\u03b3)|\u00b2 |\u03c8|\u00b2 = 1 \u00b7 |\u03c8|\u00b2. Global phase is undetectable!",
+          "startFrame": 2641,
+          "endFrame": 3150
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_global",
+          "text": "Global Phase Invariance: |e^(i\u03b3)\u03c8|\u00b2 = |\u03c8|\u00b2",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_note",
+          "text": "Global phase leaves all physical observables unchanged",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Formalize the proof of global phase invariance.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "The Power of Relative Phase",
+      "durationSeconds": 35,
+      "startFrame": 3151,
+      "endFrame": 4200,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In contrast, the relative phase\u2014the difference in phase between |0\u27e9 and |1\u27e9\u2014is intensely physical! By factoring out global phase, any single-qubit pure state can be written using two angles: theta and phi.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Relative phase is the phase angle difference between |0\u27e9 and |1\u27e9.",
+          "startFrame": 3151,
+          "endFrame": 3600
+        },
+        {
+          "text": "Canonical parameterization: |\u03c8\u27e9 = cos(\u03b8/2)|0\u27e9 + e^(i\u03c6)sin(\u03b8/2)|1\u27e9.",
+          "startFrame": 3601,
+          "endFrame": 4200
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_param",
+          "text": "|\u03c8\u27e9 = cos(\u03b8/2)|0\u27e9 + e^(i\u03c6) sin(\u03b8/2)|1\u27e9",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_angles",
+          "text": "\u03b8 \u2208 [0, \u03c0] (Colatitude)  |  \u03c6 \u2208 [0, 2\u03c0) (Longitude)",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3151,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Derive the standard spherical parameterization of a single qubit.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "Phase on the Bloch Equator",
+      "durationSeconds": 35,
+      "startFrame": 4201,
+      "endFrame": 5250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "When theta equals 90 degrees, the qubit sits on the equator of the Bloch sphere. Here, varying the relative phase phi rotates the state from |+\u27e9 at phi equals 0, to |i\u27e9 at 90 degrees, to |-\u27e9 at 180 degrees.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "On the equator (\u03b8 = \u03c0/2), varying relative phase \u03c6 rotates the vector.",
+          "startFrame": 4201,
+          "endFrame": 4680
+        },
+        {
+          "text": "\u03c6 = 0 gives |+\u27e9; \u03c6 = \u03c0/2 gives |+i\u27e9; \u03c6 = \u03c0 gives |-\u27e9.",
+          "startFrame": 4681,
+          "endFrame": 5250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_eq",
+          "text": "Equatorial Relative Phase States",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_p_state",
+          "text": "|+\u27e9 = (|0\u27e9 + |1\u27e9)/\u221a2 (\u03c6 = 0)",
+          "role": "body",
+          "position": [
+            0.0,
+            1.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_i_state",
+          "text": "|+i\u27e9 = (|0\u27e9 + i|1\u27e9)/\u221a2 (\u03c6 = \u03c0/2)",
+          "role": "body",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_m_state",
+          "text": "|-\u27e9 = (|0\u27e9 - |1\u27e9)/\u221a2 (\u03c6 = \u03c0)",
+          "role": "body",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4201,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Connect relative phase parameterization to Bloch sphere longitude.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Summary & Next Steps",
+      "durationSeconds": 35,
+      "startFrame": 5251,
+      "endFrame": 6300,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To summarize: complex amplitudes give quantum states phase. While global phase is invisible, relative phase alters the state's geometry and drives wave interference. In Lesson 7, we explore Quantum Phase and Interference in action.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Summary: Amplitudes \u03b1, \u03b2 \u2208 \u2102 possess magnitude and relative phase.",
+          "startFrame": 5251,
+          "endFrame": 5700
+        },
+        {
+          "text": "Next: Lesson 7 \u2014 Quantum Phase & Wave Interference.",
+          "startFrame": 5701,
+          "endFrame": 6300
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 6 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_a1",
+          "text": "1. Polar Form: \u03b1 = r e^(i\u03b8) with magnitude r and phase \u03b8",
+          "role": "body",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_a2",
+          "text": "2. Global Phase e^(i\u03b3): Completely undetectable experimentally",
+          "role": "body",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_a3",
+          "text": "3. Relative Phase e^(i\u03c6): Highly physical; defines equatorial position",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Recap probability amplitude insights and transition to Lesson 7.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

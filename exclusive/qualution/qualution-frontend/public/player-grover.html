@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QUALUTION — Grover's Search Algorithm (Masterclass)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2300f2ff'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #020408;
+      --panel-bg: rgba(10, 20, 38, 0.85);
+      --panel-border: rgba(0, 242, 255, 0.15);
+      --cyan-bright: #00f2ff;
+      --cyan-glow: rgba(0, 242, 255, 0.4);
+      --purple-accent: #a78bfa;
+      --amber-accent: #ff9900;
+      --green-accent: #00ff88;
+      --red-accent: #ff0055;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0, 242, 255, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 60%);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 20px 24px;
+      overflow-x: hidden;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .brand-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #040914;
+      background: var(--cyan-bright);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .brand-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.05em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .exit-btn {
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .exit-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* Cinema Viewport 16:9 */
+    .player-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #stage-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #020408;
+      border-radius: 12px;
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 242, 255, 0.05);
+      overflow: hidden;
+    }
+
+    #stage-viewport {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1600px;
+      height: 900px;
+      transform-origin: top left;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .bg-canvas {
+      position: absolute;
+      inset: 0;
+      width: 1600px;
+      height: 900px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .stage-svg {
+      position: absolute;
+      inset: 0;
+      width: 1600px;
+      height: 900px;
+      z-index: 1;
+      overflow: visible;
+    }
+
+    /* Math layer */
+    .math-layer {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .math-pill {
+      background: rgba(4, 9, 20, 0.85);
+      border: 1px solid rgba(0, 242, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 8px 24px;
+      border-radius: 30px;
+      font-size: 22px;
+      color: #38bdf8;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Subtitles bar */
+    .caption-container {
+      position: absolute;
+      bottom: 30px;
+      left: 100px;
+      right: 100px;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .caption-pill {
+      background: rgba(4, 9, 20, 0.88);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      padding: 14px 28px;
+      border-radius: 12px;
+      max-width: 1200px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .erwin-badge {
+      font-size: 13px;
+      font-weight: 800;
+      color: #00f2ff;
+      background: rgba(0, 242, 255, 0.12);
+      border: 1px solid rgba(0, 242, 255, 0.35);
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .caption-text {
+      font-size: 20px;
+      line-height: 1.5;
+      color: #f8fafc;
+      font-weight: 500;
+    }
+
+    .caption-text .hl {
+      color: #00f2ff;
+      font-weight: 700;
+      text-shadow: 0 0 12px rgba(0, 242, 255, 0.6);
+    }
+
+    /* Interactive Checkpoint Overlay */
+    .checkpoint-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 6, 14, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 40px;
+    }
+
+    .checkpoint-overlay.active {
+      display: flex;
+    }
+
+    .checkpoint-box {
+      width: 800px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid #00f2ff;
+      box-shadow: 0 0 50px rgba(0, 242, 255, 0.3);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .checkpoint-tag {
+      font-size: 12px;
+      font-weight: 800;
+      color: #00f2ff;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .checkpoint-question {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .checkpoint-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checkpoint-opt-btn {
+      padding: 14px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .checkpoint-opt-btn:hover {
+      background: rgba(0, 242, 255, 0.12);
+      border-color: #00f2ff;
+      color: #fff;
+    }
+
+    .checkpoint-opt-btn.correct {
+      background: rgba(0, 255, 136, 0.2);
+      border-color: #00ff88;
+      color: #00ff88;
+    }
+
+    .checkpoint-opt-btn.wrong {
+      background: rgba(255, 0, 85, 0.2);
+      border-color: #ff0055;
+      color: #ff0055;
+    }
+
+    .checkpoint-feedback {
+      font-size: 15px;
+      color: #7dd3fc;
+      line-height: 1.5;
+      padding: 10px 14px;
+      background: rgba(0, 242, 255, 0.08);
+      border-radius: 6px;
+      display: none;
+    }
+
+    .checkpoint-continue-btn {
+      align-self: flex-end;
+      padding: 10px 24px;
+      border-radius: 6px;
+      background: #00f2ff;
+      color: #040914;
+      font-size: 14px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: none;
+    }
+
+    /* Big Play Overlay */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 4, 8, 0.82);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    .play-overlay.hidden {
+      display: none;
+    }
+
+    .big-play-btn {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00f2ff 0%, #0f62fe 100%);
+      box-shadow: 0 0 50px rgba(0, 242, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .play-overlay:hover .big-play-btn {
+      transform: scale(1.1);
+      box-shadow: 0 0 65px rgba(0, 242, 255, 0.8);
+    }
+
+    .big-play-btn svg {
+      width: 42px;
+      height: 42px;
+      fill: #040914;
+      margin-left: 5px;
+    }
+
+    .play-overlay-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .play-overlay-sub {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    /* ── Phase 5: Theory Completion Transition Screen ── */
+    .handoff-card {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 4, 10, 0.96);
+      backdrop-filter: blur(16px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      padding: 40px;
+      text-align: center;
+      animation: fadeInHandoff 0.5s ease-out;
+    }
+
+    @keyframes fadeInHandoff {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .handoff-card.active {
+      display: flex;
+    }
+
+    .handoff-box {
+      width: 780px;
+      background: linear-gradient(160deg, rgba(8, 20, 37, 0.98) 0%, rgba(5, 14, 28, 0.98) 100%);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      box-shadow: 0 0 80px rgba(0, 242, 255, 0.08), 0 0 120px rgba(143, 0, 255, 0.06);
+      border-radius: 20px;
+      padding: 44px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* Progress pill */
+    .handoff-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .handoff-check-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    .handoff-progress-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #00ff88;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .handoff-progress-divider {
+      width: 24px;
+      height: 1px;
+      background: rgba(0, 255, 136, 0.3);
+    }
+
+    .handoff-next-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Main heading */
+    .handoff-heading {
+      font-size: 38px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .handoff-subheading {
+      font-size: 24px;
+      font-weight: 700;
+      color: #00f2ff;
+      margin-bottom: 32px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Concept pills row */
+    .handoff-concepts {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .concept-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid;
+      animation: conceptFadeIn 0.4s ease-out both;
+    }
+
+    .concept-pill:nth-child(1) { animation-delay: 0.1s; }
+    .concept-pill:nth-child(2) { animation-delay: 0.2s; }
+    .concept-pill:nth-child(3) { animation-delay: 0.3s; }
+    .concept-pill:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes conceptFadeIn {
+      from { opacity: 0; transform: scale(0.9) translateY(8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .concept-pill.superposition {
+      background: rgba(0, 242, 255, 0.08);
+      border-color: rgba(0, 242, 255, 0.3);
+      color: #00f2ff;
+    }
+
+    .concept-pill.oracle {
+      background: rgba(255, 0, 85, 0.08);
+      border-color: rgba(255, 0, 85, 0.3);
+      color: #ff5577;
+    }
+
+    .concept-pill.amplification {
+      background: rgba(255, 153, 0, 0.08);
+      border-color: rgba(255, 153, 0, 0.3);
+      color: #ff9900;
+    }
+
+    .concept-pill.measurement {
+      background: rgba(0, 255, 136, 0.08);
+      border-color: rgba(0, 255, 136, 0.3);
+      color: #00ff88;
+    }
+
+    /* CTA Button */
+    .handoff-cta-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #00f2ff 0%, #0f62fe 100%);
+      color: #020408;
+      font-size: 16px;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 40px rgba(0, 242, 255, 0.4), 0 0 80px rgba(15, 98, 254, 0.2);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .handoff-cta-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 0 55px rgba(0, 242, 255, 0.6), 0 0 100px rgba(15, 98, 254, 0.3);
+    }
+
+    .handoff-back-link {
+      font-size: 13px;
+      color: #475569;
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .handoff-back-link:hover {
+      color: #94a3b8;
+    }
+
+    /* Controls Bar */
+    .controls-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-bar-track {
+      position: relative;
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .progress-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00f2ff 0%, #0f62fe 100%);
+      border-radius: 4px;
+      transition: width 0.15s ease;
+    }
+
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .controls-left, .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-ctrl {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+
+    .btn-ctrl:hover {
+      background: rgba(0, 242, 255, 0.15);
+      border-color: #00f2ff;
+      color: #fff;
+    }
+
+    .btn-ctrl svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .play-btn {
+      width: 36px;
+      padding: 0;
+      background: rgba(0, 242, 255, 0.2);
+      border-color: #00f2ff;
+      color: #00f2ff;
+    }
+
+    .time-readout {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: #00f2ff;
+      margin-left: 8px;
+    }
+
+    .scene-title-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* ElevenLabs Button & Modal */
+    #elevenlabs-modal-btn {
+      color: #00f2ff;
+      border-color: rgba(0, 242, 255, 0.3);
+      background: rgba(0, 242, 255, 0.08);
+      gap: 5px;
+      font-weight: 700;
+    }
+    #elevenlabs-modal-btn:hover {
+      background: rgba(0, 242, 255, 0.2);
+      box-shadow: 0 0 12px rgba(0, 242, 255, 0.35);
+      color: #fff;
+    }
+    #elevenlabs-modal-btn.active-key {
+      border-color: #00f2ff;
+      box-shadow: 0 0 10px rgba(0, 242, 255, 0.25);
+    }
+
+    .voice-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 14, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .voice-modal {
+      width: 520px;
+      max-width: 95vw;
+      background: #090f1d;
+      border: 1.5px solid rgba(0, 242, 255, 0.35);
+      border-radius: 16px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 242, 255, 0.15);
+      overflow: hidden;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .voice-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .voice-modal-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .voice-modal-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(0, 242, 255, 0.12);
+      border: 1px solid rgba(0, 242, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #00f2ff;
+    }
+
+    .voice-modal-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .voice-modal-subtitle {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .voice-modal-close {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .voice-modal-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .voice-modal-body {
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .voice-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .voice-status-badge.connected {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: #00ff88;
+    }
+    .voice-status-badge.fallback {
+      background: rgba(255, 153, 0, 0.1);
+      border: 1px solid rgba(255, 153, 0, 0.3);
+      color: #ffaa33;
+    }
+    .voice-status-badge .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+      flex-shrink: 0;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .form-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+    .form-key-link {
+      font-size: 11px;
+      color: #00f2ff;
+      text-decoration: none;
+    }
+    .form-key-link:hover {
+      text-decoration: underline;
+    }
+
+    #elevenlabs-api-key-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: #060a14;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      transition: all 0.2s;
+    }
+    #elevenlabs-api-key-input:focus {
+      border-color: #00f2ff;
+      box-shadow: 0 0 12px rgba(0, 242, 255, 0.25);
+    }
+
+    .voice-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .voice-option-card {
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .voice-option-card:hover {
+      background: rgba(0, 242, 255, 0.06);
+      border-color: rgba(0, 242, 255, 0.35);
+    }
+    .voice-option-card.selected {
+      background: rgba(0, 242, 255, 0.12);
+      border-color: #00f2ff;
+      box-shadow: 0 0 14px rgba(0, 242, 255, 0.25);
+    }
+    .voice-option-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 13px;
+      color: #fff;
+    }
+    .voice-option-top .tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #00f2ff;
+      color: #040914;
+    }
+    .voice-option-desc {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .voice-test-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .voice-test-feedback {
+      font-size: 12px;
+      color: #38bdf8;
+      font-style: italic;
+    }
+
+    .voice-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.4);
+      display: flex;
+      justify-content: flex-end;
+    }
+    .voice-save-btn {
+      padding: 10px 22px;
+      background: #00f2ff;
+      border: none;
+      border-radius: 8px;
+      color: #040914;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 14px rgba(0, 242, 255, 0.35);
+    }
+    .voice-save-btn:hover {
+      background: #55f7ff;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 242, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand-group" id="header-brand">
+      <span class="brand-tag">Lesson 08</span>
+      <span class="brand-title">Grover's Search Algorithm — Masterclass</span>
+    </div>
+    <div class="header-actions">
+      <button class="exit-btn" id="exit-btn">Return to Academy</button>
+    </div>
+  </header>
+
+  <div class="player-wrapper">
+    <div id="stage-container">
+      <div id="stage-viewport">
+        <canvas class="bg-canvas" id="bg-canvas"></canvas>
+
+        <!-- Dynamic KaTeX formula bar -->
+        <div class="math-layer" id="math-layer">
+          <div class="math-pill" id="math-display"></div>
+        </div>
+
+        <!-- Master SVG Stage -->
+        <svg class="stage-svg" id="stage-svg" viewBox="0 0 1600 900">
+          <defs>
+            <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="8" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+            <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="10" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+            <linearGradient id="grad-target" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#00ff88" />
+              <stop offset="100%" stop-color="#00aa55" />
+            </linearGradient>
+            <linearGradient id="grad-unmarked" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#00f2ff" />
+              <stop offset="100%" stop-color="#0f62fe" />
+            </linearGradient>
+            <linearGradient id="grad-neg" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ff0055" />
+              <stop offset="100%" stop-color="#990033" />
+            </linearGradient>
+          </defs>
+
+          <!-- Group 1: Classical 4-box Search (Scene 1) -->
+          <g id="actor-classical-boxes" transform="translate(800, 420)" style="opacity: 0;">
+            <g transform="translate(-450, 0)">
+              <rect id="cbox-0" x="-90" y="-90" width="180" height="180" rx="16" fill="#0f1e35" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+              <text x="0" y="-10" text-anchor="middle" fill="#94a3b8" font-size="44px" font-family="'JetBrains Mono', monospace" font-weight="700">00</text>
+              <text x="0" y="45" text-anchor="middle" fill="#ff0055" font-size="20px" font-weight="700">✗ Empty</text>
+            </g>
+            <g transform="translate(-150, 0)">
+              <rect id="cbox-1" x="-90" y="-90" width="180" height="180" rx="16" fill="#0f1e35" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+              <text x="0" y="-10" text-anchor="middle" fill="#94a3b8" font-size="44px" font-family="'JetBrains Mono', monospace" font-weight="700">01</text>
+              <text x="0" y="45" text-anchor="middle" fill="#ff0055" font-size="20px" font-weight="700">✗ Empty</text>
+            </g>
+            <g transform="translate(150, 0)">
+              <rect id="cbox-2" x="-90" y="-90" width="180" height="180" rx="16" fill="#0f1e35" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+              <text x="0" y="-10" text-anchor="middle" fill="#94a3b8" font-size="44px" font-family="'JetBrains Mono', monospace" font-weight="700">10</text>
+              <text x="0" y="45" text-anchor="middle" fill="#ff0055" font-size="20px" font-weight="700">✗ Empty</text>
+            </g>
+            <g transform="translate(450, 0)">
+              <rect id="cbox-3" x="-90" y="-90" width="180" height="180" rx="16" fill="#04261d" stroke="#00ff88" stroke-width="3" filter="url(#glow-green)" />
+              <text x="0" y="-10" text-anchor="middle" fill="#00ff88" font-size="44px" font-family="'JetBrains Mono', monospace" font-weight="700">11</text>
+              <text x="0" y="45" text-anchor="middle" fill="#00ff88" font-size="20px" font-weight="800">★ TARGET</text>
+            </g>
+          </g>
+
+          <!-- Group 2: Quantum Amplitude Bars Stage (Scenes 4, 6, 7, 9, 11) -->
+          <g id="actor-amplitude-stage" transform="translate(800, 480)" style="opacity: 0;">
+            <!-- Zero Axis -->
+            <line x1="-550" y1="0" x2="550" y2="0" stroke="rgba(255,255,255,0.25)" stroke-width="2" />
+            <text x="565" y="5" fill="#64748b" font-size="14px" font-family="'JetBrains Mono', monospace">α = 0</text>
+
+            <!-- Mean Reference Line (Active in Scene 9) -->
+            <g id="mean-reference-group" style="opacity: 0;">
+              <line id="mean-dash-line" x1="-550" y1="-50" x2="550" y2="-50" stroke="#ff9900" stroke-width="2" stroke-dasharray="8,6" />
+              <text x="565" y="-45" fill="#ff9900" font-size="16px" font-weight="700" font-family="'JetBrains Mono', monospace">Mean μ = +0.25</text>
+            </g>
+
+            <!-- Bar 00 -->
+            <g transform="translate(-400, 0)">
+              <rect id="bar-rect-00" x="-45" y="-100" width="90" height="100" rx="8" fill="url(#grad-unmarked)" />
+              <text id="bar-prob-00" x="0" y="-115" text-anchor="middle" fill="#00f2ff" font-size="20px" font-weight="800" font-family="'JetBrains Mono', monospace">25%</text>
+              <text id="bar-amp-00" x="0" y="-70" text-anchor="middle" fill="#fff" font-size="16px" font-family="'JetBrains Mono', monospace">+0.50</text>
+              <text x="0" y="35" text-anchor="middle" fill="#cbd5e1" font-size="22px" font-weight="700" font-family="'JetBrains Mono', monospace">|00⟩</text>
+            </g>
+
+            <!-- Bar 01 -->
+            <g transform="translate(-130, 0)">
+              <rect id="bar-rect-01" x="-45" y="-100" width="90" height="100" rx="8" fill="url(#grad-unmarked)" />
+              <text id="bar-prob-01" x="0" y="-115" text-anchor="middle" fill="#00f2ff" font-size="20px" font-weight="800" font-family="'JetBrains Mono', monospace">25%</text>
+              <text id="bar-amp-01" x="0" y="-70" text-anchor="middle" fill="#fff" font-size="16px" font-family="'JetBrains Mono', monospace">+0.50</text>
+              <text x="0" y="35" text-anchor="middle" fill="#cbd5e1" font-size="22px" font-weight="700" font-family="'JetBrains Mono', monospace">|01⟩</text>
+            </g>
+
+            <!-- Bar 10 -->
+            <g transform="translate(130, 0)">
+              <rect id="bar-rect-10" x="-45" y="-100" width="90" height="100" rx="8" fill="url(#grad-unmarked)" />
+              <text id="bar-prob-10" x="0" y="-115" text-anchor="middle" fill="#00f2ff" font-size="20px" font-weight="800" font-family="'JetBrains Mono', monospace">25%</text>
+              <text id="bar-amp-10" x="0" y="-70" text-anchor="middle" fill="#fff" font-size="16px" font-family="'JetBrains Mono', monospace">+0.50</text>
+              <text x="0" y="35" text-anchor="middle" fill="#cbd5e1" font-size="22px" font-weight="700" font-family="'JetBrains Mono', monospace">|10⟩</text>
+            </g>
+
+            <!-- Bar 11 (Target) -->
+            <g transform="translate(400, 0)">
+              <rect id="bar-rect-11" x="-45" y="-100" width="90" height="100" rx="8" fill="url(#grad-unmarked)" filter="url(#glow-cyan)" />
+              <text id="bar-prob-11" x="0" y="-115" text-anchor="middle" fill="#00f2ff" font-size="20px" font-weight="800" font-family="'JetBrains Mono', monospace">25%</text>
+              <text id="bar-amp-11" x="0" y="-70" text-anchor="middle" fill="#fff" font-size="16px" font-family="'JetBrains Mono', monospace">+0.50</text>
+              <text x="0" y="35" text-anchor="middle" fill="#00ff88" font-size="22px" font-weight="800" font-family="'JetBrains Mono', monospace">|11⟩ ★</text>
+            </g>
+          </g>
+
+          <!-- Group 3: 3D Subspace Compass Dial (Scene 10) -->
+          <g id="actor-compass-stage" transform="translate(800, 440)" style="opacity: 0;">
+            <circle cx="0" cy="0" r="180" fill="rgba(10,20,38,0.7)" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+            <line x1="-200" y1="0" x2="200" y2="0" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+            <text x="215" y="6" fill="#94a3b8" font-size="16px" font-family="'JetBrains Mono', monospace">|s'⟩ (Unmarked)</text>
+            <line x1="0" y1="-200" x2="0" y2="200" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+            <text x="0" y="-220" text-anchor="middle" fill="#00ff88" font-size="18px" font-weight="800" font-family="'JetBrains Mono', monospace">|11⟩ (Target)</text>
+
+            <!-- State Vector Arrow -->
+            <g id="state-vector-arm" transform="rotate(-30)">
+              <line x1="0" y1="0" x2="160" y2="0" stroke="#00f2ff" stroke-width="4" filter="url(#glow-cyan)" />
+              <polygon points="160,-8 180,0 160,8" fill="#00f2ff" />
+              <text x="110" y="-15" fill="#00f2ff" font-size="18px" font-weight="800">|ψ⟩</text>
+            </g>
+            <text id="compass-angle-readout" x="0" y="240" text-anchor="middle" fill="#00f2ff" font-size="22px" font-weight="800" font-family="'JetBrains Mono', monospace">Rotation Angle: 30° → 90° (Aligned!)</text>
+          </g>
+
+          <!-- Group 4: Circuit Architecture (Scene 8 & 13) -->
+          <g id="actor-circuit-diagram" transform="translate(800, 440)" style="opacity: 0;">
+            <!-- Wires -->
+            <line x1="-500" y1="-60" x2="500" y2="-60" stroke="#94a3b8" stroke-width="3" />
+            <text x="-540" y="-55" fill="#cbd5e1" font-size="18px" font-family="'JetBrains Mono', monospace">q[0]</text>
+            <line x1="-500" y1="60" x2="500" y2="60" stroke="#94a3b8" stroke-width="3" />
+            <text x="-540" y="65" fill="#cbd5e1" font-size="18px" font-family="'JetBrains Mono', monospace">q[1]</text>
+
+            <!-- Block 1: Init H -->
+            <g id="circ-block-init" transform="translate(-400, 0)">
+              <rect x="-30" y="-90" width="60" height="60" rx="8" fill="#0f62fe" />
+              <text x="0" y="-53" text-anchor="middle" fill="#fff" font-size="22px" font-weight="700">H</text>
+              <rect x="-30" y="30" width="60" height="60" rx="8" fill="#0f62fe" />
+              <text x="0" y="67" text-anchor="middle" fill="#fff" font-size="22px" font-weight="700">H</text>
+              <text x="0" y="120" text-anchor="middle" fill="#78a9ff" font-size="14px" font-weight="700">Init</text>
+            </g>
+
+            <!-- Block 2: Oracle CZ -->
+            <g id="circ-block-oracle" transform="translate(-200, 0)">
+              <line x1="0" y1="-60" x2="0" y2="60" stroke="#ff0055" stroke-width="3" />
+              <circle cx="0" cy="-60" r="10" fill="#ff0055" />
+              <rect x="-26" y="34" width="52" height="52" rx="8" fill="#ff0055" />
+              <text x="0" y="66" text-anchor="middle" fill="#fff" font-size="20px" font-weight="800">Z</text>
+              <text x="0" y="120" text-anchor="middle" fill="#ff0055" font-size="14px" font-weight="800">Oracle (CZ)</text>
+            </g>
+
+            <!-- Block 3: Diffusion -->
+            <g id="circ-block-diff" transform="translate(100, 0)">
+              <rect x="-140" y="-105" width="280" height="210" rx="12" fill="none" stroke="#ff9900" stroke-width="2" stroke-dasharray="6,4" />
+              <!-- H -->
+              <rect x="-120" y="-85" width="45" height="50" rx="6" fill="#0f62fe" /><text x="-97" y="-53" text-anchor="middle" fill="#fff" font-size="16px">H</text>
+              <rect x="-120" y="35" width="45" height="50" rx="6" fill="#0f62fe" /><text x="-97" y="67" text-anchor="middle" fill="#fff" font-size="16px">H</text>
+              <!-- X -->
+              <rect x="-65" y="-85" width="45" height="50" rx="6" fill="#7928ca" /><text x="-42" y="-53" text-anchor="middle" fill="#fff" font-size="16px">X</text>
+              <rect x="-65" y="35" width="45" height="50" rx="6" fill="#7928ca" /><text x="-42" y="67" text-anchor="middle" fill="#fff" font-size="16px">X</text>
+              <!-- CZ -->
+              <line x1="0" y1="-60" x2="0" y2="60" stroke="#ff9900" stroke-width="3" />
+              <circle cx="0" cy="-60" r="8" fill="#ff9900" />
+              <rect x="-20" y="38" width="40" height="44" rx="6" fill="#ff9900" /><text x="0" y="66" text-anchor="middle" fill="#000" font-size="16px" font-weight="700">Z</text>
+              <!-- X -->
+              <rect x="20" y="-85" width="45" height="50" rx="6" fill="#7928ca" /><text x="42" y="-53" text-anchor="middle" fill="#fff" font-size="16px">X</text>
+              <rect x="20" y="35" width="45" height="50" rx="6" fill="#7928ca" /><text x="42" y="67" text-anchor="middle" fill="#fff" font-size="16px">X</text>
+              <!-- H -->
+              <rect x="75" y="-85" width="45" height="50" rx="6" fill="#0f62fe" /><text x="97" y="-53" text-anchor="middle" fill="#fff" font-size="16px">H</text>
+              <rect x="75" y="35" width="45" height="50" rx="6" fill="#0f62fe" /><text x="97" y="67" text-anchor="middle" fill="#fff" font-size="16px">H</text>
+              <text x="0" y="125" text-anchor="middle" fill="#ff9900" font-size="14px" font-weight="800">Diffusion Operator (U_s)</text>
+            </g>
+
+            <!-- Block 4: Measure -->
+            <g id="circ-block-measure" transform="translate(380, 0)">
+              <rect x="-30" y="-90" width="60" height="60" rx="8" fill="#334155" />
+              <text x="0" y="-53" text-anchor="middle" fill="#38bdf8" font-size="20px" font-weight="800">M</text>
+              <rect x="-30" y="30" width="60" height="60" rx="8" fill="#334155" />
+              <text x="0" y="67" text-anchor="middle" fill="#38bdf8" font-size="20px" font-weight="800">M</text>
+              <text x="0" y="120" text-anchor="middle" fill="#38bdf8" font-size="14px" font-weight="700">Measure</text>
+            </g>
+          </g>
+
+          <!-- Glowing Teacher Cursor Pointer -->
+          <g id="teacher-cursor" transform="translate(200, 200)" style="opacity: 0;">
+            <polygon points="0,0 24,18 14,22 18,32 12,35 8,24 0,28" fill="#00f2ff" filter="url(#glow-cyan)" />
+            <circle cx="2" cy="2" r="6" fill="#fff" />
+          </g>
+        </svg>
+
+        <!-- Subtitles Bar -->
+        <div class="caption-container">
+          <div class="caption-pill">
+            <span class="erwin-badge">🐱 ERWIN</span>
+            <span class="caption-text" id="caption-text">Welcome to Grover's Search Algorithm.</span>
+          </div>
+        </div>
+
+        <!-- Interactive Checkpoint Overlay -->
+        <div class="checkpoint-overlay" id="checkpoint-overlay">
+          <div class="checkpoint-box">
+            <span class="checkpoint-tag">Interactive Checkpoint</span>
+            <div class="checkpoint-question" id="cp-question">Question text</div>
+            <div class="checkpoint-options" id="cp-options"></div>
+            <div class="checkpoint-feedback" id="cp-feedback"></div>
+            <button class="checkpoint-continue-btn" id="cp-continue-btn">Continue Video ▶</button>
+          </div>
+        </div>
+
+        <!-- Phase 5: Theory Completion Transition Screen -->
+        <div class="handoff-card" id="handoff-card">
+          <div class="handoff-box">
+
+            <!-- Progress status row -->
+            <div class="handoff-progress-row">
+              <div class="handoff-check-circle">✓</div>
+              <span class="handoff-progress-label">Theory Complete</span>
+              <div class="handoff-progress-divider"></div>
+              <span class="handoff-next-label">Next: Practical Lab</span>
+            </div>
+
+            <!-- Main message -->
+            <h2 class="handoff-heading" id="handoff-heading">YOU UNDERSTAND THE SEARCH.</h2>
+            <div class="handoff-subheading">NOW BUILD IT.</div>
+
+            <!-- Four learned concepts -->
+            <div class="handoff-concepts">
+              <div class="concept-pill superposition">
+                <span>⬡</span>
+                <span>Superposition</span>
+              </div>
+              <div class="concept-pill oracle">
+                <span>◈</span>
+                <span>Oracle</span>
+              </div>
+              <div class="concept-pill amplification">
+                <span>↑</span>
+                <span>Amplitude Amplification</span>
+              </div>
+              <div class="concept-pill measurement">
+                <span>⊕</span>
+                <span>Measurement</span>
+              </div>
+            </div>
+
+            <!-- Primary CTA -->
+            <button class="handoff-cta-btn" id="handoff-btn" data-testid="handoff-enter-lab-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+              <span>ENTER QUANTUM LAB</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+
+            <!-- Secondary: Return to Academy -->
+            <button class="handoff-back-link" id="handoff-academy-btn" data-testid="handoff-academy-btn">Return to Academy without entering Lab</button>
+
+          </div>
+        </div>
+
+        <!-- Initial Play Overlay -->
+        <div class="play-overlay" id="play-overlay">
+          <div class="big-play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="play-overlay-title">Start Grover Theory Masterclass</div>
+          <div class="play-overlay-sub">16-Scene Interactive Quantum Video · Continuous Audio-Visual Experience</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <!-- Progress Bar Track -->
+      <div class="progress-bar-track" id="progress-track">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+
+      <!-- Controls Row -->
+      <div class="controls-bar">
+        <div class="controls-left">
+          <!-- Rewind 10s -->
+          <button class="btn-ctrl" id="rewind-btn" title="Rewind 10s">◀◀ 10s</button>
+
+          <!-- Play / Pause -->
+          <button class="btn-ctrl play-btn" id="play-btn" title="Play / Pause (Spacebar)">
+            <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+
+          <!-- Forward 10s -->
+          <button class="btn-ctrl" id="forward-btn" title="Skip Forward 10s">10s ▶▶</button>
+
+          <!-- Time Readout -->
+          <div class="time-readout">
+            <span id="time-current">00:00</span> / <span id="time-total">02:40</span>
+          </div>
+
+          <span class="scene-title-badge" id="scene-badge">Scene 1: The Search Problem</span>
+        </div>
+
+        <div class="controls-right">
+          <!-- ElevenLabs Studio -->
+          <button class="btn-ctrl" id="elevenlabs-modal-btn" title="ElevenLabs Voice Studio">⚡ Voice Studio</button>
+          <!-- Voice Audio Toggle -->
+          <button class="btn-ctrl" id="voice-btn" title="Toggle Erwin Voice Narration">🔊 Voice On</button>
+          <!-- Fullscreen -->
+          <button class="btn-ctrl" id="fullscreen-btn" title="Fullscreen (F)">⛶ Fullscreen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ElevenLabs Voice Studio Modal -->
+  <div class="voice-modal-backdrop" id="voice-modal-backdrop" style="display: none;">
+    <div class="voice-modal">
+      <div class="voice-modal-header">
+        <div class="voice-modal-title-group">
+          <div class="voice-modal-icon">⚡</div>
+          <div>
+            <div class="voice-modal-title">ElevenLabs Voice Studio</div>
+            <div class="voice-modal-subtitle">AI-powered neural voice narration for Erwin the Quantum Cat</div>
+          </div>
+        </div>
+        <button class="voice-modal-close" id="voice-modal-close" title="Close">✕</button>
+      </div>
+
+      <div class="voice-modal-body">
+        <div class="voice-status-badge fallback" id="voice-status-badge">
+          <span class="status-dot"></span>
+          <span id="voice-status-text">Web Speech API Fallback Active (Provide API Key below for ultra-realistic Erwin voice)</span>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label for="elevenlabs-api-key-input">ElevenLabs API Key</label>
+            <a href="https://elevenlabs.io" target="_blank" rel="noopener" class="form-key-link">Get API Key ↗</a>
+          </div>
+          <input type="password" id="elevenlabs-api-key-input" placeholder="xi-api-key..." autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label>Speaker Voice</label>
+          <div class="voice-options-grid" id="voice-options-grid"></div>
+        </div>
+
+        <div class="voice-test-row">
+          <button class="btn-ctrl" id="voice-test-btn">▶ Test Erwin Voice</button>
+          <span class="voice-test-feedback" id="voice-test-feedback"></span>
+        </div>
+      </div>
+
+      <div class="voice-modal-footer">
+        <button class="voice-save-btn" id="voice-save-btn">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // ══════════════════════════════════════════════════════════════════════════
+    // GROVER THEORY LESSON ENGINE
+    // ══════════════════════════════════════════════════════════════════════════
+    let lessonData = null;
+    let isPlaying = false;
+    let currentTimeMs = 0;
+    let animFrame = null;
+    let lastTimestamp = null;
+    let voiceEnabled = true;
+    let isCheckpointPaused = false;
+    const TOTAL_DURATION_MS = 160000;
+
+    // DOM Elements
+    const container = document.getElementById('stage-container');
+    const viewport = document.getElementById('stage-viewport');
+    const playOverlay = document.getElementById('play-overlay');
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const rewindBtn = document.getElementById('rewind-btn');
+    const forwardBtn = document.getElementById('forward-btn');
+    const progressTrack = document.getElementById('progress-track');
+    const progressFill = document.getElementById('progress-fill');
+    const timeCurrent = document.getElementById('time-current');
+    const timeTotal = document.getElementById('time-total');
+    const sceneBadge = document.getElementById('scene-badge');
+    const mathDisplay = document.getElementById('math-display');
+    const captionText = document.getElementById('caption-text');
+    const voiceBtn = document.getElementById('voice-btn');
+    const elevenlabsBtn = document.getElementById('elevenlabs-modal-btn');
+    const voiceModalBackdrop = document.getElementById('voice-modal-backdrop');
+    const voiceModalClose = document.getElementById('voice-modal-close');
+    const apiKeyInput = document.getElementById('elevenlabs-api-key-input');
+    const voiceOptionsGrid = document.getElementById('voice-options-grid');
+    const voiceTestBtn = document.getElementById('voice-test-btn');
+    const voiceTestFeedback = document.getElementById('voice-test-feedback');
+    const voiceSaveBtn = document.getElementById('voice-save-btn');
+    const voiceStatusBadge = document.getElementById('voice-status-badge');
+    const voiceStatusText = document.getElementById('voice-status-text');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const exitBtn = document.getElementById('exit-btn');
+    const checkpointOverlay = document.getElementById('checkpoint-overlay');
+    const cpQuestion = document.getElementById('cp-question');
+    const cpOptions = document.getElementById('cp-options');
+    const cpFeedback = document.getElementById('cp-feedback');
+    const cpContinueBtn = document.getElementById('cp-continue-btn');
+    const handoffCard = document.getElementById('handoff-card');
+    const handoffBtn = document.getElementById('handoff-btn');
+    const handoffAcademyBtn = document.getElementById('handoff-academy-btn');
+
+    // SVG Actor Groups
+    const actorClassicalBoxes = document.getElementById('actor-classical-boxes');
+    const actorAmplitudeStage = document.getElementById('actor-amplitude-stage');
+    const actorCompassStage = document.getElementById('actor-compass-stage');
+    const actorCircuitDiagram = document.getElementById('actor-circuit-diagram');
+    const teacherCursor = document.getElementById('teacher-cursor');
+    const meanReferenceGroup = document.getElementById('mean-reference-group');
+
+    // Amplitude Elements
+    const barRect00 = document.getElementById('bar-rect-00');
+    const barRect01 = document.getElementById('bar-rect-01');
+    const barRect10 = document.getElementById('bar-rect-10');
+    const barRect11 = document.getElementById('bar-rect-11');
+    const barProb00 = document.getElementById('bar-prob-00');
+    const barProb01 = document.getElementById('bar-prob-01');
+    const barProb10 = document.getElementById('bar-prob-10');
+    const barProb11 = document.getElementById('bar-prob-11');
+    const barAmp00 = document.getElementById('bar-amp-00');
+    const barAmp01 = document.getElementById('bar-amp-01');
+    const barAmp10 = document.getElementById('bar-amp-10');
+    const barAmp11 = document.getElementById('bar-amp-11');
+    const stateVectorArm = document.getElementById('state-vector-arm');
+
+    // 16:9 Viewport Scaler
+    function updateScale() {
+      if (!container || !viewport) return;
+      const scale = container.clientWidth / 1600;
+      viewport.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', updateScale);
+    updateScale();
+
+    // Particle Background
+    const canvas = document.getElementById('bg-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      canvas.width = 1600; canvas.height = 900;
+      const particles = Array.from({ length: 45 }, () => ({
+        x: Math.random() * 1600, y: Math.random() * 900, r: Math.random() * 2 + 0.5,
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.3 + 0.1, phase: Math.random() * Math.PI * 2
+      }));
+      function drawParticles() {
+        ctx.clearRect(0, 0, 1600, 900);
+        for (const p of particles) {
+          p.x = (p.x + p.vx + 1600) % 1600;
+          p.y = (p.y + p.vy + 900) % 900;
+          p.phase += 0.02;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 242, 255, ${p.alpha + Math.sin(p.phase) * 0.1})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(drawParticles);
+      }
+      requestAnimationFrame(drawParticles);
+    }
+
+    // Time Formatter
+    function formatTime(ms) {
+      const totalSecs = Math.max(0, Math.floor(ms / 1000));
+      const mins = Math.floor(totalSecs / 60);
+      const secs = totalSecs % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // ELEVENLABS NEURAL TTS & VOICE ENGINE
+    // ══════════════════════════════════════════════════════════════════════════
+    const ELEVENLABS_VOICES = [
+      { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam', desc: 'Erwin (Deep & Clear)', isErwin: true },
+      { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel', desc: 'Calm & Professional' },
+      { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni', desc: 'Dynamic & Expressive' },
+      { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella', desc: 'Engaging & Vibrant' }
+    ];
+
+    let currentAudio = null;
+    const audioCache = new Map();
+    let currentSpeechText = '';
+    let selectedVoiceId = localStorage.getItem('qualution_elevenlabs_voice_id') || 'pNInz6obpgDQGcFmaJgB';
+
+    function getApiKey() {
+      const stored = localStorage.getItem('qualution_elevenlabs_api_key');
+      if (stored && stored.trim()) return stored.trim();
+      if (window.ELEVENLABS_API_KEY && String(window.ELEVENLABS_API_KEY).trim()) {
+        return String(window.ELEVENLABS_API_KEY).trim();
+      }
+      return null;
+    }
+
+    function updateElevenLabsUI() {
+      const key = getApiKey();
+      if (key) {
+        if (voiceStatusBadge) voiceStatusBadge.className = 'voice-status-badge connected';
+        if (voiceStatusText) voiceStatusText.textContent = 'ElevenLabs Neural Speech Connected (eleven_turbo_v2_5)';
+        if (elevenlabsBtn) {
+          elevenlabsBtn.innerHTML = '⚡ ElevenLabs';
+          elevenlabsBtn.classList.add('active-key');
+        }
+      } else {
+        if (voiceStatusBadge) voiceStatusBadge.className = 'voice-status-badge fallback';
+        if (voiceStatusText) voiceStatusText.textContent = 'Web Speech API Fallback Active (Provide API Key below for ultra-realistic Erwin voice)';
+        if (elevenlabsBtn) {
+          elevenlabsBtn.innerHTML = '⚡ Voice Studio';
+          elevenlabsBtn.classList.remove('active-key');
+        }
+      }
+
+      if (apiKeyInput) {
+        apiKeyInput.value = key || '';
+      }
+
+      if (voiceOptionsGrid) {
+        voiceOptionsGrid.innerHTML = '';
+        ELEVENLABS_VOICES.forEach(v => {
+          const card = document.createElement('div');
+          card.className = `voice-option-card ${selectedVoiceId === v.id ? 'selected' : ''}`;
+          card.innerHTML = `
+            <div class="voice-option-top">
+              <span>${v.name}</span>
+              ${v.isErwin ? '<span class="tag">Erwin</span>' : ''}
+            </div>
+            <span class="voice-option-desc">${v.desc}</span>
+          `;
+          card.onclick = () => {
+            selectedVoiceId = v.id;
+            updateElevenLabsUI();
+          };
+          voiceOptionsGrid.appendChild(card);
+        });
+      }
+    }
+
+    function stopAllAudio() {
+      if (currentAudio) {
+        try {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+        } catch (_) {}
+        currentAudio = null;
+      }
+      if (window.speechSynthesis) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch (_) {}
+      }
+    }
+
+    function pauseAllAudio() {
+      if (currentAudio) {
+        try { currentAudio.pause(); } catch (_) {}
+      }
+      if (window.speechSynthesis) {
+        try { window.speechSynthesis.pause(); } catch (_) {}
+      }
+    }
+
+    function resumeAllAudio() {
+      if (!voiceEnabled) return;
+      if (currentAudio && currentAudio.paused) {
+        currentAudio.play().catch(() => {});
+      } else if (window.speechSynthesis && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      } else {
+        triggerCurrentSceneNarration(true);
+      }
+    }
+
+    async function speakNarration(text, force = false) {
+      if (!voiceEnabled || !text) return;
+      if (!force && currentSpeechText === text && ((currentAudio && !currentAudio.paused) || (window.speechSynthesis && window.speechSynthesis.speaking))) {
+        return;
+      }
+      currentSpeechText = text;
+      stopAllAudio();
+
+      const cleanText = text.replace(/[{}]/g, '').trim();
+      const apiKey = getApiKey();
+
+      if (apiKey) {
+        try {
+          const voiceId = selectedVoiceId;
+          const cacheKey = `${voiceId}:${cleanText}`;
+          let audioUrl = audioCache.get(cacheKey);
+
+          if (!audioUrl) {
+            const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+              method: 'POST',
+              headers: {
+                'xi-api-key': apiKey,
+                'Content-Type': 'application/json',
+                'Accept': 'audio/mpeg'
+              },
+              body: JSON.stringify({
+                text: cleanText,
+                model_id: 'eleven_turbo_v2_5',
+                voice_settings: {
+                  stability: 0.5,
+                  similarity_boost: 0.75
+                }
+              })
+            });
+
+            if (!res.ok) {
+              console.warn(`[ElevenLabs] API status ${res.status}. Falling back to browser speech synthesis.`);
+              speakBrowserFallback(cleanText);
+              return;
+            }
+
+            const blob = await res.blob();
+            audioUrl = URL.createObjectURL(blob);
+            audioCache.set(cacheKey, audioUrl);
+          }
+
+          const audio = new Audio(audioUrl);
+          currentAudio = audio;
+          audio.onended = () => {
+            if (currentAudio === audio) currentAudio = null;
+          };
+          audio.onerror = () => {
+            speakBrowserFallback(cleanText);
+          };
+          await audio.play();
+          return;
+        } catch (err) {
+          console.warn('[ElevenLabs] Fetch failed, falling back to browser speech:', err);
+          speakBrowserFallback(cleanText);
+          return;
+        }
+      }
+
+      speakBrowserFallback(cleanText);
+    }
+
+    function speakBrowserFallback(cleanText) {
+      if (!voiceEnabled || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        utter.rate = 1.0;
+        utter.pitch = 1.0;
+        utter.lang = 'en-US';
+
+        const voices = window.speechSynthesis.getVoices();
+        if (voices && voices.length > 0) {
+          const naturalVoice = voices.find(v =>
+            (v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Daniel') || v.name.includes('Aria') || v.name.includes('Guy'))) ||
+            (v.lang.startsWith('en-US') && !v.name.includes('Zira') && !v.name.includes('David'))
+          ) || voices.find(v => v.lang.startsWith('en'));
+          if (naturalVoice) utter.voice = naturalVoice;
+        }
+
+        window.speechSynthesis.speak(utter);
+      } catch (err) {
+        console.warn('[BrowserSpeech] Utterance failed:', err);
+      }
+    }
+
+    function triggerCurrentSceneNarration(force = false) {
+      if (!lessonData || !lessonData.scenes) return;
+      const sceneIndex = Math.min(15, Math.floor(currentTimeMs / 10000));
+      const scene = lessonData.scenes[sceneIndex] || lessonData.scenes[0];
+      if (scene && scene.narration) {
+        speakNarration(scene.narration, force);
+      }
+    }
+
+    // Initialize Voice Studio UI & Modal listeners
+    updateElevenLabsUI();
+    if (elevenlabsBtn) {
+      elevenlabsBtn.onclick = () => {
+        updateElevenLabsUI();
+        voiceModalBackdrop.style.display = 'flex';
+      };
+    }
+    if (voiceModalClose) {
+      voiceModalClose.onclick = () => {
+        voiceModalBackdrop.style.display = 'none';
+      };
+    }
+    if (voiceModalBackdrop) {
+      voiceModalBackdrop.onclick = (e) => {
+        if (e.target === voiceModalBackdrop) {
+          voiceModalBackdrop.style.display = 'none';
+        }
+      };
+    }
+    if (voiceSaveBtn) {
+      voiceSaveBtn.onclick = () => {
+        const val = apiKeyInput ? apiKeyInput.value.trim() : '';
+        if (val) {
+          localStorage.setItem('qualution_elevenlabs_api_key', val);
+        } else {
+          localStorage.removeItem('qualution_elevenlabs_api_key');
+        }
+        localStorage.setItem('qualution_elevenlabs_voice_id', selectedVoiceId);
+        updateElevenLabsUI();
+        voiceSaveBtn.textContent = '✓ Saved!';
+        setTimeout(() => {
+          voiceSaveBtn.textContent = 'Save Configuration';
+          voiceModalBackdrop.style.display = 'none';
+        }, 600);
+      };
+    }
+    if (voiceTestBtn) {
+      voiceTestBtn.onclick = async () => {
+        voiceTestBtn.disabled = true;
+        voiceTestFeedback.textContent = 'Synthesizing voice...';
+        const val = apiKeyInput ? apiKeyInput.value.trim() : '';
+        if (val) {
+          localStorage.setItem('qualution_elevenlabs_api_key', val);
+        }
+        localStorage.setItem('qualution_elevenlabs_voice_id', selectedVoiceId);
+        try {
+          await speakNarration("Welcome to Grover's Algorithm. I am Erwin, your quantum mentor. Let's shape quantum interference.", true);
+          voiceTestFeedback.textContent = 'Playing test audio.';
+        } catch (e) {
+          voiceTestFeedback.textContent = 'Playback error: check API key.';
+        } finally {
+          voiceTestBtn.disabled = false;
+        }
+      };
+    }
+
+    // Load Lesson JSON
+    async function loadLesson() {
+      try {
+        const res = await fetch('/data/grover-lesson.json');
+        lessonData = await res.json();
+      } catch {
+        lessonData = {
+          duration_ms: TOTAL_DURATION_MS,
+          scenes: []
+        };
+      }
+      renderScene(0);
+    }
+    loadLesson();
+
+    // Scene Renderer based on Millisecond Timeline
+    let lastRenderedSceneIdx = -1;
+    function renderScene(ms) {
+      if (!lessonData || !lessonData.scenes) return;
+      const sceneIndex = Math.min(15, Math.floor(ms / 10000));
+      const scene = lessonData.scenes[sceneIndex] || lessonData.scenes[0];
+
+      sceneBadge.textContent = `Scene ${sceneIndex + 1}: ${scene.title}`;
+      if (mathDisplay && scene.katex && window.katex) {
+        katex.render(scene.katex, mathDisplay, { displayMode: true, throwOnError: false });
+      }
+
+      // Highlighted Subtitle
+      if (captionText) {
+        let txt = scene.narration;
+        for (const hw of scene.highlight_words || []) {
+          txt = txt.replace(new RegExp(`(${hw})`, 'gi'), '<span class="hl">$1</span>');
+        }
+        captionText.innerHTML = txt;
+      }
+
+      if (isPlaying && sceneIndex !== lastRenderedSceneIdx) {
+        speakNarration(scene.narration);
+        lastRenderedSceneIdx = sceneIndex;
+      }
+
+      // Hide all main actor groups
+      actorClassicalBoxes.style.opacity = '0';
+      actorAmplitudeStage.style.opacity = '0';
+      actorCompassStage.style.opacity = '0';
+      actorCircuitDiagram.style.opacity = '0';
+      teacherCursor.style.opacity = '0';
+      meanReferenceGroup.style.opacity = '0';
+      handoffCard.classList.remove('active');
+
+      // Checkpoint trigger
+      if (sceneIndex === 4 && ms >= 40500 && ms < 49500 && !isCheckpointPaused && !scene.checkpointShown) {
+        scene.checkpointShown = true;
+        showCheckpoint(scene.visual.params);
+      } else if (sceneIndex === 13 && ms >= 130500 && ms < 139500 && !isCheckpointPaused && !scene.checkpointShown) {
+        scene.checkpointShown = true;
+        showCheckpoint(scene.visual.params);
+      }
+
+      // Visual Graph Switching
+      if (sceneIndex === 0 || sceneIndex === 1) {
+        actorClassicalBoxes.style.opacity = '1';
+      } else if (sceneIndex === 2 || sceneIndex === 3 || sceneIndex === 4) {
+        actorAmplitudeStage.style.opacity = '1';
+        setAmplitudes(0.5, 0.5, 0.5, 0.5);
+      } else if (sceneIndex === 5 || sceneIndex === 6) {
+        actorAmplitudeStage.style.opacity = '1';
+        setAmplitudes(0.5, 0.5, 0.5, -0.5); // Target inverted
+      } else if (sceneIndex === 7) {
+        actorCircuitDiagram.style.opacity = '1';
+      } else if (sceneIndex === 8) {
+        actorAmplitudeStage.style.opacity = '1';
+        meanReferenceGroup.style.opacity = '1';
+        setAmplitudes(0.0, 0.0, 0.0, 1.0); // Boosted
+      } else if (sceneIndex === 9) {
+        actorCompassStage.style.opacity = '1';
+        stateVectorArm.setAttribute('transform', 'rotate(-90)');
+      } else if (sceneIndex === 10) {
+        actorAmplitudeStage.style.opacity = '1';
+        setAmplitudes(0.0, 0.0, 0.0, 1.0);
+      } else if (sceneIndex === 11) {
+        actorClassicalBoxes.style.opacity = '1';
+      } else if (sceneIndex === 12) {
+        actorCircuitDiagram.style.opacity = '1';
+        teacherCursor.style.opacity = '1';
+      } else if (sceneIndex === 13) {
+        actorAmplitudeStage.style.opacity = '1';
+        setAmplitudes(0.0, 0.0, 0.0, 1.0);
+      } else if (sceneIndex === 14) {
+        actorAmplitudeStage.style.opacity = '1';
+        setAmplitudes(0.0, 0.0, 0.0, 1.0);
+      } else if (sceneIndex === 15) {
+        handoffCard.classList.add('active');
+      }
+
+      // Update progress bar
+      const pct = (ms / TOTAL_DURATION_MS) * 100;
+      progressFill.style.width = `${pct}%`;
+      timeCurrent.textContent = formatTime(ms);
+    }
+
+    function setAmplitudes(a0, a1, a2, a3) {
+      updateBar(barRect00, barProb00, barAmp00, a0, false);
+      updateBar(barRect01, barProb01, barAmp01, a1, false);
+      updateBar(barRect10, barProb10, barAmp10, a2, false);
+      updateBar(barRect11, barProb11, barAmp11, a3, true);
+    }
+
+    function updateBar(rect, prob, amp, val, isTarget) {
+      const h = Math.abs(val) * 200;
+      const isNeg = val < 0;
+      rect.setAttribute('height', h);
+      rect.setAttribute('y', isNeg ? 0 : -h);
+      rect.setAttribute('fill', isNeg ? 'url(#grad-neg)' : (isTarget && val > 0.8 ? 'url(#grad-target)' : 'url(#grad-unmarked)'));
+      prob.textContent = `${Math.round(val * val * 100)}%`;
+      prob.setAttribute('y', isNeg ? h + 24 : -h - 15);
+      amp.textContent = (val >= 0 ? '+' : '') + val.toFixed(2);
+      amp.setAttribute('y', isNeg ? h / 2 + 6 : -h / 2 + 6);
+    }
+
+    // Checkpoint Handler
+    function showCheckpoint(params) {
+      isCheckpointPaused = true;
+      pauseVideo();
+      checkpointOverlay.classList.add('active');
+      cpQuestion.textContent = params.question;
+      cpOptions.innerHTML = '';
+      cpFeedback.style.display = 'none';
+      cpContinueBtn.style.display = 'none';
+
+      params.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'checkpoint-opt-btn';
+        btn.textContent = opt.text;
+        btn.onclick = () => {
+          if (opt.isCorrect) {
+            btn.classList.add('correct');
+            cpFeedback.style.display = 'block';
+            cpFeedback.innerHTML = `✓ ${params.explanation}`;
+            cpContinueBtn.style.display = 'block';
+          } else {
+            btn.classList.add('wrong');
+            cpFeedback.style.display = 'block';
+            cpFeedback.innerHTML = '✗ Not quite. Think about how probabilities sum across the register. Try again!';
+          }
+        };
+        cpOptions.appendChild(btn);
+      });
+    }
+
+    cpContinueBtn.onclick = () => {
+      checkpointOverlay.classList.remove('active');
+      isCheckpointPaused = false;
+      playVideo();
+    };
+
+    // Playback Loop
+    function playbackLoop(timestamp) {
+      if (!isPlaying || isCheckpointPaused) return;
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const delta = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+
+      currentTimeMs += delta;
+      if (currentTimeMs >= TOTAL_DURATION_MS) {
+        currentTimeMs = TOTAL_DURATION_MS;
+        pauseVideo();
+        renderScene(TOTAL_DURATION_MS);
+        return;
+      }
+
+      renderScene(currentTimeMs);
+      animFrame = requestAnimationFrame(playbackLoop);
+    }
+
+    function playVideo() {
+      if (isPlaying) return;
+      if (currentTimeMs >= TOTAL_DURATION_MS) currentTimeMs = 0;
+      isPlaying = true;
+      lastTimestamp = null;
+      playOverlay.classList.add('hidden');
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+      resumeAllAudio();
+      animFrame = requestAnimationFrame(playbackLoop);
+    }
+
+    function pauseVideo() {
+      if (!isPlaying) return;
+      isPlaying = false;
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      if (animFrame) {
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+      }
+      pauseAllAudio();
+    }
+
+    function seekTo(targetMs) {
+      currentTimeMs = Math.max(0, Math.min(targetMs, TOTAL_DURATION_MS));
+      renderScene(currentTimeMs);
+      if (isPlaying) {
+        triggerCurrentSceneNarration(true);
+      } else {
+        stopAllAudio();
+      }
+    }
+
+    // Scrubber click
+    progressTrack.onclick = (e) => {
+      const rect = progressTrack.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      seekTo(ratio * TOTAL_DURATION_MS);
+    };
+
+    playBtn.onclick = () => isPlaying ? pauseVideo() : playVideo();
+    playOverlay.onclick = playVideo;
+    rewindBtn.onclick = () => seekTo(currentTimeMs - 10000);
+    forwardBtn.onclick = () => seekTo(currentTimeMs + 10000);
+
+    voiceBtn.onclick = () => {
+      voiceEnabled = !voiceEnabled;
+      voiceBtn.textContent = voiceEnabled ? '🔊 Voice On' : '🔇 Voice Muted';
+      if (!voiceEnabled) {
+        stopAllAudio();
+      } else if (isPlaying) {
+        triggerCurrentSceneNarration(true);
+      }
+    };
+
+    fullscreenBtn.onclick = () => {
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        isPlaying ? pauseVideo() : playVideo();
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        seekTo(currentTimeMs - 10000);
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        seekTo(currentTimeMs + 10000);
+      } else if (e.code === 'KeyF') {
+        e.preventDefault();
+        fullscreenBtn.click();
+      }
+    });
+
+    // Exit & Lab Handoff
+    function launchWorkbench() {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'LAUNCH_PRACTICAL_LAB', lessonId: 'lesson-8-grovers-search' }, '*');
+      }
+      window.location.href = '/?assessment=lesson-8-grovers-search';
+    }
+
+    exitBtn.onclick = () => {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'EXIT_LESSON' }, '*');
+      }
+      window.location.href = '/?view=learn';
+    };
+
+    handoffBtn.onclick = launchWorkbench;
+    if (handoffAcademyBtn) {
+      handoffAcademyBtn.onclick = () => {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'EXIT_LESSON' }, '*');
+        }
+        window.location.href = '/?view=learn';
+      };
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+qiskit
+qiskit-aer
+pennylane
+cirq
+qbraid
+numpy
+pytest
+httpx

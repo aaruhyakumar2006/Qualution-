@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1600, height=900" />
+  <title>Scene 01 — Hook: What is a Bit?</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1600px;
+      height: 900px;
+      overflow: hidden;
+      background: #040914;
+      background-image: radial-gradient(ellipse 90% 60% at 50% 25%, #07152b 0%, #040914 65%, #020408 100%);
+      color: #f8fafc;
+      font-family: 'Inter', system-ui, sans-serif;
+      position: relative;
+    }
+    .bg-canvas { position: absolute; inset: 0; width: 1600px; height: 900px; pointer-events: none; z-index: 0; }
+    .stage-svg { position: absolute; inset: 0; width: 1600px; height: 900px; z-index: 1; overflow: visible; }
+    .caption-bar {
+      position: absolute;
+      bottom: 54px;
+      left: 140px;
+      right: 140px;
+      text-align: center;
+      font-size: 28px;
+      line-height: 1.6;
+      color: #94a3b8;
+      z-index: 3;
+    }
+    .hl-term {
+      color: #f8fafc;
+      font-weight: 700;
+      display: inline-block;
+      transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
+    }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "animejs": "/node_modules/animejs/dist/modules/index.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas class="bg-canvas" id="bg-canvas"></canvas>
+
+  <svg class="stage-svg" viewBox="0 0 1600 900">
+    <g transform="translate(800, 380)">
+      <g id="actor-classical">
+        <rect id="bit-glow-0" x="-68" y="-68" width="136" height="136" rx="26" fill="none" stroke="rgba(56,189,248,0.25)" stroke-width="2" opacity="0.4" />
+        <rect id="bit-rect-0" x="-60" y="-60" width="120" height="120" rx="20" fill="#0f1e35" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+        <text id="bit-text-0" x="0" y="10" text-anchor="middle" dominant-baseline="middle" fill="#38bdf8" font-size="52px" font-family="'JetBrains Mono', monospace" font-weight="700">0</text>
+        <text id="bit-sub-0" x="0" y="85" text-anchor="middle" fill="#475569" font-size="16px" font-family="'Inter', sans-serif">bit[0]</text>
+      </g>
+    </g>
+  </svg>
+
+  <div class="caption-bar" id="caption">
+    Every computer you have ever used speaks in <span class="hl-term" id="hl-bits">bits</span>. A bit is the simplest possible <span class="hl-term" id="hl-switch">switch</span> — it is either zero or one. Nothing else.
+  </div>
+
+  <script type="module">
+    import { createTimeline } from 'animejs';
+
+    // Particle Drift
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 1600; canvas.height = 900;
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * 1600, y: Math.random() * 900, r: Math.random() * 1.8 + 0.6,
+      vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+      color: Math.random() > 0.4 ? 'rgba(56,189,248,' : 'rgba(167,139,250,',
+      alpha: Math.random() * 0.35 + 0.15, phase: Math.random() * Math.PI * 2, speed: 0.015
+    }));
+    function draw() {
+      ctx.clearRect(0, 0, 1600, 900);
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = 1600; if (p.x > 1600) p.x = 0;
+        if (p.y < 0) p.y = 900; if (p.y > 900) p.y = 0;
+        p.phase += p.speed;
+        const a = p.alpha + Math.sin(p.phase) * 0.1;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color}${Math.max(0.05, a)})`; ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+
+    // Scene Timeline
+    const tl = createTimeline({ autoplay: true });
+    window.__sceneTimeline = tl;
+
+    // Entrance
+    tl.add('#caption', { opacity: [0, 1], translateY: [20, 0], duration: 900, ease: 'outQuart' }, 200);
+    tl.add('#actor-classical', { scale: [0.88, 1], opacity: [0, 1], duration: 900, ease: 'outQuart' }, 200);
+
+    // Highlight pulses
+    tl.add('#hl-bits', { color: [{ to: '#38bdf8' }, { to: '#f8fafc' }], scale: [1, 1.15, 1], duration: 1100, ease: 'inOutQuint' }, 6000);
+    tl.add('#hl-switch', { color: [{ to: '#38bdf8' }, { to: '#f8fafc' }], scale: [1, 1.15, 1], duration: 1100, ease: 'inOutQuint' }, 16500);
+
+    // Bit flip at 18000ms
+    tl.add('#bit-rect-0', { fill: '#38bdf8', scale: [1, 1.18, 1], duration: 520, ease: 'outBack(1.4)' }, 18000);
+    tl.add('#bit-glow-0', { stroke: 'rgba(56,189,248,0.7)', opacity: [0.4, 0.9, 0.6], duration: 520 }, 18000);
+    tl.add('#bit-text-0', {
+      opacity: [1, 0], duration: 100,
+      onComplete: () => {
+        const el = document.getElementById('bit-text-0');
+        if (el) { el.textContent = '1'; el.style.fill = '#040914'; }
+      }
+    }, 18080);
+    tl.add('#bit-text-0', { opacity: [0, 1], duration: 180 }, 18180);
+  </script>
+</body>
+</html>

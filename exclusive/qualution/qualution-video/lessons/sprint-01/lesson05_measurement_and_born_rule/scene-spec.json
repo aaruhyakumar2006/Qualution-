@@ -1,0 +1,603 @@
+{
+  "$schema": "../scene-schema.md",
+  "lessonId": "s1-theory-measurement-probability",
+  "lessonTitle": "Measurement & Born's Rule",
+  "sprintId": "sprint-01",
+  "targetDurationSeconds": 205,
+  "fps": 30,
+  "totalFrames": 6150,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "aspectRatio": "16:9",
+  "learningObjectives": [
+    "Explain the non-deterministic nature of quantum measurement.",
+    "Formulate and compute probabilities using Born's Rule: P(x) = |\u27e8x|\u03c8\u27e9|\u00b2.",
+    "Understand wavefunction collapse and projection onto eigenstates.",
+    "Distinguish irreversible measurement from reversible unitary operations.",
+    "Analyze the connection between repeated circuit shots and theoretical distributions."
+  ],
+  "curriculumBoundaries": {
+    "topicsCovered": [
+      "The Measurement Postulate of quantum mechanics",
+      "Max Born's 1926 probability interpretation (Born's Rule)",
+      "Calculation: P(0) = |\u03b1|\u00b2, P(1) = |\u03b2|\u00b2",
+      "Wavefunction collapse (state projection)",
+      "Irreversibility of measurement and loss of quantum phase",
+      "Empirical histograms vs analytical probabilities (shots)"
+    ],
+    "topicsDeferred": [
+      "Complex phase interference effects before measurement (Lesson 7)",
+      "Generalized POVM measurements (Sprint 3)",
+      "Entanglement-induced subsystem collapse (Sprint 2)"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "title": "The Measurement Enigma",
+      "durationSeconds": 20,
+      "startFrame": 1,
+      "endFrame": 600,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In classical physics, observing an object does not change its state. But in quantum mechanics, the very act of observation irreversibly changes what is being observed. This is the quantum measurement problem.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Classical observation is passive and non-invasive.",
+          "startFrame": 1,
+          "endFrame": 270
+        },
+        {
+          "text": "In quantum mechanics, measurement irreversibly transforms the state.",
+          "startFrame": 271,
+          "endFrame": 600
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_head",
+          "text": "LESSON 5: MEASUREMENT & BORN'S RULE",
+          "role": "header",
+          "position": [
+            -6.0,
+            3.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_sub",
+          "text": "The Irreversible Collapse of Quantum Superposition",
+          "role": "subheader",
+          "position": [
+            -6.0,
+            3.2,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_1_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_1_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_1_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce the foundational paradox of quantum observation and wavefunction collapse.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-02",
+      "title": "Max Born and the Probability Rule",
+      "durationSeconds": 25,
+      "startFrame": 601,
+      "endFrame": 1350,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "In 1926, physicist Max Born discovered how mathematical wavefunctions translate into physical experimental reality. He postulated that the probability of measuring an outcome is the absolute square of its amplitude.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "In 1926, Max Born formulated the quantum probability postulate.",
+          "startFrame": 601,
+          "endFrame": 960
+        },
+        {
+          "text": "The probability of an outcome equals the absolute square of its amplitude.",
+          "startFrame": 961,
+          "endFrame": 1350
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_born_title",
+          "text": "Born's Rule (1926 Nobel Prize Formulation)",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_born_eq",
+          "text": "P(x) = |\u27e8x|\u03c8\u27e9|\u00b2",
+          "role": "formula",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_2_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_2_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_2_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 601,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Introduce Born's Rule mathematically and historically.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-03",
+      "title": "Calculating Probabilities for a Single Qubit",
+      "durationSeconds": 30,
+      "startFrame": 1351,
+      "endFrame": 2250,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "For a single qubit state |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9, the probability of measuring zero is P(0) = |\u03b1|\u00b2, and the probability of measuring one is P(1) = |\u03b2|\u00b2. Because the probabilities must sum to 1, |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Probability of outcome 0: P(0) = |\u03b1|\u00b2.",
+          "startFrame": 1351,
+          "endFrame": 1770
+        },
+        {
+          "text": "Probability of outcome 1: P(1) = |\u03b2|\u00b2 where |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.",
+          "startFrame": 1771,
+          "endFrame": 2250
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_p0",
+          "text": "P(0) = |\u03b1|\u00b2 = |\u27e80|\u03c8\u27e9|\u00b2",
+          "role": "formula",
+          "position": [
+            -3.5,
+            0.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_p1",
+          "text": "P(1) = |\u03b2|\u00b2 = |\u27e81|\u03c8\u27e9|\u00b2",
+          "role": "formula",
+          "position": [
+            3.5,
+            0.8,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_total_p",
+          "text": "P(0) + P(1) = |\u03b1|\u00b2 + |\u03b2|\u00b2 = 1.0",
+          "role": "subheader",
+          "position": [
+            0.0,
+            -1.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_3_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_3_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_3_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 1351,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Provide concrete mathematical derivation of single-qubit measurement probabilities.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-04",
+      "title": "Wavefunction Collapse in Real Time",
+      "durationSeconds": 30,
+      "startFrame": 2251,
+      "endFrame": 3150,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Before measurement, the qubit held infinite continuous possibilities. But the moment a measurement occurs, the state vector instantaneously collapses onto the observed eigenstate: either strictly |0\u27e9 or strictly |1\u27e9.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Before measurement: coherent superposition \u03b1|0\u27e9 + \u03b2|1\u27e9.",
+          "startFrame": 2251,
+          "endFrame": 2670
+        },
+        {
+          "text": "After measurement: state collapses completely to |0\u27e9 or |1\u27e9.",
+          "startFrame": 2671,
+          "endFrame": 3150
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_before",
+          "text": "Before: |\u03c8\u27e9 = \u03b1|0\u27e9 + \u03b2|1\u27e9",
+          "role": "body",
+          "position": [
+            -4.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_arrow",
+          "text": "\u2500\u2500\u2500[ MEASURE ]\u2500\u2500\u2500>",
+          "role": "header",
+          "position": [
+            0.0,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_after",
+          "text": "After: |0\u27e9  OR  |1\u27e9",
+          "role": "body",
+          "position": [
+            4.0,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_4_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_4_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_4_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 2251,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Illustrate state vector projection and wavefunction collapse dynamically.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-05",
+      "title": "Irreversibility: The Loss of Phase",
+      "durationSeconds": 30,
+      "startFrame": 3151,
+      "endFrame": 4050,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Notice an essential fact: quantum gates are reversible unitaries, but measurement is strictly irreversible. Once collapsed, all information about the relative phase angle \u03b8 is permanently destroyed.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Quantum gates are reversible unitary operations: U\u2020U = I.",
+          "startFrame": 3151,
+          "endFrame": 3570
+        },
+        {
+          "text": "Measurement is irreversible projection: relative phase information is lost.",
+          "startFrame": 3571,
+          "endFrame": 4050
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_rev",
+          "text": "Quantum Gates = Reversible Unitaries",
+          "role": "body",
+          "position": [
+            -3.5,
+            0.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_irrev",
+          "text": "Measurement = Irreversible Projection",
+          "role": "body",
+          "position": [
+            3.5,
+            0.5,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_5_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_5_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_5_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 3151,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Differentiate unitary reversible quantum evolution from non-unitary measurement.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-06",
+      "title": "Shots and Empirical Sampling",
+      "durationSeconds": 35,
+      "startFrame": 4051,
+      "endFrame": 5100,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "Because a single measurement returns only one bit, quantum computers execute circuits over many repetitions called shots. Running 1,000 shots on an equal superposition yields approximately 500 zeros and 500 ones.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Quantum programs are executed across multiple repeated 'shots'.",
+          "startFrame": 4051,
+          "endFrame": 4530
+        },
+        {
+          "text": "By accumulating shot histograms, we reconstruct theoretical probability distributions.",
+          "startFrame": 4531,
+          "endFrame": 5100
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_shots",
+          "text": "Empirical Sampling via Circuit Shots",
+          "role": "header",
+          "position": [
+            0.0,
+            2.5,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_hist",
+          "text": "1,000 Shots on |+\u27e9: ~500 |0\u27e9, ~500 |1\u27e9",
+          "role": "subheader",
+          "position": [
+            0.0,
+            0.0,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_6_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_6_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_6_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 4051,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Connect single-shot measurement collapse to experimental quantum hardware execution.",
+      "transitionOut": "smooth_crossfade"
+    },
+    {
+      "id": "scene-07",
+      "title": "Summary & Practical Connection",
+      "durationSeconds": 35,
+      "startFrame": 5101,
+      "endFrame": 6150,
+      "narration": {
+        "speaker": "QUALUTION Narrator",
+        "text": "To conclude: Born's Rule dictates that P(x) = |\u27e8x|\u03c8\u27e9|\u00b2. Measurement collapses superposition into classical reality, producing empirical counts. Next in Lesson 6, we examine the inner structure of complex probability amplitudes.",
+        "tone": "Authoritative, pedagogically clear, engaging",
+        "pacingWpm": 130
+      },
+      "captions": [
+        {
+          "text": "Summary: P(x) = |\u27e8x|\u03c8\u27e9|\u00b2 governs outcome likelihoods upon collapse.",
+          "startFrame": 5101,
+          "endFrame": 5550
+        },
+        {
+          "text": "Next: Lesson 6 \u2014 Complex Probability Amplitudes & Geometry.",
+          "startFrame": 5551,
+          "endFrame": 6150
+        }
+      ],
+      "onScreenText": [
+        {
+          "id": "txt_sum_title",
+          "text": "LESSON 5 SUMMARY",
+          "role": "header",
+          "position": [
+            0.0,
+            3.0,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_k1",
+          "text": "1. Born's Rule: P(0) = |\u03b1|\u00b2, P(1) = |\u03b2|\u00b2",
+          "role": "body",
+          "position": [
+            0.0,
+            1.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_k2",
+          "text": "2. Wavefunction Collapse: State projects onto observed basis state",
+          "role": "body",
+          "position": [
+            0.0,
+            0.2,
+            0.1
+          ]
+        },
+        {
+          "id": "txt_k3",
+          "text": "3. Shots: Accumulate measurement samples to reveal probabilities",
+          "role": "body",
+          "position": [
+            0.0,
+            -0.8,
+            0.1
+          ]
+        }
+      ],
+      "visualElements": [
+        {
+          "id": "vis_7_bg",
+          "type": "background_plate",
+          "source": "assets/backgrounds/deep_space_grid.png",
+          "layer": "background"
+        },
+        {
+          "id": "vis_7_stage",
+          "type": "vector_diagram",
+          "source": "procedural_blender_object",
+          "layer": "primary"
+        }
+      ],
+      "animationActions": [
+        {
+          "target": "vis_7_stage",
+          "action": "fade_in_and_settle",
+          "startFrame": 5101,
+          "durationFrames": 30
+        }
+      ],
+      "assetsRequired": [
+        "deep_space_grid.png",
+        "ibm_quantum_palette.blend"
+      ],
+      "educationalPurpose": "Summarize key principles and bridge forward to probability amplitudes.",
+      "transitionOut": "fade_to_black"
+    }
+  ]
+}

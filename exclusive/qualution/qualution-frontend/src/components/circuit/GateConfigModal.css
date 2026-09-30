@@ -1,0 +1,104 @@
+.gate-config-dialog {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  width: 320px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.gate-config-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.gate-config-section:last-child {
+  margin-bottom: 0;
+}
+
+.gate-config-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.angle-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.angle-input {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.angle-presets {
+  display: flex;
+  gap: 8px;
+}
+
+.angle-presets button {
+  flex: 1;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.angle-presets button:hover {
+  background-color: var(--accent-purple);
+  border-color: var(--accent-purple);
+  color: #fff;
+}
+
+.qubit-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.qubit-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.qubit-option-btn:hover {
+  border-color: var(--accent-purple);
+  background-color: var(--bg-tertiary);
+}
+
+.qubit-option-btn.active {
+  border-color: var(--accent-purple);
+  background-color: rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+}
+
+.qubit-option-btn.active-target {
+  border-color: #ff8389;
+  background-color: rgba(255, 131, 137, 0.15);
+  box-shadow: 0 0 12px rgba(255, 131, 137, 0.3);
+}
