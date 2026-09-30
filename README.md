@@ -1,4 +1,6 @@
 <div align="center">
+<img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/303d62ca-144a-450f-a633-2e2f9eb00623" />
+
 
 # ⚛️ QUALUTION
 
