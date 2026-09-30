@@ -50,8 +50,7 @@
 | **Title** | AI-Based Interactive Quantum Algorithm Learning Platform |
 | **Theme** | Smart Education |
 | **Category** | Software |
-| **Team Name** | DADBODS |
-| **Team ID** | 126917 |
+
 
 ---
 
