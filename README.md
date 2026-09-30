@@ -66,7 +66,7 @@
 9. [Adaptive Circuit Execution](#adaptive-circuit-execution)
 10. [Benchmarks](#-benchmarks)
 11. [JSON-Driven Live Teaching](#json-driven-live-teaching)
-12. [Erwin: Socratic AI Companion](#erwin-socratic-ai-companion)
+12. [Mario: Socratic AI Companion](#erwin-socratic-ai-companion)
 13. [Assessment and Certification Flow](#assessment-and-certification-flow)
 14. [Curriculum](#curriculum)
 15. [Impact](#impact)
@@ -522,11 +522,11 @@ sequenceDiagram
 
 ---
 
-## Erwin: Socratic AI Companion
+## Mario: Socratic AI Companion
 
 Erwin doesn't just say "wrong." **It works out why.**
 
-When a learner predicts an incorrect distribution, Erwin asks things like:
+When a learner predicts an incorrect distribution, Mario asks things like:
 
 > - What state did you expect?
 > - Which gate changed the state?
@@ -540,7 +540,7 @@ Generated explanations, code and optimisations are checked against the execution
 ```mermaid
 sequenceDiagram
     participant U as Learner
-    participant E as Erwin
+    participant MA as Mario
     participant M as Misconception engine
     participant V as Verifier
     participant X as Execution Engine
