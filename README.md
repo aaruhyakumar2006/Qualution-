@@ -1,5 +1,7 @@
 <div align="center">
 
+<img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/a3c6759a-c46d-4d52-98ae-0e83a1052339" />
+
 # ⚛️ QUALUTION
 
 ### Learn it. Build it. Predict it. Run it. Prove it.
