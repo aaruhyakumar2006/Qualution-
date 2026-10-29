@@ -41,7 +41,8 @@ import {
 } from '../features/learning/assessmentEngine';
 import { hasBoardLesson } from '../features/theory/boardLessonRegistry';
 import type { CircuitRequest } from '../features/circuit/types';
-import AcidSquares from '../components/AcidSquares';
+import { MarioHero } from '../components/learning/MarioHero';
+import { QuantumMarioWorldMap } from '../components/learning/QuantumMarioWorldMap';
 import './LearnPage.css';
 
 export interface PathwayStage {
@@ -965,6 +966,10 @@ export const LearnPage: React.FC<LearnPageProps> = ({
   const [activeChallengeFilter, setActiveChallengeFilter] = useState<'all' | 'guided' | 'foundation' | 'algorithm' | 'advanced'>('all');
 
   const handleLaunchChallenge = (challenge: QuantumChallengeItem) => {
+    if (challenge.id === 's1-hadamard-superposition' || challenge.guidedLessonId === 's1-hadamard-superposition') {
+      onLaunchIDE(undefined, undefined, 's1-hadamard-superposition');
+      return;
+    }
     if (challenge.taskModule) {
       handleLaunchAssessment(challenge.taskModule);
     } else if (challenge.curriculumModuleId) {
@@ -1091,6 +1096,10 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
   const handleLaunchAssessment = (lesson: LessonModule) => {
     setSelectedLesson(lesson);
+    if (lesson.id === 'lesson-2-superposition-hadamard' || lesson.id === 'lesson-1-superposition') {
+      onLaunchIDE(lesson.assessment.starterCircuit, lesson, 's1-hadamard-superposition');
+      return;
+    }
     onLaunchIDE(lesson.assessment.starterCircuit, lesson);
   };
 
@@ -1127,50 +1136,23 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
   return (
     <div className="learn-page-landing-style" data-testid="learn-page">
-      {/* ── Top Laser Pulse Accent Line (Matches Landing Page) ──────── */}
-      <div className="lp-laser-accent-line" aria-hidden="true">
-        <div className="lp-laser-track" />
-        <div className="lp-laser-glow-pulse" />
+      {/* ── Nice White Super Mario Overworld Backdrop with Floating Pixel Clouds ── */}
+      <div className="lp-mario-white-backdrop" aria-hidden="true">
+        <div className="lp-mario-clouds-container">
+          <img src="/mario/Cloud1.png" alt="" className="lp-mario-cloud cloud-drift-1" />
+          <img src="/mario/Cloud2.png" alt="" className="lp-mario-cloud cloud-drift-2" />
+          <img src="/mario/Cloud1.png" alt="" className="lp-mario-cloud cloud-drift-3" />
+          <img src="/mario/Cloud2.png" alt="" className="lp-mario-cloud cloud-drift-4" />
+          <img src="/mario/Cloud1.png" alt="" className="lp-mario-cloud cloud-drift-5" />
+        </div>
+        <div className="lp-mario-hills-horizon">
+          <img src="/mario/Hill1.png" alt="" className="lp-mario-bg-hill hill-left" />
+          <img src="/mario/Bush1.png" alt="" className="lp-mario-bg-bush bush-left" />
+          <img src="/mario/Hill1.png" alt="" className="lp-mario-bg-hill hill-right" />
+          <img src="/mario/Bush1.png" alt="" className="lp-mario-bg-bush bush-right" />
+        </div>
       </div>
 
-      {/* ── AcidSquares WebGL Raymarching Corridor (Matches Landing Page) ── */}
-      <div className="lp-webgl-background-layer" aria-hidden="true">
-        <AcidSquares
-          color1="#041226"
-          color2="#38bdf8"
-          color3="#ffffff"
-          detail="medium"
-          speed={0.45}
-          waveDepth={1}
-          zoom={1.25}
-          density={8.5}
-          glow={1.1}
-          exposure={2600}
-          spread={0.28}
-          stepSize={0.002}
-          colorShift={0}
-          contrast={1.05}
-          brightness={1.0}
-          opacity={theme === 'dark' ? 0.72 : 0.25}
-          mouseInteraction={true}
-          mouseStrength={0.12}
-          mouseRadius={0.35}
-          blur={0}
-          grain={true}
-          grainIntensity={0.04}
-          lightMode={theme === 'light'}
-        />
-      </div>
-
-      {/* ── Depth Vignette Overlay (Matches Landing Page) ───────────── */}
-      <div className="lp-depth-vignette" aria-hidden="true" />
-
-      {/* ── Subtle Quantum Grid Background (Matches Landing Page) ─── */}
-      <div className="lp-grid-backdrop" aria-hidden="true" />
-
-      {/* ══════════════════════════════════════════════════════════════
-          1. TOP NAVIGATION BAR (Matches Landing Page)
-          ══════════════════════════════════════════════════════════════ */}
       <header className="lp-academy-nav" data-testid="academy-nav">
         <div className="lp-nav-container">
           <div className="lp-nav-left">
@@ -1189,24 +1171,14 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
             <nav className="lp-nav-menu">
               <a
-                href="#tracks-overview"
+                href="#learning-map"
                 className="lp-nav-item"
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById('tracks-overview')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById("learning-map")?.scrollIntoView({ behavior: "smooth" });
                 }}
               >
-                Curriculum (12)
-              </a>
-              <a
-                href="#challenges"
-                className="lp-nav-item"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('challenges')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                Challenges ({ALL_QUANTUM_CHALLENGES.length})
+                Learning Map
               </a>
               <a
                 href="#what-you-will-learn"
@@ -1242,16 +1214,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
           </div>
 
           <div className="lp-nav-right">
-            <button
-              type="button"
-              className="lp-theme-switch-btn"
-              onClick={toggleTheme}
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-            </button>
-
+            
             <div className="lp-nav-xp-pill" title="Mastery Experience Points">
               <Trophy size={14} className="lp-xp-icon" />
               <span>{totalXP} XP</span>
@@ -1297,48 +1260,43 @@ export const LearnPage: React.FC<LearnPageProps> = ({
       </header>
 
       {/* ══════════════════════════════════════════════════════════════
-          2. GRAND LANDING-PAGE HERO BANNER
+          2. RETRO ARCADE MARIO HERO (Super Qualution Bros.)
           ══════════════════════════════════════════════════════════════ */}
-      <section className="lp-academy-hero">
-        <div className="lp-hero-inner">
-          <div className="lp-hero-tagline">
-            <span className="lp-pulse-point" />
-            <Sparkles size={13} />
-            <span>ENTERPRISE QUANTUM COMPUTING ACADEMY</span>
-          </div>
+      <MarioHero
+        currentXP={totalXP}
+        completedLessonsCount={completedCount}
+        totalModulesCount={QUANTUM_CURRICULUM.length}
+        onLaunchIDE={() => onLaunchIDE()}
+        onScrollToCurriculum={() => {
+          document.getElementById('tracks-overview')?.scrollIntoView({ behavior: 'smooth' });
+        }}
+        onAddXP={(amount) => {
+          setTotalXP((prev) => prev + amount);
+        }}
+        playerName={user?.full_name?.split(' ')[0]?.toUpperCase() || user?.email?.split('@')[0]?.toUpperCase() || 'MARIO'}
+      />
 
-          <h1 className="lp-hero-main-title">
-            Quantum Computing <span className="lp-gradient-title-text">Academy</span>
-          </h1>
-
-          <div className="lp-hero-cta-cluster">
-            <button
-              type="button"
-              className="lp-hero-explore-button"
-              onClick={() => {
-                document.getElementById('tracks-overview')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              <span>Explore Curriculum (12)</span>
-              <ArrowRight size={16} />
-            </button>
-            <button
-              type="button"
-              className="lp-hero-workbench-button"
-              onClick={() => onLaunchIDE()}
-              data-testid="hero-open-lab-btn"
-            >
-              <Cpu size={16} />
-              <span>Open Quantum Lab Studio</span>
-            </button>
-          </div>
-        </div>
-      </section>
+      {/* ══════════════════════════════════════════════════════════════
+          2B. UNIFIED 2D OVERWORLD MAP LEARNING PATHWAY
+          ══════════════════════════════════════════════════════════════ */}
+      <div id="learning-map">
+      <QuantumMarioWorldMap
+        completedLessonIds={completedIds}
+        totalXP={totalXP}
+        challenges={ALL_QUANTUM_CHALLENGES}
+        tracks={CURRICULUM_TRACKS}
+        onLaunchAssessment={handleLaunchAssessment}
+        onLaunchChallenge={handleLaunchChallenge}
+        onOpenTheoryLesson={handleOpenTheoryLesson}
+        onLaunchIDE={onLaunchIDE}
+        isChallengeCompleted={isChallengeCompleted}
+      />
+      </div>
 
       {/* ══════════════════════════════════════════════════════════════
           3. FULL-WIDTH MASTERY & ACTIVE MISSION DASHBOARD
           ══════════════════════════════════════════════════════════════ */}
-      <section className="lp-dashboard-strip-section">
+      <section className="lp-dashboard-strip-section" style={{ display: 'none' }}>
         <div className="lp-dashboard-strip-container">
           {/* Left Segment: Mastery Progress */}
           <div className="lp-mastery-segment">
@@ -1392,7 +1350,10 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                 <span className="lp-hud-live-dot" />
                 <span>ACTIVE MISSION HUD • MODULE 0{selectedLesson.lessonNumber}</span>
               </div>
-              <span className="lp-hud-xp-badge">+{selectedLesson.xpReward} XP</span>
+              <span className="lp-hud-xp-badge">
+                <img src="/mario/Coin.png" alt="Coin" className="mario-coin-icon-inline" />
+                +{selectedLesson.xpReward} XP
+              </span>
             </div>
 
             <h4 className="lp-hud-title">
@@ -1412,12 +1373,12 @@ export const LearnPage: React.FC<LearnPageProps> = ({
             </div>
 
             <div className="lp-hud-actions-group" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              {(selectedLesson.id === 'lesson-1-superposition' || selectedLesson.lessonNumber === 1) && (
+              {(selectedLesson.id === 'lesson-1-superposition' || selectedLesson.lessonNumber === 1 || selectedLesson.id === 'lesson-2-superposition-hadamard' || selectedLesson.lessonNumber === 2) && (
                 <button
                   type="button"
                   className="lp-hud-launch-action-btn guided-btn"
                   onClick={() => onLaunchIDE(undefined, undefined, 's1-hadamard-superposition')}
-                  data-testid="hud-launch-guided-lesson-btn"
+                  data-testid="launch-guided-lesson-btn-s1"
                   style={{
                     background: 'linear-gradient(135deg, #0f62fe 0%, #0043ce 100%)',
                     color: '#ffffff',
@@ -1469,7 +1430,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
           ══════════════════════════════════════════════════════════════ */}
       <section className="lp-competency-section" id="what-you-will-learn">
         <div className="lp-competency-container">
-          <h2 className="lp-sub-heading">What you'll learn in this curriculum</h2>
+          <h2 className="lp-sub-heading">🍄 What you'll learn: Power-Ups &amp; Quantum Abilities</h2>
           <div className="lp-competency-grid">
             {whatYouWillLearn.map((item, idx) => (
               <div key={idx} className="lp-competency-item">
@@ -1484,549 +1445,12 @@ export const LearnPage: React.FC<LearnPageProps> = ({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          5. UNIFIED CURRICULUM SYLLABUS: 3 TRACKS (12 MODULES)
-          ══════════════════════════════════════════════════════════════ */}
-      <section className="lp-curriculum-flow-section" id="tracks-overview" data-testid="tracks-overview">
-        <div className="lp-curriculum-flow-container">
-          {/* Syllabus Header Bar */}
-          <div className="lp-syllabus-control-bar">
-            <div>
-              <h2 className="lp-sub-heading" style={{ margin: 0 }}>Course Curriculum</h2>
-              <div className="lp-syllabus-metrics">
-                <span>3 Structured Tracks</span>
-                <span className="metric-dot">•</span>
-                <span>12 Interactive Modules</span>
-                <span className="metric-dot">•</span>
-                <span>~2h 15m Total Length</span>
-              </div>
-            </div>
-
-            <div className="lp-syllabus-actions">
-              <button
-                type="button"
-                className="lp-expand-all-btn"
-                onClick={toggleAllSections}
-              >
-                {areAllSectionsOpen ? 'Collapse all tracks' : 'Expand all tracks'}
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Search */}
-          <div className="lp-search-box-row">
-            <div className="lp-search-field">
-              <Search size={15} className="lp-search-icon" />
-              <input
-                type="text"
-                placeholder="Search topics, gates, or algorithms (e.g. Hadamard, Bell, VQE, Phase)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="lp-search-input-elem"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  className="lp-clear-search-btn"
-                  onClick={() => setSearchQuery('')}
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* 3 Tracks Accordion List */}
-          <div className="lp-tracks-container">
-            {CURRICULUM_TRACKS.map((track) => {
-              const isOpen = openSections[track.id] ?? true;
-              const matchingModules = track.modules.filter((m) => {
-                if (!searchQuery.trim()) return true;
-                const q = searchQuery.toLowerCase();
-                return (
-                  m.title.toLowerCase().includes(q) ||
-                  m.summary.toLowerCase().includes(q) ||
-                  m.theoryBeat.toLowerCase().includes(q) ||
-                  m.practicalBeat.toLowerCase().includes(q) ||
-                  m.assessmentGate.toLowerCase().includes(q) ||
-                  m.conceptTags.some((tag) => tag.toLowerCase().includes(q))
-                );
-              });
-
-              if (searchQuery.trim() && matchingModules.length === 0) return null;
-
-              return (
-                <div
-                  key={track.id}
-                  id={track.id}
-                  className="lp-track-accordion-card"
-                  data-testid={`track-card-${track.id}`}
-                >
-                  {/* Track Header Bar */}
-                  <button
-                    type="button"
-                    className={`lp-track-header-button ${isOpen ? 'expanded' : ''}`}
-                    onClick={() => toggleSection(track.id)}
-                    aria-expanded={isOpen}
-                  >
-                    <div className="lp-track-header-left">
-                      <span className="lp-track-chevron">
-                        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                      </span>
-                      <div className="lp-track-title-group">
-                        <span className="lp-track-title">
-                          {track.title}
-                        </span>
-                        <span className={`lp-track-diff-pill ${track.difficulty.toLowerCase()}`}>
-                          {track.difficulty}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="lp-track-header-right">
-                      <span>{track.modules.length} modules</span>
-                      <span className="metric-dot">•</span>
-                      <span>{track.trackNumber === 1 ? '45m' : track.trackNumber === 2 ? '50m' : '40m'}</span>
-                    </div>
-                  </button>
-
-                  {/* Modules in this Track */}
-                  {isOpen && (
-                    <div className="lp-modules-flow-list">
-                      {matchingModules.map((m) => {
-                        const isMastered =
-                          completedIds.includes(m.id) ||
-                          (m.id === 'lesson-1-superposition' && completedIds.includes('s1-hadamard-superposition')) ||
-                          ((m.id === 'lesson-1-bits-vs-qubits' || m.lessonNumber === 1) &&
-                            (completedIds.includes('lesson-1-superposition') || completedIds.includes('s1-hadamard-superposition')));
-                        const isTheoryExpanded = expandedTheoryLessonId === m.id;
-                        const isSelected = selectedLesson.id === m.id;
-
-                        return (
-                          <article
-                            key={m.id}
-                            id={`module-beat-${m.id}`}
-                            className={`lp-module-row ${isMastered ? 'mastered' : ''} ${isSelected ? 'active-highlight' : ''}`}
-                            data-testid={`module-beat-${m.id}`}
-                            onClick={() => setSelectedLesson(m)}
-                          >
-                            <div className="lp-module-top-row">
-                              <div className="lp-module-identity">
-                                <span className="lp-module-icon">
-                                  {m.lessonNumber === 1 || m.lessonNumber === 8 || m.id === 'lesson-8-grovers-search' ? <Video size={15} /> : <FileText size={15} />}
-                                </span>
-                                <span className="lp-module-index">0{m.lessonNumber}.</span>
-                                <h4 className="lp-module-name">{m.title}</h4>
-                              </div>
-
-                              <div className="lp-module-controls">
-                                <span className="lp-xp-reward-tag">+{m.xpReward} XP</span>
-
-                                {isMastered ? (
-                                  <span
-                                    className="lp-status-pill mastered"
-                                    data-testid={m.lessonNumber === 1 ? 'status-completed-lesson-1-superposition' : `status-completed-${m.id}`}
-                                  >
-                                    <CheckCircle2 size={12} /> Mastered
-                                  </span>
-                                ) : (
-                                  <span className="lp-status-pill ready">Ready</span>
-                                )}
-
-                                {/* Action Buttons */}
-                                {m.lessonNumber === 1 && (
-                                  <>
-                                    <button
-                                      type="button"
-                                      className="lp-row-action-btn guided"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        onLaunchIDE(undefined, undefined, 's1-hadamard-superposition');
-                                      }}
-                                      data-testid="launch-guided-lesson-btn-s1"
-                                      title="Start Guided Practical Lesson (QUALUTION)"
-                                    >
-                                      <Sparkles size={12} />
-                                      <span>Guided Lesson</span>
-                                    </button>
-                                    <button
-                                      type="button"
-                                      className="lp-row-action-btn preview"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleOpenTheoryLesson(m.id);
-                                      }}
-                                      data-testid="module-1-visual-btn"
-                                      title="Watch 4-min JSON-driven visual lesson"
-                                    >
-                                      <Play size={12} fill="currentColor" />
-                                      <span>4-min Lesson</span>
-                                    </button>
-                                  </>
-                                )}
-
-                                {(m.id === 'lesson-8-grovers-search' || m.lessonNumber === 8) && (
-                                  <button
-                                    type="button"
-                                    className="lp-row-action-btn preview"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleOpenTheoryLesson(m.id);
-                                    }}
-                                    data-testid="module-8-theory-video-btn"
-                                    title="Watch 16-scene JSON-driven Grover theory masterclass"
-                                  >
-                                    <Play size={12} fill="currentColor" />
-                                    <span>Theory Video</span>
-                                  </button>
-                                )}
-
-
-                                <button
-                                  type="button"
-                                  className={`lp-row-action-btn notes ${isTheoryExpanded ? 'open' : ''}`}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setSelectedLesson(m);
-                                    setExpandedTheoryLessonId(isTheoryExpanded ? null : m.id);
-                                  }}
-                                  data-testid={`theory-toggle-${m.id}`}
-                                  title="Toggle theory notes and concept quiz"
-                                >
-                                  <BookOpen size={12} />
-                                  <span>{isTheoryExpanded ? 'Hide Notes' : 'Notes & Quiz'}</span>
-                                  {isTheoryExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                                </button>
-
-                                <button
-                                  type="button"
-                                  className="lp-row-action-btn assessment"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLaunchAssessment(m);
-                                  }}
-                                  data-testid={`launch-assessment-btn-${m.id}`}
-                                  title="Launch verified hands-on assessment in Quantum Lab"
-                                >
-                                  <Cpu size={12} />
-                                  <span>Practice Lab</span>
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Summary description */}
-                            <p className="lp-module-summary-text">{m.summary}</p>
-
-                            {/* Beat Elements (Theory, Practical, Assessment Gate) */}
-                            <div className="lp-module-beats-container">
-                              <div className="lp-beat-tag theory">
-                                <strong>Theory:</strong> {m.theoryBeat}
-                              </div>
-                              <div className="lp-beat-tag practical">
-                                <strong>Practical:</strong> {m.practicalBeat}
-                                <button
-                                  type="button"
-                                  className="lp-inline-workbench-link"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLaunchAssessment(m);
-                                  }}
-                                  data-testid={`workbench-btn-${m.id}`}
-                                >
-                                  Apply on Workbench
-                                </button>
-                              </div>
-                              <div className="lp-beat-tag assessment">
-                                <strong>Gate:</strong> {m.assessmentGate}
-                              </div>
-                            </div>
-
-                            {/* Expandable Theory & Quiz Drawer */}
-                            {isTheoryExpanded && (
-                              <div className="lp-module-drawer" onClick={(e) => e.stopPropagation()}>
-                                <div className="lp-drawer-heading">
-                                  <BookOpen size={15} />
-                                  <span>Theory Takeaways &amp; Concept Check</span>
-                                </div>
-
-                                <div className="lp-drawer-text-body">
-                                  {m.theoryParagraphs.map((p, idx) => (
-                                    <p key={idx}>{p}</p>
-                                  ))}
-                                </div>
-
-                                <div className="lp-takeaways-highlight">
-                                  <h5 className="takeaways-header">Key Theoretical Takeaways</h5>
-                                  <ul>
-                                    {m.keyTakeaways.map((takeaway, idx) => (
-                                      <li key={idx}>{takeaway}</li>
-                                    ))}
-                                  </ul>
-                                </div>
-
-                                {/* Concept Quiz */}
-                                <div className="lp-concept-quiz-block">
-                                  <div className="lp-quiz-top-bar">
-                                    <Award size={14} />
-                                    <span>Quick Concept Check</span>
-                                  </div>
-                                  <p className="lp-quiz-question-text">{m.quiz.question}</p>
-                                  <div className="lp-quiz-options-grid">
-                                    {m.quiz.options.map((opt, optIdx) => {
-                                      const isChosen = selectedQuizAnswers[m.id] === optIdx;
-                                      const isCorrect = optIdx === m.quiz.correctIndex;
-                                      const submitted = quizSubmitted[m.id];
-
-                                      let optionClass = 'lp-quiz-option-button';
-                                      if (submitted) {
-                                        if (isCorrect) optionClass += ' correct';
-                                        else if (isChosen) optionClass += ' incorrect';
-                                      } else if (isChosen) {
-                                        optionClass += ' chosen';
-                                      }
-
-                                      return (
-                                        <button
-                                          key={optIdx}
-                                          type="button"
-                                          className={optionClass}
-                                          onClick={() => handleSelectQuizOption(m.id, optIdx)}
-                                        >
-                                          <span className="opt-marker">{String.fromCharCode(65 + optIdx)}</span>
-                                          <span className="opt-caption">{opt}</span>
-                                        </button>
-                                      );
-                                    })}
-                                  </div>
-
-                                  {quizSubmitted[m.id] && (
-                                    <div className="lp-quiz-feedback-box">
-                                      {selectedQuizAnswers[m.id] === m.quiz.correctIndex ? (
-                                        <span className="feedback-msg success">
-                                          ✓ Correct! {m.quiz.explanation}
-                                        </span>
-                                      ) : (
-                                        <span className="feedback-msg error">
-                                          ✗ Incorrect. Correct answer is {String.fromCharCode(65 + m.quiz.correctIndex)}. {m.quiz.explanation}
-                                        </span>
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </article>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          5. ALL QUANTUM CHALLENGES (Directly Below Curriculum)
-          ══════════════════════════════════════════════════════════════ */}
-      <section className="lp-challenges-section" id="challenges" data-testid="all-challenges-section">
-        <div className="lp-challenges-container">
-          {/* Header */}
-          <div className="lp-challenges-header">
-            <div className="lp-challenges-badge">
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span>PRACTICAL QUANTUM TASK MISSIONS</span>
-            </div>
-            <h2 className="lp-challenges-title">Quantum Circuit Challenges &amp; Tasks</h2>
-            <p className="lp-challenges-subtitle">
-              Hands-on quantum tasks and algorithmic challenges. Build and manipulate quantum circuits to satisfy objective criteria, then verify your circuit in the Quantum IDE to earn Quantum XP points.
-            </p>
-
-            {/* Stats Bar */}
-            <div className="lp-challenges-stats-bar">
-              <div className="lp-cstat">
-                <span className="lp-cstat-val">19</span>
-                <span className="lp-cstat-lbl">Total Tasks</span>
-              </div>
-              <div className="lp-cstat-div" />
-              <div className="lp-cstat">
-                <span className="lp-cstat-val">7</span>
-                <span className="lp-cstat-lbl">Single-Qubit Tasks</span>
-              </div>
-              <div className="lp-cstat-div" />
-              <div className="lp-cstat">
-                <span className="lp-cstat-val">12</span>
-                <span className="lp-cstat-lbl">Algorithmic Tasks</span>
-              </div>
-              <div className="lp-cstat-div" />
-              <div className="lp-cstat">
-                <span className="lp-cstat-val">4,450 XP</span>
-                <span className="lp-cstat-lbl">Total Mastery XP</span>
-              </div>
-              <div className="lp-cstat-div" />
-              <div className="lp-cstat">
-                <span className="lp-cstat-val">95%+</span>
-                <span className="lp-cstat-lbl">Target Fidelity</span>
-              </div>
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="lp-challenges-filters" role="tablist">
-              <button
-                type="button"
-                className={`lp-cfilter-btn ${activeChallengeFilter === 'all' ? 'active' : ''}`}
-                onClick={() => setActiveChallengeFilter('all')}
-                data-testid="filter-all-challenges"
-              >
-                All Tasks ({ALL_QUANTUM_CHALLENGES.length})
-              </button>
-              <button
-                type="button"
-                className={`lp-cfilter-btn ${activeChallengeFilter === 'guided' ? 'active' : ''}`}
-                onClick={() => setActiveChallengeFilter('guided')}
-                data-testid="filter-guided-challenges"
-              >
-                Single-Qubit Tasks (7)
-              </button>
-              <button
-                type="button"
-                className={`lp-cfilter-btn ${activeChallengeFilter === 'foundation' ? 'active' : ''}`}
-                onClick={() => setActiveChallengeFilter('foundation')}
-                data-testid="filter-foundation-challenges"
-              >
-                Foundations (4)
-              </button>
-              <button
-                type="button"
-                className={`lp-cfilter-btn ${activeChallengeFilter === 'algorithm' ? 'active' : ''}`}
-                onClick={() => setActiveChallengeFilter('algorithm')}
-                data-testid="filter-algorithm-challenges"
-              >
-                Algorithms &amp; Complexity (4)
-              </button>
-              <button
-                type="button"
-                className={`lp-cfilter-btn ${activeChallengeFilter === 'advanced' ? 'active' : ''}`}
-                onClick={() => setActiveChallengeFilter('advanced')}
-                data-testid="filter-advanced-challenges"
-              >
-                Advanced &amp; Variational (4)
-              </button>
-            </div>
-          </div>
-
-          {/* Grid */}
-          <div className="lp-challenges-grid" data-testid="challenges-grid">
-            {filteredChallenges.map((challenge) => {
-              const completed = isChallengeCompleted(challenge);
-              return (
-                <div
-                  key={challenge.id}
-                  className={`lp-challenge-card ${completed ? 'completed' : ''}`}
-                  data-testid={`challenge-card-${challenge.id}`}
-                >
-                  <div>
-                    <div className="lp-c-top">
-                      <div className="lp-c-badges-wrap">
-                        <span className="lp-c-num-badge">
-                          TASK {challenge.challengeNumber}
-                        </span>
-                        <span className={`lp-c-cat-badge ${challenge.category}`}>
-                          {challenge.categoryLabel}
-                        </span>
-                      </div>
-                      {completed ? (
-                        <span className="lp-c-status-done" title="Challenge Task Completed">
-                          <Check className="w-3 h-3 text-emerald-400" />
-                          Done
-                        </span>
-                      ) : (
-                        <span className="lp-c-status-ready">Ready to Solve</span>
-                      )}
-                    </div>
-
-                    <div className="lp-c-body">
-                      <h3 className="lp-c-title">{challenge.title}</h3>
-                      <p className="lp-c-desc">{challenge.description}</p>
-
-                      <div className="lp-c-criteria-box">
-                        <div className="lp-c-criteria-row">
-                          {challenge.targetState && (
-                            <div className="lp-c-target-state">
-                              <span className="text-slate-400 font-normal text-xs">Target:</span>
-                              <span>{challenge.targetState}</span>
-                            </div>
-                          )}
-                          {challenge.requiredGates && challenge.requiredGates.length > 0 && (
-                            <div className="lp-c-gates-list">
-                              <span className="text-slate-400 font-normal text-xs">Gates:</span>
-                              {challenge.requiredGates.map((g, gi) => (
-                                <span key={gi} className="lp-c-gate-chip">
-                                  {g}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        <div className="lp-c-criteria-summary">
-                          {challenge.criteriaSummary}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="lp-c-footer">
-                    <div className="lp-c-meta">
-                      <span className="lp-c-meta-item">
-                        <Clock className="w-3.5 h-3.5" />
-                        {challenge.duration}
-                      </span>
-                      <span className="lp-c-meta-item lp-c-xp">
-                        <Zap className="w-3.5 h-3.5" />
-                        +{challenge.xpReward} XP
-                      </span>
-                      <span className={`lp-c-difficulty ${challenge.difficulty}`}>
-                        {challenge.difficulty}
-                      </span>
-                    </div>
-
-                    <div className="lp-c-actions">
-                      {challenge.curriculumModuleId && (
-                        <button
-                          type="button"
-                          className="lp-c-theory-btn"
-                          onClick={() => handleOpenTheoryLesson(challenge.curriculumModuleId!)}
-                          title="Read concept theory"
-                        >
-                          <BookOpen className="w-3.5 h-3.5" />
-                          Theory
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        className="lp-c-launch-btn"
-                        onClick={() => handleLaunchChallenge(challenge)}
-                        data-testid={`launch-challenge-btn-${challenge.id}`}
-                        title="Start task in Quantum Studio IDE to earn points"
-                      >
-                        <Play className="w-3.5 h-3.5 fill-current" />
-                        {challenge.type === 'task' ? 'Start Task' : 'Launch Task'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
           6. PREREQUISITES & DESCRIPTION
           ══════════════════════════════════════════════════════════════ */}
       <section className="lp-details-section">
         <div className="lp-details-container">
           <div className="lp-details-block">
-            <h3 className="lp-details-title">Requirements &amp; Prerequisites</h3>
+            <h3 className="lp-details-title">📜 World Rules &amp; Prerequisites</h3>
             <ul className="lp-details-list">
               <li>No quantum physics or quantum hardware background required. Every concept starts from ground zero.</li>
               <li>Basic high-school algebra (vectors and matrices are taught visually with Bloch sphere representations).</li>
@@ -2035,7 +1459,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
           </div>
 
           <div className="lp-details-block">
-            <h3 className="lp-details-title">Curriculum Description</h3>
+            <h3 className="lp-details-title">⭐ Adventure Mission Description</h3>
             <p>
               Qualution Academy bridges quantum information theory and practical algorithmic execution.
               Instead of abstract chalkboard derivations, each lesson pairs mathematical formalism with an interactive
@@ -2054,7 +1478,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
           ══════════════════════════════════════════════════════════════ */}
       <section className="lp-faq-section" id="faq">
         <div className="lp-faq-container">
-          <h2 className="lp-sub-heading">Frequently Asked Questions</h2>
+          <h2 className="lp-sub-heading">❓ Frequently Asked Questions &amp; Secrets</h2>
           <div className="lp-faq-flow-list">
             {faqs.map((faq, index) => {
               const isOpen = expandedFaqIndex === index;

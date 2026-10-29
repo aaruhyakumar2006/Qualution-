@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ErwinAvatar, type ErwinState } from './ErwinAvatar';
+import { MarioCompanionAvatar } from './MarioCompanionAvatar';
 import { ErwinHybridAIAssistant } from './ErwinHybridAIAssistant';
 import { useErwinCompanion } from '../../hooks/useErwinState';
 import './GlobalErwinCompanion.css';
 
 export interface GlobalErwinCompanionProps {
   size?: number;
+  showBubble?: boolean;
 }
 
 type DragPhase = 'idle' | 'dragging' | 'jumping' | 'returning';
@@ -22,7 +24,7 @@ type DragPhase = 'idle' | 'dragging' | 'jumping' | 'returning';
  * Click behaviour:
  *  - Clicking without dragging opens up the Erwin Hybrid AI Assistant.
  */
-export const GlobalErwinCompanion: React.FC<GlobalErwinCompanionProps> = ({ size = 64 }) => {
+export const GlobalErwinCompanion: React.FC<GlobalErwinCompanionProps> = ({ size = 64, showBubble = true }) => {
   const companion = useErwinCompanion();
   const [dragPhase, setDragPhase] = useState<DragPhase>('idle');
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -181,9 +183,9 @@ export const GlobalErwinCompanion: React.FC<GlobalErwinCompanionProps> = ({ size
                 }
                 setIsAssistantOpen((prev) => !prev);
               }}
-              title={isAssistantOpen ? "Close Erwin Hybrid AI" : "Click to chat with Erwin Hybrid AI (or drag to move)"}
+              title={isAssistantOpen ? "Close Mario Quantum AI" : "Click to chat with Mario Quantum AI (or drag to move)"}
             >
-              <ErwinAvatar
+              <MarioCompanionAvatar
                 size={size}
                 state={(localErwinState ?? companion.state) as ErwinState}
                 className={`erwin-global-avatar${suppressAnim ? ' erwin-motion-suspended' : ''}`}
@@ -193,8 +195,8 @@ export const GlobalErwinCompanion: React.FC<GlobalErwinCompanionProps> = ({ size
           </div>
         </div>
 
-        {/* Speech bubble — always rendered; dismissed on click */}
-        {!bubbleDismissed && (
+        {/* Speech bubble — only rendered if showBubble is enabled */}
+        {showBubble && !bubbleDismissed && (
           <div
             className={`erwin-global-bubble erwin-global-bubble--${companion.state}`}
             data-testid="global-erwin-bubble"
@@ -202,8 +204,8 @@ export const GlobalErwinCompanion: React.FC<GlobalErwinCompanionProps> = ({ size
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && setBubbleDismissed(true)}
-            aria-label="Dismiss Erwin bubble"
-            title="Click to dismiss bubble (or click Erwin avatar to chat)"
+            aria-label="Dismiss bubble"
+            title="Click to dismiss bubble"
           >
             {companion.text}
           </div>

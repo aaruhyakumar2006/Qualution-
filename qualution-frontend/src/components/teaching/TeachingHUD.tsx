@@ -184,7 +184,7 @@ export const TeachingHUD: React.FC<TeachingHUDProps> = ({
         {/* Left: Metadata & Current Chapter */}
         <div className="teaching-hud-left">
           {import.meta.env.MODE === 'test' && (
-            <div className="teaching-erwin-companion" title={`Erwin: ${erwinText}`}>
+            <div className="teaching-erwin-companion" title={`Mario: ${erwinText}`}>
               <span className="teaching-hud-assistant-icon" aria-hidden="true">
                 <Sparkles size={16} />
               </span>
@@ -635,7 +635,7 @@ export const TeachingHUD: React.FC<TeachingHUDProps> = ({
           <div className="cinematic-subtitles-overlay" data-testid="cinematic-subtitles">
             <div className="cinematic-subtitles-pill">
               <p className="cinematic-subtitles-text" data-testid="teaching-narration">
-                <span className="cinematic-speaker-tag">[ERWIN]</span>
+                <span className="cinematic-speaker-tag">[MARIO]</span>
                 <span>{narrationText || currentStep?.explanation}</span>
               </p>
               {isPredictionWaiting && (

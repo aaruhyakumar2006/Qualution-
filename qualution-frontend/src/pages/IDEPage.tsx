@@ -13,6 +13,7 @@ import { MetricsView } from '../components/visualization/MetricsView';
 import { LearningPanel } from '../components/visualization/LearningPanel';
 import { TutorPanel } from '../components/tutor/TutorPanel';
 import { ErwinHybridAIAssistant } from '../components/common/ErwinHybridAIAssistant';
+import { SocraticFeedbackPanel } from '../components/learning/SocraticFeedbackPanel';
 const TheoryViewer = lazy(() => import('../components/learning/TheoryViewer').then(m => ({ default: m.TheoryViewer })));
 import { OptimizationStudio } from '../components/optimization/OptimizationStudio';
 import { qubitConcept } from '../features/theory/content/qubit';
@@ -106,6 +107,35 @@ interface IDEPageProps {
   onNavigateStudentPortal?: () => void;
 }
 
+export const parseLessonIdFromUrl = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const searchParams = new URLSearchParams(window.location.search);
+    const l = searchParams.get('lesson') || searchParams.get('assessment') || searchParams.get('guidedLesson');
+    if (l) return l;
+    if (window.location.hash.includes('lesson=')) {
+      const hashPart = window.location.hash.split('?')[1];
+      if (hashPart) {
+        const hp = new URLSearchParams(hashPart);
+        const hl = hp.get('lesson') || hp.get('assessment');
+        if (hl) return hl;
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return null;
+};
+
+export const getInitialLessonShots = (lessonId: string | null | undefined): number | null => {
+  if (!lessonId) return null;
+  const lesson = lessonRegistry.getLesson(lessonId);
+  if (lesson?.starterCircuit?.shots && typeof lesson.starterCircuit.shots === 'number' && lesson.starterCircuit.shots > 0) {
+    return lesson.starterCircuit.shots;
+  }
+  return null;
+};
+
 export const IDEPage: React.FC<IDEPageProps> = ({
   initialCircuit,
   initialLessonId,
@@ -151,8 +181,16 @@ export const IDEPage: React.FC<IDEPageProps> = ({
   const [selectedTimelineStepIdx, setSelectedTimelineStepIdx] = useState<number>(0);
 
   // ── Execution Config ────────────────────────────────────────
-  const [selectedBackend, setSelectedBackend] = useState<string>('pennylane');
-  const [shots, setShots] = useState<number>(1000);
+  const [selectedBackend, setSelectedBackend] = useState<string>('auto');
+  const [shots, setShots] = useState<number>(() => {
+    if (initialCircuit?.shots && typeof initialCircuit.shots === 'number' && initialCircuit.shots > 0) {
+      return initialCircuit.shots;
+    }
+    const effectiveLesson = initialLessonId || parseLessonIdFromUrl();
+    const lessonShots = getInitialLessonShots(effectiveLesson);
+    if (lessonShots) return lessonShots;
+    return 1000;
+  });
   const [isBackendReady, setIsBackendReady] = useState<boolean>(false);
 
   // ── Execution State ─────────────────────────────────────────
@@ -199,7 +237,7 @@ export const IDEPage: React.FC<IDEPageProps> = ({
   }, [activeAssessment]);
 
   // ── Teaching / Guided Lesson State ───────────────────────────
-  const [activeLessonId, setActiveLessonId] = useState<string | null>(initialLessonId || null);
+  const [activeLessonId, setActiveLessonId] = useState<string | null>(() => initialLessonId || parseLessonIdFromUrl() || null);
   const [highlightedGateId, setHighlightedGateId] = useState<string | null>(null);
   const [highlightedQubitIndex, setHighlightedQubitIndex] = useState<number | null>(null);
   const [teachingController, setTeachingController] = useState<TeachingController | null>(null);
@@ -329,7 +367,11 @@ export const IDEPage: React.FC<IDEPageProps> = ({
   const [isBlochModalOpen, setIsBlochModalOpen] = useState<boolean>(false);
 
   const toggleTutorWorkspace = useCallback(() => {
-    setIsTutorDocked((prev) => !prev);
+    if (typeof window !== 'undefined' && window.innerWidth < 900) {
+      setIsTutorModalOpen((prev) => !prev);
+    } else {
+      setIsTutorDocked((prev) => !prev);
+    }
   }, []);
 
   // ── Modal / Overlay State ───────────────────────────────────
@@ -351,18 +393,28 @@ export const IDEPage: React.FC<IDEPageProps> = ({
   // ── Toast Notifications ─────────────────────────────────────
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const toastCounterRef = useRef<number>(0);
+  const toastTimeoutsRef = useRef<Set<any>>(new Set());
 
   const showToast = useCallback((type: 'success' | 'warning' | 'error' | 'info', message: string) => {
     const id = `toast-${++toastCounterRef.current}`;
     setToasts((prev) => [...prev, { id, type, text: message }]);
     
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      toastTimeoutsRef.current.delete(timer);
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 5000);
+    toastTimeoutsRef.current.add(timer);
   }, []);
 
   const dismissToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      toastTimeoutsRef.current.forEach((t) => clearTimeout(t));
+      toastTimeoutsRef.current.clear();
+    };
   }, []);
 
   // Listen to global framework/toast triggers from CodeEditor and other components
@@ -527,6 +579,9 @@ export const IDEPage: React.FC<IDEPageProps> = ({
     (newCircuit: CircuitRequest) => {
       historyRef.current.push(newCircuit);
       setCircuit(newCircuit);
+      if (typeof newCircuit.shots === 'number' && newCircuit.shots > 0) {
+        setShots(newCircuit.shots);
+      }
       updateHistoryFlags();
       if (teachingControllerRef.current) {
         teachingControllerRef.current.onUserCircuitChange(newCircuit);
@@ -562,6 +617,18 @@ export const IDEPage: React.FC<IDEPageProps> = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       (window as any).__qualutionDemoHadamardVisualDrag = async () => {
+        // Reset circuit to clean 1-qubit state with measurement before demonstration
+        setShots(500);
+        handleUpdateCircuit({
+          qubits: 1,
+          classical_bits: 1,
+          gates: [],
+          measure: true,
+          shots: 500,
+        });
+
+        await new Promise((r) => setTimeout(r, 120));
+
         const coordinator = new CircuitDriverCoordinator(undefined, 'locked');
         coordinator.scriptedDriver.onCursorUpdate((t) => {
           setTeachingCursor({
@@ -586,14 +653,15 @@ export const IDEPage: React.FC<IDEPageProps> = ({
 
         if (placed) {
           handleUpdateCircuit(coordinator.toCircuitRequest());
+          setLeftVizMode('results');
           setTimeout(() => {
-            handleRunRef.current();
-          }, 500);
+            handleRunRef.current(undefined, 500);
+          }, 450);
         }
 
         setTimeout(() => {
           setTeachingCursor(null);
-        }, 400);
+        }, 500);
 
         return placed;
       };
@@ -1249,8 +1317,18 @@ export const IDEPage: React.FC<IDEPageProps> = ({
   );
 
   // ── Run / Simulation Execution ───────────────────────────────
-  const handleRun = useCallback(async (overrideBackend?: unknown) => {
-    const activeBackend = typeof overrideBackend === 'string' ? overrideBackend : selectedBackend;
+  const handleRun = useCallback(async (overrideBackend?: unknown, overrideShots?: number) => {
+    const chosenBackend = typeof overrideBackend === 'string' ? overrideBackend : selectedBackend;
+    const activeBackend = (!chosenBackend || chosenBackend === 'auto')
+      ? 'qiskit_aer'
+      : chosenBackend;
+    const effectiveShots = typeof overrideShots === 'number' && overrideShots > 0
+      ? overrideShots
+      : (typeof circuit.shots === 'number' && circuit.shots > 0 ? circuit.shots : shots);
+
+    if (typeof overrideShots === 'number' && overrideShots > 0 && overrideShots !== shots) {
+      setShots(overrideShots);
+    }
 
     // 1. Client-side sanity validation
     const validation = validateCircuitClientSide(circuit);
@@ -1268,12 +1346,12 @@ export const IDEPage: React.FC<IDEPageProps> = ({
 
     const payload = sanitizeCircuitForBackend({
       ...circuit,
-      shots,
+      shots: effectiveShots,
       noise_model: noiseProfile ?? undefined,
       topology: selectedTopology !== 'None (Ideal)' ? selectedTopology : undefined,
     });
 
-    const signature = getCircuitSignature(circuit, activeBackend, shots, 'shots') + (noiseProfile ? JSON.stringify(noiseProfile) : '');
+    const signature = getCircuitSignature(circuit, activeBackend, effectiveShots, 'shots') + (noiseProfile ? JSON.stringify(noiseProfile) : '');
     const startTime = performance.now();
 
     setExecutionState((prev) => ({
@@ -1325,24 +1403,26 @@ export const IDEPage: React.FC<IDEPageProps> = ({
         executionStartTime: startTime,
       });
 
-      const friendlyBackend =
-        activeBackend === 'pennylane'
-          ? 'PennyLane'
-          : activeBackend === 'aer_simulator' || activeBackend === 'qiskit' || activeBackend === 'qiskit_aer'
-          ? 'Qiskit'
-          : activeBackend === 'cirq'
-          ? 'Google Cirq'
-          : activeBackend === 'clifford_stabilizer'
-          ? 'Clifford Stabilizer'
-          : activeBackend === 'qbraid'
-          ? 'qBraid'
-          : 'PennyLane';
+      const getBackendDisplayName = (b: string) => {
+        const lower = b.toLowerCase();
+        if (lower === 'auto' || lower === 'qiskit_aer' || lower === 'aer_simulator' || lower === 'qiskit') {
+          return 'Qiskit Aer';
+        }
+        if (lower === 'pennylane') return 'PennyLane';
+        if (lower === 'cirq') return 'Cirq';
+        if (lower === 'qbraid') return 'qBraid Cloud';
+        if (lower === 'clifford_stabilizer') return 'Clifford Stabilizer';
+        return 'Qiskit Aer';
+      };
 
-      showToast('success', `Circuit successfully executed in ${friendlyBackend} (${durationMs.toFixed(1)}ms)`);
+      const backendDisplayName = getBackendDisplayName(activeBackend);
+      showToast('success', `Ran by ${backendDisplayName} (${durationMs.toFixed(1)}ms)`);
       return enrichedResult;
     } catch (err: unknown) {
       const durationMs = performance.now() - startTime;
-      const errorMsg = err instanceof Error ? err.message : 'Simulation failed';
+      const errorMsg = err instanceof Error
+        ? err.message
+        : (typeof err === 'string' ? err : ((err as any)?.message ?? 'Simulation failed'));
 
       setExecutionState((prev) => ({
         ...prev,
@@ -1359,8 +1439,13 @@ export const IDEPage: React.FC<IDEPageProps> = ({
 
   // ── Teaching Controller Lifecycle ────────────────────────────
   useEffect(() => {
-    if (initialLessonId) {
-      setActiveLessonId(initialLessonId);
+    const effectiveLesson = initialLessonId || parseLessonIdFromUrl();
+    if (effectiveLesson) {
+      setActiveLessonId(effectiveLesson);
+      const lessonShots = getInitialLessonShots(effectiveLesson);
+      if (lessonShots) {
+        setShots(lessonShots);
+      }
     }
   }, [initialLessonId]);
 
@@ -1379,6 +1464,10 @@ export const IDEPage: React.FC<IDEPageProps> = ({
   useEffect(() => {
     handleUpdateCircuitRef.current = handleUpdateCircuit;
   }, [handleUpdateCircuit]);
+
+  // Stable ref so the lesson useEffect never re-fires just because showToast's identity changed
+  const showToastRef = useRef(showToast);
+  useEffect(() => { showToastRef.current = showToast; });
 
   useEffect(() => {
     if (!activeLessonId) {
@@ -1401,8 +1490,14 @@ export const IDEPage: React.FC<IDEPageProps> = ({
       updateCircuit: (newCirc) => {
         handleUpdateCircuitRef.current(newCirc);
       },
-      runSimulation: async () => {
-        const res = await handleRunRef.current();
+      runSimulation: async (customShots?: number, backend?: string) => {
+        const targetShots = typeof customShots === 'number' && customShots > 0
+          ? customShots
+          : (circuitRef.current?.shots || shots);
+        if (targetShots && targetShots !== shots) {
+          setShots(targetShots);
+        }
+        const res = await handleRunRef.current(backend, targetShots);
         return res ?? null;
       },
       getSimulationResult: () => executionStateRef.current.latestResult,
@@ -1425,7 +1520,7 @@ export const IDEPage: React.FC<IDEPageProps> = ({
         setHighlightedQubitIndex(null);
       },
       clearToasts: () => setToasts([]),
-      showToast,
+      showToast: (...args) => showToastRef.current(...args),
       updateMetrics: (liveM) => {
         setExecutionState((prev) => ({
           ...prev,
@@ -1440,21 +1535,29 @@ export const IDEPage: React.FC<IDEPageProps> = ({
       },
     };
 
+    let isCancelled = false;
     const ctrl = new TeachingController(hooks);
     setTeachingController(ctrl);
 
     ctrl.loadLesson(activeLessonId).then((success) => {
+      if (isCancelled || ctrl.isTerminated()) return;
       if (success) {
-        setCircuitName(ctrl.getState().activeLesson?.title || 'Guided Lesson');
+        const lesson = ctrl.getState().activeLesson;
+        setCircuitName(lesson?.title || 'Guided Lesson');
+        const lessonShots = lesson?.starterCircuit?.shots;
+        if (typeof lessonShots === 'number' && lessonShots > 0) {
+          setShots(lessonShots);
+        }
         ctrl.setAutoPlay(true);
         ctrl.start();
       }
     });
 
     return () => {
+      isCancelled = true;
       ctrl.destroy();
     };
-  }, [activeLessonId, showToast]);
+  }, [activeLessonId]); // showToast intentionally excluded — use showToastRef to avoid restarting lesson on every render
 
   // Dirty indicator
   const isDirty = isCircuitDirty(
@@ -1487,10 +1590,15 @@ export const IDEPage: React.FC<IDEPageProps> = ({
         e.preventDefault();
         setIsCommandPaletteOpen(true);
       }
+      // Ctrl+L -> Toggle Tutor Workspace
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        toggleTutorWorkspace();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleRun, handleUndo, handleRedo]);
+  }, [handleRun, handleUndo, handleRedo, toggleTutorWorkspace]);
 
   // ── Derived simulation values for bottom panels ──────────────
   const lastTimelineStep = executionState.latestResult?.visualization?.timeline?.steps?.slice(-1)[0];
@@ -1683,6 +1791,8 @@ export const IDEPage: React.FC<IDEPageProps> = ({
         onOptimize={() => setIsOptimizationModalOpen(true)}
         onOpenTimeline={() => setIsTimelineModalOpen(true)}
         onOpenMetrics={() => setIsMetricsModalOpen(true)}
+        onToggleTutor={toggleTutorWorkspace}
+        isTutorOpen={isTutorDocked || isTutorModalOpen}
         onSelectStatevector={() => setLeftVizMode('state')}
         onSelectBloch={() => setIsBlochModalOpen(true)}
         onSelectPhase={() => setRightVizMode('qsphere')}
@@ -1935,42 +2045,10 @@ export const IDEPage: React.FC<IDEPageProps> = ({
 
 
       {currentAssessment && assessmentResult && !assessmentResult.passed && (
-        <div
-          className="ibm-assessment-feedback-banner"
-          data-testid="assessment-feedback-banner"
-          style={
-            currentAssessment.id === 'lesson-8-grovers-search'
-              ? { background: 'rgba(4, 14, 31, 0.92)', border: '1px solid rgba(255, 0, 85, 0.3)', borderLeft: '3px solid #ff0055', padding: '10px 16px' }
-              : undefined
-          }
-        >
-          <AlertCircle size={14} className="feedback-icon error" />
-          <div className="feedback-text" style={{ flex: 1 }}>
-            <strong>{assessmentResult.title}:</strong> {assessmentResult.summary}
-            {assessmentResult.hints.length > 0 && (
-              <div style={{ marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {assessmentResult.hints.map((h, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      fontSize: '12px',
-                      color: i === 0 && currentAssessment.id === 'lesson-8-grovers-search' ? '#ffd6e0' : '#94a3b8',
-                      display: 'flex',
-                      gap: '6px',
-                      alignItems: 'flex-start',
-                      lineHeight: '1.5',
-                    }}
-                  >
-                    <span style={{ fontWeight: 700, minWidth: '18px', color: '#ff5577', flexShrink: 0 }}>
-                      {assessmentResult.hints.length > 1 ? `${i + 1}.` : '→'}
-                    </span>
-                    <span>{h}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+        <SocraticFeedbackPanel
+          result={assessmentResult}
+          assessmentId={currentAssessment.id}
+        />
       )}
 
       {/* Phase 13 & 14: Theory Lesson Context Banner & Experiment Result Explanation */}
@@ -2632,6 +2710,21 @@ export const IDEPage: React.FC<IDEPageProps> = ({
         </Suspense>
       </FeatureModal>
 
+      {/* 4. Tutor Modal */}
+      <FeatureModal
+        isOpen={isTutorModalOpen}
+        onClose={() => setIsTutorModalOpen(false)}
+        title="AI Quantum Tutor"
+        icon={<Bot size={16} color="var(--qs-accent, #0f62fe)" />}
+        testId="tutor-feature-modal"
+      >
+        <TutorPanel
+          circuit={circuit}
+          simulationResult={executionState.latestResult}
+          selectedGate={selectedGate}
+          onClose={() => setIsTutorModalOpen(false)}
+        />
+      </FeatureModal>
 
       {/* 4.5 Theory Modal */}
       <FeatureModal
@@ -3109,6 +3202,43 @@ export const IDEPage: React.FC<IDEPageProps> = ({
           BOTTOM STATUS BAR (IBM COMPOSER FOOTER)
           ══════════════════════════════════════════════════════════ */}
       <footer className="ibm-composer-footer-bar" data-testid="composer-footer-bar">
+        {executionState.status === 'success' && executionState.executionDurationMs != null && (
+          <div
+            className="ibm-footer-execution-status"
+            data-testid="footer-execution-status"
+            style={{
+              marginRight: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '7px',
+              fontSize: '11px',
+              color: '#34d399',
+              fontFamily: 'monospace',
+              letterSpacing: '0.02em',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: '#34d399',
+                display: 'inline-block',
+                boxShadow: '0 0 6px rgba(52, 211, 153, 0.7)',
+              }}
+            />
+            <span>
+              Ran by {(() => {
+                const b = (executionState.requestedBackend || selectedBackend || 'auto').toLowerCase();
+                if (b === 'auto' || b === 'qiskit_aer' || b === 'aer_simulator' || b === 'qiskit') return 'Qiskit Aer';
+                if (b === 'pennylane') return 'PennyLane';
+                if (b === 'cirq') return 'Cirq';
+                if (b === 'qbraid') return 'qBraid Cloud';
+                return 'Qiskit Aer';
+              })()} ({executionState.executionDurationMs.toFixed(1)}ms)
+            </span>
+          </div>
+        )}
         <div className="ibm-footer-theme-icons" title="Theme options">
           <button
             type="button"

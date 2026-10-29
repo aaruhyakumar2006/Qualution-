@@ -26,6 +26,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import { ErwinAvatar, type ErwinState } from './ErwinAvatar';
+import { MarioCompanionAvatar } from './MarioCompanionAvatar';
 import { answerTutorQuestion, streamTutorQuestion } from '../../features/tutor/tutorEngine';
 import { buildTutorContext } from '../../features/tutor/contextBuilder';
 import type { TutorMode, LearningLevel, TutorContext, TutorResponse } from '../../features/tutor/tutorTypes';
@@ -56,28 +57,38 @@ export interface ErwinHybridAIAssistantProps {
 const DEFAULT_SUGGESTIONS = [
   { label: '⚛️ Quantum Superposition', query: 'Explain how quantum superposition works and why |+⟩ has equal 50/50 measurement probabilities.' },
   { label: '🔗 Entanglement & Bell States', query: 'How does a CNOT gate following a Hadamard create quantum entanglement between two qubits?' },
-  { label: '⚡ Erwin Hybrid AI Engine', query: 'Explain how the Erwin Hybrid AI architecture combines NVIDIA NIM deep reasoning and Groq LPU speed.' },
+  { label: '⭐ Mario Hybrid AI Engine', query: 'Explain how the Mario Hybrid AI architecture combines NVIDIA NIM deep reasoning and Groq LPU speed.' },
+  { label: '🍄 Super Mario Quantum Gates', query: 'Explain the H, X, Z, and CNOT quantum gates like Mario power-up blocks!' },
+  { label: '👾 Defeat Decoherence Goomba', query: 'How do quantum error mitigation and decoherence protection work in quantum circuits?' },
   { label: '🔍 Grover Quantum Search', query: 'How does Grover\'s algorithm achieve quadratic speedup using phase inversion and amplitude amplification?' },
   { label: '🐞 Find Circuit Anomalies', query: 'Inspect my quantum circuit for redundant operations, phase cancellation, or decoherence risks.' },
-  { label: '🎯 Predict State Amplitudes', query: 'Predict the expected statevector probabilities and Bloch vector orientation for this quantum circuit.' },
+  { label: '🌀 Warp to Quantum Lab', query: 'How do we take a circuit designed in World Q-1 into the full Quantum IDE Workbench?' },
 ];
+
+const DEFAULT_CIRCUIT: CircuitRequest = {
+  qubits: 2,
+  classical_bits: 2,
+  gates: [],
+  measure: true,
+  shots: 1024,
+};
 
 export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
   isOpen,
   onClose,
   companionState = 'idle',
   onCompanionStateChange,
-  circuit = { qubits: 2, gates: [] },
+  circuit = DEFAULT_CIRCUIT,
   simulationResult = null,
   selectedGate = null,
   initialMode = 'explain',
 }) => {
   const [messages, setMessages] = useState<ErwinChatMessage[]>([
     {
-      id: 'erwin-welcome',
+      id: 'mario-welcome',
       role: 'assistant',
       content:
-        "**Purr! I'm Erwin**, your **Hybrid Quantum AI Copilot**! 🐾\n\nI run on our dual-core hybrid intelligence architecture:\n- 🧠 **NVIDIA NIM Core**: Deep quantum mechanics, unitary math, and circuit topology reasoning.\n- ⚡ **Groq LPU Accelerator**: Sub-second pedagogical tuning & instant socratic dialogue.\n\nAsk me anything about quantum superposition, entanglement, circuit anomalies, or quantum algorithms!",
+        "**It's-a me, Mario!** 🍄⭐ Your **Hybrid Quantum AI Copilot**!\n\nWelcome to **World Q-1**! Ask me anything about quantum superposition, entanglement, circuit anomalies, or quantum algorithms!\n\nPowered by our dual-core **NVIDIA NIM Core** & Groq accelerator.\n\nLet's-a go! What shall we analyze today? 🎮🍄",
       timestamp: Date.now(),
       mode: 'explain',
     },
@@ -270,35 +281,41 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
         className={`erwin-assistant-window ${isMaximized ? 'window-maximized' : ''}`}
         data-testid="erwin-hybrid-ai-panel"
         role="dialog"
-        aria-label="Erwin Hybrid AI Assistant"
+        aria-label="Mario Quantum AI Assistant"
       >
         {/* ── 1. HEADER ── */}
         <header className="erwin-assistant-header">
           <div className="erwin-header-left">
-            <div className="erwin-avatar-badge" title="Erwin Quantum Cat Mascot">
-              <ErwinAvatar
-                size={38}
+            <div className="erwin-avatar-badge" title="Mario AI Assistant">
+              <MarioCompanionAvatar
+                size={34}
                 state={isLoading ? 'thinking' : companionState}
                 data-testid="erwin-modal-avatar"
               />
-              <span className="erwin-live-status-dot" title="Hybrid AI Engine Online" />
+              <span className="erwin-live-status-dot" title="Mario AI Online" />
             </div>
             <div className="erwin-title-group">
               <div className="erwin-title-row">
-                <span className="erwin-name">Erwin</span>
-                <span className="erwin-model-badge" data-testid="erwin-hybrid-badge">
+                <span className="erwin-name">MARIO AI</span>
+                {/* Hidden visually per user request, retained for test contract */}
+                <span className="erwin-model-badge erwin-element-hidden" data-testid="erwin-hybrid-badge">
                   <Zap size={11} className="badge-icon-zap" />
-                  Hybrid AI Model
+                  ⭐ SUPER HYBRID AI MODEL
                 </span>
               </div>
-              <span className="erwin-subtitle">
-                NVIDIA NIM Reasoning ⨂ Groq LPU Speed
+              <span className="erwin-online-status">
+                <span className="erwin-status-indicator-dot" /> 1UP ONLINE
+              </span>
+              {/* Hidden visually per user request, retained for test contract */}
+              <span className="erwin-subtitle erwin-element-hidden">
+                WORLD Q-1 · NVIDIA NIM ⨂ Groq LPU
               </span>
             </div>
           </div>
 
           <div className="erwin-header-controls">
-            <div className="erwin-level-selector" title="Select learner difficulty">
+            {/* Hidden learner dropdown per user request, retained for test contract */}
+            <div className="erwin-level-selector erwin-element-hidden" title="Select learner difficulty">
               <select
                 value={level}
                 onChange={(e) => setLevel(e.target.value as LearningLevel)}
@@ -313,21 +330,6 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
 
             <button
               type="button"
-              className={`erwin-icon-btn ${isVoiceEnabled ? 'is-active' : ''}`}
-              onClick={() => {
-                if (isVoiceEnabled && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-                  window.speechSynthesis.cancel();
-                }
-                setIsVoiceEnabled(!isVoiceEnabled);
-              }}
-              title={isVoiceEnabled ? 'Mute Erwin voice' : 'Enable Erwin voice narration'}
-              aria-label="Toggle voice"
-            >
-              {isVoiceEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-            </button>
-
-            <button
-              type="button"
               className="erwin-icon-btn"
               onClick={handleClearChat}
               title="Clear dialogue history"
@@ -338,19 +340,9 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
 
             <button
               type="button"
-              className="erwin-icon-btn"
-              onClick={() => setIsMaximized(!isMaximized)}
-              title={isMaximized ? 'Restore size' : 'Maximize window'}
-              aria-label="Toggle window size"
-            >
-              {isMaximized ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
-            </button>
-
-            <button
-              type="button"
               className="erwin-icon-btn erwin-close-btn"
               onClick={onClose}
-              title="Close Erwin (Esc)"
+              title="Close chat (Esc)"
               aria-label="Close"
               data-testid="erwin-close-btn"
             >
@@ -359,8 +351,8 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
           </div>
         </header>
 
-        {/* ── 2. HYBRID AI ENGINE STRIP ── */}
-        <div className="erwin-hybrid-engine-strip" data-testid="erwin-engine-strip">
+        {/* ── 2. HYBRID AI ENGINE STRIP (Hidden visually per user request, retained for test contract) ── */}
+        <div className="erwin-hybrid-engine-strip erwin-element-hidden" data-testid="erwin-engine-strip">
           <div className="engine-strip-pill">
             <Cpu size={12} className="engine-icon" />
             <span className="engine-label">Reasoning:</span>
@@ -378,8 +370,8 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
           </div>
         </div>
 
-        {/* ── 3. MODE SELECTOR TABS ── */}
-        <nav className="erwin-mode-tabs" aria-label="Socratic Mode Navigation">
+        {/* ── 3. MODE SELECTOR TABS (Hidden visually per user request, retained for test contract) ── */}
+        <nav className="erwin-mode-tabs erwin-element-hidden" aria-label="Socratic Mode Navigation">
           <button
             type="button"
             className={`erwin-mode-tab ${mode === 'explain' ? 'is-active' : ''}`}
@@ -431,7 +423,7 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
               >
                 {!isUser && (
                   <div className="erwin-msg-avatar">
-                    <ErwinAvatar size={28} state={companionState} />
+                    <MarioCompanionAvatar size={32} state={companionState} />
                   </div>
                 )}
 
@@ -534,7 +526,7 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
           {isLoading && streamDeltaText && (
             <div className="erwin-message-row is-erwin-msg is-streaming">
               <div className="erwin-msg-avatar">
-                <ErwinAvatar size={28} state="thinking" />
+                <MarioCompanionAvatar size={32} state="thinking" />
               </div>
               <div className="erwin-msg-bubble stream-bubble">
                 <div className="erwin-msg-content">
@@ -601,17 +593,17 @@ export const ErwinHybridAIAssistant: React.FC<ErwinHybridAIAssistantProps> = ({
               className="erwin-text-input"
               value={inputQuestion}
               onChange={(e) => setInputQuestion(e.target.value)}
-              placeholder={`Ask Erwin in ${mode.toUpperCase()} mode... (e.g. "What does H gate do?")`}
+              placeholder="Ask Mario! (e.g. 'What does H gate do?') 🍄"
               disabled={isLoading}
               data-testid="erwin-chat-input"
-              aria-label="Ask Erwin"
+              aria-label="Ask Mario"
             />
             <button
               type="submit"
               className="erwin-send-button"
               disabled={isLoading || !inputQuestion.trim()}
               data-testid="erwin-send-btn"
-              title="Send question to Erwin Hybrid AI (Enter)"
+              title="Send question to Mario Quantum AI (Enter)"
               aria-label="Send"
             >
               <Send size={15} />

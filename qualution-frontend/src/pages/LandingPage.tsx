@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import ToonhubHero from '../components/ToonhubHero';
+import React, { useState, useEffect } from 'react';
+import { CodedexLanding } from '../components/CodedexLanding';
 import { LoginModal } from '../features/auth/LoginModal';
 import { SignUpModal } from '../features/auth/SignUpModal';
 
@@ -24,6 +24,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = 'auto';
+    document.body.style.height = 'auto';
+    const root = document.getElementById('root');
+    if (root) { root.style.overflow = 'auto'; root.style.height = 'auto'; }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      if (root) { root.style.overflow = ''; root.style.height = ''; }
+    };
+  }, []);
 
   const handleOpenLogin = () => {
     if (onOpenLogin) {
@@ -52,8 +64,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   return (
-    <main className="w-full h-screen overflow-hidden">
-      <ToonhubHero
+    <main className="w-full min-h-screen bg-[#040914]">
+      <CodedexLanding
         onLaunchIDE={onLaunchIDE}
         onOpenLogin={handleOpenLogin}
         onOpenSignUp={handleOpenSignUp}

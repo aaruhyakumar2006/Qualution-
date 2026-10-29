@@ -1,46 +1,41 @@
-import React from 'react';
-
-import { ErwinAvatar } from '../../components/common/ErwinAvatar';
+import React, { useState } from 'react';
 
 /**
- * AuthBadge — Our mascot Erwin prominently displayed in a clear, legible size at the top of the auth modal.
+ * AuthBadge — Super Mario Quantum Guide prominently displayed in 16-bit arcade glory.
  */
-export const AuthBadge: React.FC = () => (
-  <div className="auth-ref-badge-container">
-    {/* Soft radiant ambient halo behind mascot */}
-    <div
-      className="auth-ref-flare"
-      style={{
-        width: 160,
-        height: 160,
-        top: -16,
-        background: 'radial-gradient(circle, rgba(17, 146, 232, 0.35) 0%, rgba(34, 197, 94, 0.18) 50%, transparent 72%)',
-        filter: 'blur(18px)',
-      }}
-    />
+export const AuthBadge: React.FC = () => {
+  const [jumping, setJumping] = useState(false);
 
-    {/* Mascot Avatar Container — Generous and crisp */}
-    <div
-      className="auth-ref-badge"
-      style={{
-        width: 110,
-        height: 110,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle at 50% 30%, #1e293b 0%, #090e17 100%)',
-        border: '2.5px solid rgba(56, 189, 248, 0.45)',
-        boxShadow: '0 12px 28px -4px rgba(17, 146, 232, 0.35), 0 0 22px rgba(56, 189, 248, 0.22)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-        position: 'relative',
-        zIndex: 2,
-      }}
-    >
-      <ErwinAvatar size={98} state="idle" />
+  const handleClick = () => {
+    setJumping(true);
+    setTimeout(() => setJumping(false), 450);
+  };
+
+  return (
+    <div className="auth-ref-badge-container">
+      {/* Radiant golden halo behind Mario */}
+      <div className="auth-ref-flare" />
+
+      {/* Mascot Avatar Container — 16-Bit Mario with Coin Pill */}
+      <div
+        className={`auth-ref-badge ${jumping ? 'mario-jump-action' : ''}`}
+        onClick={handleClick}
+        title="Mario Quantum Guide — Click to Jump!"
+        style={{ cursor: 'pointer' }}
+      >
+        <img
+          src={jumping ? '/mario/Mario_Big_Jump.png' : '/mario/Mario_Big_Idle.png'}
+          alt="Mario Quantum Guide"
+          className="auth-mario-avatar-img"
+        />
+        <div className="auth-mario-coin-badge">
+          <img src="/mario/Coin.png" alt="" className="auth-mario-coin-icon" />
+          <span>1-UP</span>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 /**
  * Google 4-color 'G' icon

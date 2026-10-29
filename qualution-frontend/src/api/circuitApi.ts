@@ -4,6 +4,9 @@ import type {
   CircuitRunResponse,
   CircuitRequest,
 } from '../features/circuit/types';
+import { executeRoutedCircuit } from '../features/circuit/executionRouter';
+import { toVisualizationPayload } from '../features/circuit/resultNormalizer';
+import { getQuantumEnginePreference } from '../features/circuit/wasmManager';
 
 export interface ReadinessResponse {
   status: string;
@@ -50,10 +53,53 @@ export interface ParseResponse {
 }
 
 export async function runCircuit(request: CircuitRunRequest): Promise<CircuitRunResponse> {
-  return apiClient<CircuitRunResponse>('/circuits/run', {
-    method: 'POST',
-    body: JSON.stringify(request),
+  const isLocalPreferred =
+    request.backend === 'clifford_stabilizer' ||
+    request.backend === 'wasm' ||
+    request.backend === 'local_browser';
+
+  const toCanonical = (circuit: CircuitRequest) => ({
+    qubits: circuit.qubits,
+    classical_bits: circuit.classical_bits,
+    gates: (circuit.gates || []).map((g, idx) => ({
+      id: g.id || `g_${idx}`,
+      type: (g as any).type || g.gate,
+      targets: g.targets,
+      column: g.column ?? idx,
+      angle: g.angle,
+    })),
+    measurements: (circuit.gates || [])
+      .filter((g) => ((g as any).type || g.gate || '').toLowerCase() === 'measure')
+      .map((g) => ({ qubit: g.targets[0], classical_bit: g.targets[0] })),
+    measure: circuit.measure,
+    shots: circuit.shots,
   });
+
+  if (isLocalPreferred) {
+    try {
+      const canonical = toCanonical(request.circuit);
+      const unified = await executeRoutedCircuit(canonical, { shots: request.circuit.shots });
+      return toVisualizationPayload(unified, request.circuit);
+    } catch (localErr) {
+      console.warn('[CircuitApi] Local Execution Router encountered an error, falling back to backend:', localErr);
+    }
+  }
+
+  try {
+    return await apiClient<CircuitRunResponse>('/circuits/run', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    });
+  } catch (backendErr) {
+    // Graceful offline fallback: if backend server is unreachable, run client-side Execution Router
+    try {
+      const canonical = toCanonical(request.circuit);
+      const unified = await executeRoutedCircuit(canonical, { shots: request.circuit.shots });
+      return toVisualizationPayload(unified, request.circuit);
+    } catch {
+      throw backendErr;
+    }
+  }
 }
 
 export async function checkReadiness(): Promise<ReadinessResponse> {

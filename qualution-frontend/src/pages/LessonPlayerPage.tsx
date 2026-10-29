@@ -32,6 +32,8 @@ import {
   Volume2,
   VolumeX,
   FlaskConical as Flask,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
 import { useLessonPlayer } from '../hooks/useLessonPlayer';
 import { TeachingBoard } from '../components/teaching/TeachingBoard';
@@ -93,6 +95,24 @@ export const LessonPlayerPage: React.FC<LessonPlayerPageProps> = ({
   const [hasCompleted, setHasCompleted] = useState<boolean>(false);
   const [availableExperiments, setAvailableExperiments] = useState<string[]>([]);
   const completedRef = useRef<boolean>(false);
+  const playerRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = useCallback(() => {
+    const el = playerRef.current;
+    if (!el) return;
+    if (!document.fullscreenElement) {
+      el.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
+  }, []);
 
   // Phase 2 + Phase 3: Teaching Cursor coordination
   const [cursorState, setCursorState] = useState<BoardCursorState>({ x: 256, y: 216, visible: true, moving: false });
@@ -304,20 +324,9 @@ export const LessonPlayerPage: React.FC<LessonPlayerPageProps> = ({
 
   // Render lesson player
   return (
-    <div className="lesson-player-page">
-      {/* Header */}
-      <header className="lesson-player-header">
-        <button className="back-button" onClick={handleBack} aria-label="Back to Academy" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-          <ArrowLeft size={18} />
-          <span style={{ fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#ffffff', fontSize: '0.85rem' }}>QUALUTION</span>
-          <span style={{ fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#38bdf8', fontSize: '0.82rem' }}>ACADEMY</span>
-        </button>
-        <h1 className="lesson-title">{lessonTitle}</h1>
-        <div className="header-spacer" />
-      </header>
-
+    <div className="lesson-player-page" ref={playerRef} data-fullscreen={isFullscreen}>
       {/* Teaching Board Container */}
-      <div className="lesson-player-content">
+      <div className="lesson-player-content" onClick={toggleFullscreen} title="Click to toggle fullscreen">
         <TeachingBoard
           svgChildren={
             <>
@@ -381,6 +390,11 @@ export const LessonPlayerPage: React.FC<LessonPlayerPageProps> = ({
           onOpenWorkbench={handleOpenWorkbench}
         />
       </div>
+
+      {/* Fullscreen Button */}
+      <button className="lesson-fullscreen-btn" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}>
+        {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+      </button>
 
       {/* Playback Controls */}
       <div className={`lesson-player-controls ${

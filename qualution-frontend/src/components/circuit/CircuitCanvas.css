@@ -613,6 +613,17 @@
               background-color 0.4s ease;
 }
 
+.canvas-viewport::-webkit-scrollbar { width: 6px; height: 6px; }
+.canvas-viewport::-webkit-scrollbar-track { background: transparent; }
+.canvas-viewport::-webkit-scrollbar-thumb {
+  background: #3b4452;
+  border-radius: 3px;
+}
+.canvas-viewport::-webkit-scrollbar-thumb:hover { background: #4f5b6b; }
+
+[data-theme="light"] .canvas-viewport::-webkit-scrollbar-thumb { background: #c6c6c6; }
+[data-theme="light"] .canvas-viewport::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+
 /* ═══════════════════════════════════════════════════════════════
    PERSISTENT AMBIENT QUANTUM BACKGROUND (SHARED ACROSS ALL SEGMENTS)
    ═══════════════════════════════════════════════════════════════ */
@@ -805,13 +816,17 @@
   padding-right: 4px;
   box-sizing: border-box;
   overflow: hidden;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .qubit-name {
   font-family: var(--font-mono, monospace);
   font-size: 14px;
-  font-weight: 500;
-  color: var(--qs-text-secondary, #8d8d8d);
+  font-weight: 600;
+  color: #a8b3c8;
   white-space: nowrap;
 }
 
@@ -819,14 +834,16 @@
   color: #525252;
 }
 
-.qubit-wire-row.wire-highlighted .qubit-label-box {
-  background: rgba(15, 98, 254, 0.15);
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(15, 98, 254, 0.4);
+.classical-lbl .qubit-name {
+  color: #a8b3c8;
+}
+
+[data-theme="light"] .classical-lbl .qubit-name {
+  color: #525252;
 }
 
 .qubit-wire-row.wire-highlighted .qubit-name {
-  color: #78a9ff;
+  color: #a8b3c8;
   font-weight: 700;
 }
 
@@ -1155,9 +1172,7 @@
   margin-top: 6px;
 }
 
-.classical-lbl .qubit-name {
-  color: var(--qs-text-muted, #8d8d8d);
-}
+
 
 .classical-track {
   height: 48px;

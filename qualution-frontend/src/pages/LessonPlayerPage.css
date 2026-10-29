@@ -18,6 +18,76 @@
   background: #0a0a0a;
   color: #e8e8e8;
   overflow: hidden;
+  position: relative;
+}
+
+/* ── Fullscreen Button ───────────────────────────────────────────────────── */
+.lesson-fullscreen-btn {
+  position: absolute;
+  bottom: calc(100% - 100vh + 16px);
+  right: 16px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(20, 20, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #e8e8e8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.lesson-fullscreen-btn:hover {
+  background: rgba(99, 102, 241, 0.4);
+  border-color: rgba(99, 102, 241, 0.7);
+  color: #ffffff;
+}
+
+/* ── Fullscreen mode ─────────────────────────────────────────────────────── */
+.lesson-player-page:fullscreen,
+.lesson-player-page:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+}
+
+.lesson-player-page:fullscreen .lesson-player-content,
+.lesson-player-page:-webkit-full-screen .lesson-player-content {
+  flex: 1;
+  padding: 0;
+}
+
+.lesson-player-page:fullscreen .lesson-player-header,
+.lesson-player-page:-webkit-full-screen .lesson-player-header {
+  display: none;
+}
+
+.lesson-player-page:fullscreen .lesson-player-controls,
+.lesson-player-page:-webkit-full-screen .lesson-player-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+}
+
+.lesson-player-page:fullscreen:hover .lesson-player-controls,
+.lesson-player-page:-webkit-full-screen:hover .lesson-player-controls {
+  opacity: 1;
+}
+
+.lesson-player-page:fullscreen .lesson-fullscreen-btn,
+.lesson-player-page:-webkit-full-screen .lesson-fullscreen-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
 }
 
 /* ── Header ──────────────────────────────────────────────────────────────── */
@@ -74,6 +144,7 @@
   justify-content: center;
   padding: 2rem;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .teaching-board-container {

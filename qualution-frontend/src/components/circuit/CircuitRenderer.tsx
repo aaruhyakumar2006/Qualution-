@@ -452,6 +452,8 @@ const CanonicalGateItem: React.FC<CanonicalGateItemProps> = ({
         e.dataTransfer.dropEffect = 'copy';
       }}
       data-testid={`placed-gate-${gateType}-${gate.column}`}
+      data-gate-id={gate.id}
+      data-teaching-target={`placed-gate-${gate.id}`}
       title={tooltipText}
     >
       {/* ── Multi-Qubit Connector Line (drawn from the uppermost target with stroke-dashoffset animation) ── */}

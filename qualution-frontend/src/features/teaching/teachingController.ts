@@ -74,6 +74,7 @@ export class TeachingController {
   private stageCoordCache: Map<string, { x: number; y: number }> = new Map();
   private validatedStepIndices: Set<number> = new Set();
   private furthestValidatedStepIndex: number = -1;
+  private isDestroyed: boolean = false;
 
   constructor(hooks: TeachingIDEHooks, speech: SpeechService = defaultSpeechService) {
     this.hooks = hooks;
@@ -310,6 +311,7 @@ export class TeachingController {
   }
 
   public async start(): Promise<void> {
+    if (this.isDestroyed) return;
     if (!this.state.activeLesson || this.state.totalSteps === 0) {
       return;
     }
@@ -356,7 +358,12 @@ export class TeachingController {
     await this.restart();
   }
 
+  public isTerminated(): boolean {
+    return this.isDestroyed;
+  }
+
   public destroy(): void {
+    this.isDestroyed = true;
     this.speech.stop();
     this.cleanupDragDOM();
     if (this.hooks?.clearHighlights) {
@@ -955,6 +962,7 @@ export class TeachingController {
   // ── Step Execution Engine ─────────────────────────────────────────
 
   private async goToStep(index: number, options?: { force?: boolean }): Promise<void> {
+    if (this.isDestroyed) return;
     if (!this.state.activeLesson) return;
     const step = this.state.activeLesson.steps[index];
     if (!step) return;
@@ -1171,15 +1179,44 @@ export class TeachingController {
         return;
       }
 
-      // Ensure cursor is completely hidden during transitions — NEVER show automated cursor clicks on UI buttons
+      // Ensure cursor is completely hidden during transitions
       this.updateCursor({ isVisible: false, isClicking: false, label: undefined });
 
-      // Natural pause allowing the learner to read narration and observe the circuit state
-      // Minimum reading time based on narration length (approx 150-200 WPM, ~35ms per character)
-      const narrationReadingTime = step.narrationText ? Math.min(6000, Math.max(1800, step.narrationText.length * 35)) : 1800;
-      const basePause = Math.max(2500, narrationReadingTime);
-      const pauseDuration = Math.round(basePause / (this.state.playbackSpeed || 1));
-      await new Promise((resolve) => setTimeout(resolve, pauseDuration));
+      const hadSpeech = !!step.narrationText;
+      const wordCount = hadSpeech ? step.narrationText.split(/\s+/).length : 0;
+      const speed = this.state.playbackSpeed || 1;
+
+      if (hadSpeech) {
+        // Chrome Web Speech API fires onend prematurely on the first utterance.
+        // Guard: expected TTS duration = words / 2.0 words-per-second (~120 WPM).
+        // If onend fired early, wait the remaining time so the next step's speech
+        // never overlaps with the current step's still-playing audio.
+        const expectedTtsDurationMs = Math.round((wordCount / 2.0) * 1000 / speed);
+        const elapsed = Date.now() - this.stepStartTime;
+        const remaining = expectedTtsDurationMs - elapsed;
+        if (remaining > 0) {
+          await new Promise((resolve) => setTimeout(resolve, remaining));
+          if (this.stepExecutionToken !== token || !this.state.isAutoPlay || (this.state.status as string) === 'PAUSED' || this.isDestroyed) {
+            return;
+          }
+        }
+        // If the browser speech synthesis engine is still actively outputting audio, wait for it
+        if (typeof window !== 'undefined' && window.speechSynthesis?.speaking) {
+          const maxWait = Date.now() + 6000;
+          while (window.speechSynthesis.speaking && Date.now() < maxWait) {
+            await new Promise((r) => setTimeout(r, 200));
+            if (this.stepExecutionToken !== token || !this.state.isAutoPlay || (this.state.status as string) === 'PAUSED' || this.isDestroyed) {
+              return;
+            }
+          }
+        }
+        // 1000ms comfortable breath after speech fully completes
+        await new Promise((resolve) => setTimeout(resolve, Math.round(1000 / speed)));
+      } else {
+        // No TTS: word-count proportional reading pause
+        const pauseDuration = Math.round(Math.min(4000, Math.max(1500, wordCount * 250)) / speed);
+        await new Promise((resolve) => setTimeout(resolve, pauseDuration));
+      }
 
       if (this.stepExecutionToken !== token || !this.state.isAutoPlay || (this.state.status as string) === 'PAUSED') {
         return;
@@ -1670,19 +1707,20 @@ export class TeachingController {
             // Non-blocking
           }
 
+          const targetShots = action.shots || this.state.activeLesson?.starterCircuit?.shots || 1000;
           emitTeachingEvent({
             type: 'simulation_started',
             lessonId: this.state.activeLesson?.id || '',
             timestamp: Date.now(),
             metadata: {
-              shots: action.shots || 1000,
+              shots: targetShots,
               backend: action.backend || 'auto',
               routingReason,
               executionMethod,
             },
           });
 
-          const simResult = await this.hooks.runSimulation(action.shots, action.backend);
+          const simResult = await this.hooks.runSimulation(targetShots, action.backend);
           this.lastSimResult = simResult;
 
           emitTeachingEvent({

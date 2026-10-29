@@ -80,65 +80,26 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         <h2 className="auth-ref-title">Sign in</h2>
 
         {/* Role Toggle: Student vs Teacher */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '8px',
-          background: 'rgba(15, 23, 42, 0.75)',
-          padding: '4px',
-          borderRadius: '12px',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
-          marginBottom: '1.25rem',
-        }}>
+        <div className="auth-mario-role-toggle">
           <button
             type="button"
+            className={`auth-mario-role-btn ${role === 'student' ? 'active-student' : ''}`}
             onClick={() => {
               setRole('student');
               if (!email || email === 'teacher@qualution.edu') setEmail('aarav.sharma@qualution.edu');
             }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              padding: '8px 12px',
-              borderRadius: '8px',
-              fontSize: '13px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: role === 'student' ? '#0284c7' : 'transparent',
-              color: role === 'student' ? '#ffffff' : '#94a3b8',
-              border: role === 'student' ? '1px solid #38bdf8' : '1px solid transparent',
-              boxShadow: role === 'student' ? '0 2px 8px rgba(2, 132, 199, 0.4)' : 'none',
-            }}
           >
-            <span>🎓 Student</span>
+            <span>🍄 Student</span>
           </button>
           <button
             type="button"
+            className={`auth-mario-role-btn ${role === 'teacher' ? 'active-teacher' : ''}`}
             onClick={() => {
               setRole('teacher');
               if (!email || email === 'aarav.sharma@qualution.edu') setEmail('teacher@qualution.edu');
             }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              padding: '8px 12px',
-              borderRadius: '8px',
-              fontSize: '13px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              background: role === 'teacher' ? '#7c3aed' : 'transparent',
-              color: role === 'teacher' ? '#ffffff' : '#94a3b8',
-              border: role === 'teacher' ? '1px solid #a855f7' : '1px solid transparent',
-              boxShadow: role === 'teacher' ? '0 2px 8px rgba(124, 58, 237, 0.4)' : 'none',
-            }}
           >
-            <span>👨‍🏫 Teacher</span>
+            <span>👑 Teacher</span>
           </button>
         </div>
 

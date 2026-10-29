@@ -113,6 +113,15 @@ export interface RawStep {
   id: string;
   /** Optional human-readable title (shown in progress UI). */
   title?: string;
+  /** Optional concept IDs associated with this step. */
+  concepts?: string[];
+  /** Optional learning goal for this step. */
+  goal?: string;
+  /** Optional checkpoint metadata. */
+  checkpoint?: {
+    circuit_ref?: string;
+    question_type?: string;
+  };
   /** Ordered list of compact commands. */
   cmds: RawCmd[];
 }

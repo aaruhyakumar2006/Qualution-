@@ -1,9 +1,9 @@
 .toast-portal-container {
   position: fixed;
-  top: 54px;
+  bottom: 38px;
   right: 24px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 10px;
   z-index: 999999;
   pointer-events: none;
@@ -90,7 +90,7 @@
 @keyframes toastSlideIn {
   from {
     opacity: 0;
-    transform: translateY(-14px) scale(0.96);
+    transform: translateY(14px) scale(0.96);
   }
   to {
     opacity: 1;

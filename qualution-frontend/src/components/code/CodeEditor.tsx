@@ -286,35 +286,16 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleFrameworkChange = (newFw: CodeFramework) => {
     setFramework(newFw);
-    const friendlyName =
-      newFw === 'pennylane'
-        ? 'PennyLane'
-        : newFw === 'qiskit'
-        ? 'Qiskit'
-        : newFw === 'cirq'
-        ? 'Google Cirq'
-        : 'OpenQASM 3.0';
-
-    // Dispatch pop message (toast) requested by user:
-    // "if the user clicks pennylane there the pop message should come like cirucit succesfully executed in pennylane or the respective one the user clicks there"
-    window.dispatchEvent(
-      new CustomEvent('qualution:toast', {
-        detail: {
-          type: 'success',
-          text: `Circuit successfully executed in ${friendlyName}`,
-        },
-      })
-    );
 
     // Sync the top execution backend with this framework
     const backendId =
       newFw === 'pennylane'
         ? 'pennylane'
         : newFw === 'qiskit'
-        ? 'aer_simulator'
+        ? 'qiskit_aer'
         : newFw === 'cirq'
         ? 'cirq'
-        : 'pennylane';
+        : 'auto';
 
     window.dispatchEvent(
       new CustomEvent('qualution:set-backend', {

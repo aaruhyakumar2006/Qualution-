@@ -4,7 +4,7 @@
 
 .teaching-hud-container {
   position: relative;
-  z-index: 90;
+  z-index: 40;
   width: 100%;
   background: var(--wb-bg-elevated, #1e232d);
   border-bottom: 1px solid var(--wb-border, #262c36);

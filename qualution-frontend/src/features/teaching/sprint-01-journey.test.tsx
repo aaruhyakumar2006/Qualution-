@@ -268,8 +268,13 @@ describe('Phase 2D — Sprint 1 End-to-End Integration & UX Audit', () => {
     });
 
     // Step 2 -> 3 (Prediction)
+    await waitFor(() => {
+      const btn = screen.getByTestId('teaching-next-btn');
+      expect(btn).not.toBeDisabled();
+    });
+    const step2NextBtn = screen.getByTestId('teaching-next-btn');
     await act(async () => {
-      fireEvent.click(nextBtn);
+      fireEvent.click(step2NextBtn);
     });
 
     await waitFor(() => {
@@ -286,17 +291,34 @@ describe('Phase 2D — Sprint 1 End-to-End Integration & UX Audit', () => {
       fireEvent.click(submitPredBtn);
     });
 
-    // Advance through steps 4, 5, and 6 to reach Takeover at Step 7
-    for (let step = 4; step <= 6; step++) {
-      await waitFor(() => {
-        const btn = screen.getByTestId('teaching-next-btn');
-        expect(btn).not.toBeDisabled();
-      });
-      const btn = screen.getByTestId('teaching-next-btn');
-      await act(async () => {
-        fireEvent.click(btn);
-      });
-    }
+    // Step 4 is active after prediction submission
+    await waitFor(() => {
+      expect(screen.getByText('Execute Simulation on Quantum Backend')).toBeInTheDocument();
+    });
+
+    // Advance to Step 5
+    await waitFor(() => expect(screen.getByTestId('teaching-next-btn')).not.toBeDisabled());
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('teaching-next-btn'));
+    });
+    await waitFor(() => {
+      expect(screen.getByText('Analyze Measurement Distribution')).toBeInTheDocument();
+    });
+
+    // Advance to Step 6
+    await waitFor(() => expect(screen.getByTestId('teaching-next-btn')).not.toBeDisabled());
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('teaching-next-btn'));
+    });
+    await waitFor(() => {
+      expect(screen.getByText('Computational Basis Eigenstate')).toBeInTheDocument();
+    });
+
+    // Advance to Step 7 (Takeover)
+    await waitFor(() => expect(screen.getByTestId('teaching-next-btn')).not.toBeDisabled());
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('teaching-next-btn'));
+    });
 
     // Step 7 is takeover (Hands-on Verification)
     await waitFor(() => {

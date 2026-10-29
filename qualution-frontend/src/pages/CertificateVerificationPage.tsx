@@ -54,7 +54,7 @@ export const CertificateVerificationPage: React.FC<CertificateVerificationPagePr
         setCertificate(result.certificate);
       } else {
         // Fallback default for Aarav Sharma
-        const defaultCert = getOrCreateStudentCertificate('Aarav Sharma', 'aarav.sharma@qualution.edu');
+        const defaultCert = getOrCreateStudentCertificate('Aarav Sharma', 'aarav.sharma@qualution.edu', 92, 'A+', true);
         setCertificate(defaultCert);
       }
       setVerificationTime(new Date().toUTCString());

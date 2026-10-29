@@ -77,11 +77,11 @@ interface HeaderProps {
 type MenuType = 'file' | 'edit' | 'view' | 'help' | 'templates' | null;
 
 const BACKEND_OPTIONS = [
-  { id: 'pennylane', name: 'PennyLane Default Qubit', type: 'Local Simulator' },
-  { id: 'aer_simulator', name: 'Qiskit Aer Simulator', type: 'Local Statevector' },
-  { id: 'cirq', name: 'Google Cirq Native', type: 'Local Cirq' },
-  { id: 'clifford_stabilizer', name: 'Clifford Stabilizer (<1 MB)', type: 'Aaronson-Gottesman' },
-  { id: 'qbraid', name: 'qBraid Ecosystem Hub', type: 'Cloud Ecosystem' },
+  { id: 'auto', name: 'Auto Backend', type: 'Intelligent (Qiskit Aer)' },
+  { id: 'qiskit_aer', name: 'Qiskit Aer', type: 'Local Statevector' },
+  { id: 'pennylane', name: 'PennyLane', type: 'Default Qubit' },
+  { id: 'cirq', name: 'Cirq', type: 'Google Cirq' },
+  { id: 'qbraid', name: 'qBraid Cloud', type: 'Cloud Ecosystem' },
 ];
 
 const SHOTS_OPTIONS = [
@@ -98,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
   circuitName = 'Untitled circuit',
   onOpenFiles,
   onOpenRunConfig,
-  selectedBackend = 'pennylane',
+  selectedBackend = 'auto',
   onSelectBackend,
   shots = 1000,
   onChangeShots,
@@ -131,6 +131,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenTopology,
   isVoiceListening = false,
   onToggleVoice,
+  onNavigateTeacherPortal,
+  onNavigateStudentPortal,
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
@@ -187,6 +189,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   const getBackendLabel = (id?: string) => {
     switch (id) {
+      case 'auto':
+        return 'Auto Backend';
       case 'aer_simulator':
       case 'qiskit':
       case 'qiskit_aer':
@@ -194,13 +198,13 @@ export const Header: React.FC<HeaderProps> = ({
       case 'pennylane':
         return 'PennyLane';
       case 'cirq':
-        return 'Google Cirq';
+        return 'Cirq';
       case 'clifford_stabilizer':
         return 'Clifford Stabilizer';
       case 'qbraid':
-        return 'qBraid Ecosystem';
+        return 'qBraid Cloud';
       default:
-        return 'PennyLane';
+        return 'Auto Backend';
     }
   };
 
@@ -332,24 +336,9 @@ export const Header: React.FC<HeaderProps> = ({
                     onClick={() => {
                       onSelectBackend?.(opt.id);
                       setIsBackendDropdownOpen(false);
-                      const engineName =
-                        opt.id === 'pennylane'
-                          ? 'PennyLane'
-                          : opt.id === 'aer_simulator'
-                          ? 'Qiskit'
-                          : opt.id === 'cirq'
-                          ? 'Google Cirq'
-                          : opt.id === 'clifford_stabilizer'
-                          ? 'Clifford Stabilizer'
-                          : 'qBraid';
-                      window.dispatchEvent(
-                        new CustomEvent('qualution:toast', {
-                          detail: { type: 'success', text: `Circuit successfully executed in ${engineName}` },
-                        })
-                      );
                       window.dispatchEvent(
                         new CustomEvent('qualution:set-framework', {
-                          detail: opt.id === 'aer_simulator' ? 'qiskit' : opt.id,
+                          detail: opt.id === 'aer_simulator' || opt.id === 'qiskit_aer' || opt.id === 'auto' ? 'qiskit' : opt.id,
                         })
                       );
                     }}
@@ -415,24 +404,9 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => {
                         onSelectBackend?.(opt.id);
                         setIsBackendDropdownOpen(false);
-                        const engineName =
-                          opt.id === 'pennylane'
-                            ? 'PennyLane'
-                            : opt.id === 'aer_simulator'
-                            ? 'Qiskit'
-                            : opt.id === 'cirq'
-                            ? 'Google Cirq'
-                            : opt.id === 'clifford_stabilizer'
-                            ? 'Clifford Stabilizer'
-                            : 'qBraid';
-                        window.dispatchEvent(
-                          new CustomEvent('qualution:toast', {
-                            detail: { type: 'success', text: `Circuit successfully executed in ${engineName}` },
-                          })
-                        );
                         window.dispatchEvent(
                           new CustomEvent('qualution:set-framework', {
-                            detail: opt.id === 'aer_simulator' ? 'qiskit' : opt.id,
+                            detail: opt.id === 'aer_simulator' || opt.id === 'qiskit_aer' || opt.id === 'auto' ? 'qiskit' : opt.id,
                           })
                         );
                       }}
@@ -1031,6 +1005,19 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Radio size={14} style={{ color: isCollabActive ? '#34d399' : '#c084fc' }} />
               <span>{isCollabActive ? `Live: ${collabRoomCode || 'Collab'}` : 'Collaborate'}</span>
+            </button>
+          )}
+
+          {onToggleTutor && (
+            <button
+              type="button"
+              className={`ibm-save-file-btn ibm-header-tutor-btn ${isTutorOpen ? 'active' : ''}`}
+              onClick={onToggleTutor}
+              title="AI Quantum Tutor (Ctrl+L)"
+              data-testid="header-tutor-btn"
+            >
+              <Bot size={14} className="ibm-save-icon" />
+              <span>Tutor</span>
             </button>
           )}
 

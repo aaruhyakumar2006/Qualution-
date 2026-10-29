@@ -4,12 +4,12 @@
    Tokens: --space-6 (24px), --space-2 (8px), --space-3 (12px)
    ═══════════════════════════════════════════════════════════════ */
 
-/* Fixed anchor: bottom-left corner */
+/* Fixed anchor: bottom-left corner across entire website */
 .erwin-global-anchor {
   position: fixed;
   bottom: var(--space-6, 24px);
   left: var(--space-6, 24px);
-  z-index: 1000;
+  z-index: 999999;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -51,7 +51,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 8px;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;

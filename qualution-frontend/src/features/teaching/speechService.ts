@@ -97,6 +97,9 @@ export class BrowserSpeechService implements TTSProvider {
 
     return new Promise<void>((resolve) => {
       try {
+        // Null out currentUtterance BEFORE stop() so the old utterance's onend
+        // doesn't accidentally resolve a stale narrationPromise via finalize()
+        this.currentUtterance = null;
         this.stop();
 
         // Resume if browser suspended speechSynthesis
@@ -148,7 +151,9 @@ export class BrowserSpeechService implements TTSProvider {
           finalize();
         };
 
-        const timeoutMs = Math.max(4000, trimmed.length * 150);
+        // Safety timeout: TTS speaks ~15 chars/sec at rate 0.95, so chars/15*1000 = ms + 2000ms buffer.
+        // This ensures we don't hang forever if onend fails, without firing prematurely.
+        const timeoutMs = Math.max(3000, Math.round(trimmed.length / 15 * 1000) + 2000);
         setTimeout(() => {
           finalize();
         }, timeoutMs);

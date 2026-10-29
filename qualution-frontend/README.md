@@ -2,7 +2,7 @@
 
 Professional Quantum Learning &amp; Integrated Development Environment (IDE) built with **React**, **TypeScript**, and **Vite**.
 
-Qualution connects to the **Qualution FastAPI Backend** to simulate quantum circuits on **Qiskit Aer** and **PennyLane**, providing real-time drag-and-drop circuit composition, bidirectional source code synchronization, exact statevector analysis, 3D Bloch sphere projections, educational gate-by-gate timeline inspection, and an interactive deterministic learning engine.
+Qualution features an intelligent multi-tiered execution architecture: an on-device **Rust/WebAssembly (WASM)** core (with automatic **TypeScript** fallback) running in dedicated Web Workers for sub-millisecond local stabilizer and statevector simulations, alongside connection to the **Qualution FastAPI Backend** (Qiskit Aer, PennyLane, MPS, Cloud QPU) for large circuits exceeding client safe memory thresholds. It provides real-time drag-and-drop circuit composition, bidirectional source code synchronization, exact statevector analysis, 3D Bloch sphere projections, educational gate-by-gate timeline inspection, and an interactive deterministic learning engine.
 
 ---
 

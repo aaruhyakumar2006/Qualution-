@@ -821,7 +821,11 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({
                 }}
               >
                 <span>
-                  {role === 'teacher' ? 'Launch Instructor Dashboard' : 'Launch Student Portal'}
+                  {role === 'teacher' && onNavigateTeacherPortal
+                    ? 'Launch Instructor Dashboard'
+                    : onNavigateStudentPortal
+                    ? 'Launch Student Portal'
+                    : 'Launch Quantum Studio'}
                 </span>
                 <ArrowRight size={18} />
               </button>

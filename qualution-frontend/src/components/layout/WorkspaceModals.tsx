@@ -77,11 +77,12 @@ export const RunConfigModal: React.FC<RunConfigModalProps> = ({
               onChange={(e) => onSelectBackend(e.target.value)}
               data-testid="run-modal-backend-select"
             >
+              <option value="auto">Auto Backend (Qiskit Aer)</option>
+              <option value="qiskit_aer">Qiskit Aer (Local Statevector)</option>
               <option value="pennylane">PennyLane (default.qubit)</option>
-              <option value="qiskit_aer">Qiskit Aer (C++ Matrix Simulator)</option>
-              <option value="cirq">Google Cirq (Local Simulator)</option>
+              <option value="cirq">Cirq (Google Cirq)</option>
+              <option value="qbraid">qBraid Cloud (Quantum Ecosystem)</option>
               <option value="clifford_stabilizer">Clifford Stabilizer (Aaronson-Gottesman)</option>
-              <option value="qbraid">qBraid (Quantum Ecosystem Provider)</option>
             </select>
             <span className="field-hint">
               Target engine for local quantum statevector and circuit execution.

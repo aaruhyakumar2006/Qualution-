@@ -21,6 +21,8 @@ import {
   ChevronRight,
   Sun,
   Moon,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
@@ -158,6 +160,14 @@ const DEFAULT_PRACTICAL_MAPPINGS: Record<string, { lessonId: string; label: stri
   },
 };
 
+const MemoizedMarkdown = React.memo<{ content: string; className?: string }>(({ content, className }) => (
+  <div className={className}>
+    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+      {content}
+    </ReactMarkdown>
+  </div>
+));
+
 export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = ({
   lessonId,
   onSelectLesson,
@@ -202,6 +212,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
   const [copiedFormulaId, setCopiedFormulaId] = useState<string | null>(null);
   const [activeGlossaryTerm, setActiveGlossaryTerm] = useState<string | null>(null);
   const [showLessonSelector, setShowLessonSelector] = useState<boolean>(false);
+  const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
 
   // Lesson 1-9 Quiz state
   const [selectedSingleAnswer, setSelectedSingleAnswer] = useState<number | null>(null);
@@ -213,6 +224,78 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
   const [assessmentScore, setAssessmentScore] = useState<number | null>(null);
 
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const play8BitSound = (type: 'coin' | 'jump' | 'stomp' | 'powerup') => {
+    if (!audioEnabled) return;
+    try {
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new AudioCtx();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      const now = ctx.currentTime;
+      if (type === 'coin') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(987.77, now);
+        osc.frequency.setValueAtTime(1318.51, now + 0.08);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (type === 'jump') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else if (type === 'powerup') {
+        const notes = [330, 392, 659, 523, 587, 784];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+          gain.gain.setValueAtTime(0.08, now + idx * 0.07);
+          gain.gain.linearRampToValueAtTime(0.001, now + (idx + 1) * 0.07);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.07);
+          osc.stop(now + (idx + 1) * 0.07);
+        });
+      } else if (type === 'stomp') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.12);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.12);
+      }
+    } catch {
+      // Audio fallback
+    }
+  };
 
   useEffect(() => {
     // Reset state on lesson change
@@ -230,25 +313,49 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
     }
   }, [lesson.id]);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    const totalScrollable = scrollHeight - clientHeight;
-    if (totalScrollable > 0) {
-      const pct = Math.min(100, Math.round((scrollTop / totalScrollable) * 100));
-      setReadingProgress(pct);
-    }
+  const scrollRafId = useRef<number | null>(null);
+  const activeSectionIdRef = useRef<string>('');
+  const lastProgressRef = useRef<number>(-1);
 
-    // Determine active section based on scroll position
-    for (const sec of lesson.sections) {
-      const el = document.getElementById(sec.id);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= 200 && rect.bottom >= 100) {
-          setActiveSectionId(sec.id);
-          break;
+  useEffect(() => {
+    return () => {
+      if (scrollRafId.current !== null) {
+        cancelAnimationFrame(scrollRafId.current);
+      }
+    };
+  }, []);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    if (scrollRafId.current !== null) return;
+
+    scrollRafId.current = requestAnimationFrame(() => {
+      scrollRafId.current = null;
+      const { scrollTop, scrollHeight, clientHeight } = target;
+      const totalScrollable = scrollHeight - clientHeight;
+      if (totalScrollable > 0) {
+        const pct = Math.min(100, Math.round((scrollTop / totalScrollable) * 100));
+        if (Math.abs(pct - lastProgressRef.current) >= 2 || pct === 100 || pct === 0) {
+          lastProgressRef.current = pct;
+          setReadingProgress(pct);
         }
       }
-    }
+
+      // Determine active section based on scroll position without forcing layout constantly
+      for (const sec of lesson.sections) {
+        const el = document.getElementById(sec.id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 250 && rect.bottom >= 80) {
+            if (activeSectionIdRef.current !== sec.id) {
+              activeSectionIdRef.current = sec.id;
+              setActiveSectionId(sec.id);
+            }
+            break;
+          }
+        }
+      }
+    });
   };
 
   const isCompleted = completedLessons.includes(lesson.id);
@@ -260,12 +367,16 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
     setIsSingleQuizSubmitted(true);
 
     if (lesson.quiz && optIndex === lesson.quiz.correctIndex) {
+      play8BitSound('powerup');
       const updated = markLessonCompleted(lesson.id, lesson.xpReward);
       setCompletedLessons(updated);
+    } else {
+      play8BitSound('stomp');
     }
   };
 
   const handleManualComplete = () => {
+    play8BitSound('powerup');
     const updated = markLessonCompleted(lesson.id, lesson.xpReward);
     setCompletedLessons(updated);
   };
@@ -283,6 +394,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
   const handleSelectMultiOption = (questionId: string, optIndex: number) => {
     if (isMultiSubmitted) return;
+    play8BitSound('coin');
     setMultiAnswers((prev) => ({
       ...prev,
       [questionId]: optIndex,
@@ -304,15 +416,19 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
     const isPassing = lesson.isAssessment ? percent >= 70 : correctCount >= Math.ceil(activeMultiQuestions.length / 2);
     if (isPassing) {
+      play8BitSound('powerup');
       const updated = markLessonCompleted(lesson.id, lesson.xpReward);
       if (lesson.isAssessment) {
         markLessonCompleted('lesson-1-theory-assessment', 0);
       }
       setCompletedLessons(updated);
+    } else {
+      play8BitSound('stomp');
     }
   };
 
   const handleResetMultiQuiz = () => {
+    play8BitSound('jump');
     setMultiAnswers({});
     setIsMultiSubmitted(false);
     setAssessmentScore(null);
@@ -324,11 +440,13 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
   const copyFormulaText = (secId: string, formulaStr: string) => {
     navigator.clipboard.writeText(formulaStr);
+    play8BitSound('coin');
     setCopiedFormulaId(secId);
     setTimeout(() => setCopiedFormulaId(null), 2000);
   };
 
   const scrollToSection = (secId: string) => {
+    play8BitSound('jump');
     const el = document.getElementById(secId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -337,83 +455,122 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
   return (
     <div
-      className="theory-reader-overlay full-page-reader"
+      className="theory-reader-overlay full-page-reader mario-theme-reader"
       data-testid="theory-lesson-reader"
       onScroll={handleScroll}
       ref={mainContainerRef}
     >
-      {/* ── TOP STICKY COMMAND & PROGRESS HEADER ── */}
-      <header className="theory-sticky-topbar">
+      {/* ── White Cloud Style Background Backdrop with Floating Pixel Clouds ── */}
+      <div className="lp-mario-white-backdrop">
+        <div className="lp-mario-clouds-container">
+          <img src="/mario/Cloud1.png" alt="" className="lp-mario-cloud cloud-drift-1" />
+          <img src="/mario/Cloud2.png" alt="" className="lp-mario-cloud cloud-drift-2" />
+          <img src="/mario/Cloud1.png" alt="" className="lp-mario-cloud cloud-drift-3" />
+          <img src="/mario/Cloud2.png" alt="" className="lp-mario-cloud cloud-drift-4" />
+          <img src="/mario/Cloud1.png" alt="" className="lp-mario-cloud cloud-drift-5" />
+        </div>
+      </div>
+
+      {/* CRT Scanline Overlay */}
+      <div className="mario-scanlines" />
+
+      {/* ── TOP STICKY ARCADE HUD COMMAND & PROGRESS HEADER ── */}
+      <header className="theory-sticky-topbar mario-arcade-hud">
         <div className="topbar-inner">
           <div className="topbar-left">
             <button
               type="button"
-              className="topbar-back-btn"
-              onClick={onClose}
+              className="topbar-back-btn mario-hud-btn"
+              onClick={() => {
+                play8BitSound('stomp');
+                onClose();
+              }}
               data-testid="theory-reader-close-btn"
               title="Return to Academy Overview"
             >
               <ArrowLeft size={16} />
-              <span>Back to Academy</span>
+              <span>◀ WORLD SELECT</span>
             </button>
 
             <div className="topbar-divider" />
 
-            <div className="topbar-breadcrumb">
-              <span className="breadcrumb-sprint">{lesson.sprintTitle}</span>
-              <ChevronRight size={12} className="text-muted" />
-              <span className="breadcrumb-lesson">Lesson {lesson.lessonNumber}</span>
+            <div className="mario-hud-stage-badge">
+              <span className="mario-badge-world">WORLD 1-{lesson.lessonNumber}</span>
+              <span className="mario-badge-tag">{lesson.tag.replace(/^World\s*\d+-\d+\s*·\s*/i, '')}</span>
             </div>
           </div>
 
           <div className="topbar-center">
-            {/* Reading Scroll Progress Bar */}
-            <div className="reading-progress-container" title={`Reading Progress: ${readingProgress}%`}>
-              <div className="progress-label">READING PROGRESS ({readingProgress}%)</div>
-              <div className="progress-track">
-                <div className="progress-fill" style={{ width: `${readingProgress}%` }} />
+            {/* Reading Scroll Progress Meter */}
+            <div className="reading-progress-container mario-progress-box" title={`Level Progress: ${readingProgress}%`}>
+              <div className="mario-progress-hud-row">
+                <span className="mario-progress-label">STAGE PROGRESS</span>
+                <span className="mario-progress-val">{readingProgress}%</span>
+              </div>
+              <div className="progress-track mario-progress-track">
+                <div className="progress-fill mario-progress-fill" style={{ width: `${readingProgress}%` }} />
               </div>
             </div>
           </div>
 
-          <div className="topbar-right">
+          <div className="topbar-right mario-hud-cluster">
+            {/* Coins Counter */}
+            <div className="mario-hud-coin-counter" title="Total Coins Collected">
+              <img src="/mario/Coin.png" alt="Coin" className="mario-coin-icon spin" />
+              <span>×{isCompleted ? '100' : String(Math.round(readingProgress)).padStart(2, '0')}</span>
+            </div>
+
             {/* Quick Lesson Switcher Dropdown Toggle */}
             <button
               type="button"
-              className="topbar-switcher-btn"
-              onClick={() => setShowLessonSelector((prev) => !prev)}
+              className="topbar-switcher-btn mario-hud-btn"
+              onClick={() => {
+                play8BitSound('jump');
+                setShowLessonSelector((prev) => !prev);
+              }}
               title="Jump to any Sprint 1 Lesson"
             >
-              <List size={14} />
-              <span>Lessons ({currentIndex + 1}/{THEORETICAL_SPRINT_1_LESSONS.length})</span>
+              <img src="/mario/MysteryBlock.png" alt="?" className="mario-btn-qblock-icon" />
+              <span>LEVELS ({currentIndex + 1}/{THEORETICAL_SPRINT_1_LESSONS.length})</span>
             </button>
 
-            <div className="topbar-xp-badge">
-              <Trophy size={13} color="#facc15" />
-              <span>+{lesson.xpReward} XP</span>
+            {/* XP Star Badge */}
+            <div className="topbar-xp-badge mario-xp-badge" title="Course XP Reward">
+              <img src="/mario/Starman.png" alt="★" className="mario-star-hud-icon" />
+              <span>+{lesson.xpReward} PTS</span>
             </div>
+
+            {/* 8-Bit SFX Audio Toggle */}
+            <button
+              type="button"
+              className="mario-audio-toggle-btn"
+              onClick={() => setAudioEnabled((prev) => !prev)}
+              title={audioEnabled ? 'Mute 8-Bit Audio' : 'Enable 8-Bit Audio'}
+            >
+              {audioEnabled ? <Volume2 size={15} color="#ffd700" /> : <VolumeX size={15} color="#94a3b8" />}
+              <span className="audio-label">{audioEnabled ? 'SFX ON' : 'MUTED'}</span>
+            </button>
 
             {/* Theme Toggle Button */}
             <button
               type="button"
-              className="topbar-theme-toggle-btn"
+              className="topbar-theme-toggle-btn mario-theme-btn"
               onClick={toggleTheme}
-              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Theme`}
+              title={`Switch to ${theme === 'dark' ? 'Overworld Sky' : 'Underground'} Mode`}
               data-testid="theory-reader-theme-toggle"
             >
-              {theme === 'dark' ? <Sun size={14} color="#facc15" /> : <Moon size={14} color="#7c3aed" />}
-              <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+              {theme === 'dark' ? <Sun size={14} color="#facc15" /> : <Moon size={14} color="#60a5fa" />}
             </button>
 
             {isCompleted ? (
-              <span className="topbar-status-badge completed">
+              <span className="topbar-status-badge completed mario-status-cleared">
                 <CheckCircle2 size={13} />
-                <span>Mastered</span>
+                <span>CLEARED ★</span>
               </span>
             ) : (
-              <span className="topbar-status-badge ready">
+              <span className="topbar-status-badge ready mario-status-active">
                 <Zap size={13} />
-                <span>Ready</span>
+                <span>PLAYING ▶</span>
               </span>
             )}
           </div>
@@ -422,16 +579,16 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
       {/* ── QUICK LESSON SELECTOR DRAWER / DROPDOWN ── */}
       {showLessonSelector && (
-        <div className="theory-lesson-drawer-overlay" onClick={() => setShowLessonSelector(false)}>
-          <div className="theory-lesson-drawer-menu" onClick={(e) => e.stopPropagation()}>
-            <div className="drawer-header">
-              <div className="drawer-title">
-                <BookOpen size={16} color="var(--accent-cyan, #00f2ff)" />
-                <span>Sprint 1 Theoretical Lessons</span>
+        <div className="theory-lesson-drawer-overlay mario-drawer-overlay" onClick={() => setShowLessonSelector(false)}>
+          <div className="theory-lesson-drawer-menu mario-drawer-menu" onClick={(e) => e.stopPropagation()}>
+            <div className="drawer-header mario-drawer-header">
+              <div className="drawer-title mario-arcade-font">
+                <img src="/mario/MysteryBlock.png" alt="?" className="drawer-block-icon" />
+                <span>WORLD 1 — LEVEL SELECT</span>
               </div>
               <button
                 type="button"
-                className="drawer-close-btn"
+                className="drawer-close-btn mario-close-btn"
                 onClick={() => setShowLessonSelector(false)}
               >
                 ✕
@@ -447,21 +604,22 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                   <button
                     key={l.id}
                     type="button"
-                    className={`drawer-lesson-item ${isItemActive ? 'active' : ''} ${isItemCompleted ? 'completed' : ''}`}
+                    className={`drawer-lesson-item mario-drawer-item ${isItemActive ? 'active' : ''} ${isItemCompleted ? 'completed' : ''}`}
                     onClick={() => {
+                      play8BitSound('jump');
                       onSelectLesson(l.id);
                       setShowLessonSelector(false);
                     }}
                   >
-                    <span className="item-num">{String(idx + 1).padStart(2, '0')}</span>
+                    <span className="item-num mario-item-num">W1-{idx + 1}</span>
                     <div className="item-details">
                       <span className="item-title">{l.title}</span>
                       <span className="item-meta">{l.tag} · {l.estimatedDuration}</span>
                     </div>
                     {isItemCompleted ? (
-                      <CheckCircle2 size={14} color="#10b981" />
+                      <span className="mario-drawer-cleared-star">★ CLEAR</span>
                     ) : (
-                      <span className="item-xp">+{l.xpReward} XP</span>
+                      <span className="item-xp mario-xp-pill">+{l.xpReward} XP</span>
                     )}
                   </button>
                 );
@@ -476,21 +634,21 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
         {/* ── LEFT STICKY SIDEBAR: TABLE OF CONTENTS & QUICK ACTIONS ── */}
         <aside className="theory-reader-sidebar">
           {/* Table of Contents Card */}
-          <div className="sidebar-toc-card">
-            <div className="toc-header">
-              <List size={14} color="var(--accent-cyan, #00f2ff)" />
-              <span>Table of Contents</span>
+          <div className="sidebar-toc-card mario-sidebar-card">
+            <div className="toc-header mario-card-header">
+              <img src="/mario/MysteryBlock.png" alt="?" className="mario-side-icon" />
+              <span>STAGE QUEST LOG</span>
             </div>
 
-            <nav className="toc-nav">
-              {lesson.sections.map((sec) => (
+            <nav className="toc-nav mario-toc-nav">
+              {lesson.sections.map((sec, idx) => (
                 <button
                   key={sec.id}
                   type="button"
-                  className={`toc-link ${activeSectionId === sec.id ? 'active' : ''}`}
+                  className={`toc-link mario-toc-link ${activeSectionId === sec.id ? 'active' : ''}`}
                   onClick={() => scrollToSection(sec.id)}
                 >
-                  <span className="toc-dot" />
+                  <span className="mario-toc-badge">1-{idx + 1}</span>
                   <span className="toc-title">{sec.title}</span>
                 </button>
               ))}
@@ -498,43 +656,49 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
               {lesson.practicalConnection && (
                 <button
                   type="button"
-                  className="toc-link practical-link"
+                  className="toc-link practical-link mario-warp-link"
                   onClick={() => scrollToSection('sec-practical-connection')}
                 >
-                  <Zap size={13} color="#00f2ff" />
-                  <span>Hands-On Quantum Lab</span>
+                  <img src="/mario/PipeTop.png" alt="Pipe" className="mario-pipe-mini-icon" />
+                  <span>Warp Zone: Hands-On Lab</span>
                 </button>
               )}
 
               {(lesson.quiz || activeMultiQuestions.length > 0) && (
                 <button
                   type="button"
-                  className="toc-link quiz-link"
+                  className="toc-link quiz-link mario-boss-link"
                   onClick={() => scrollToSection('sec-quiz-assessment')}
                 >
-                  <Award size={13} color="#facc15" />
-                  <span>Concept Assessment</span>
+                  <img src="/mario/Starman.png" alt="★" className="mario-star-mini-icon" />
+                  <span>Bowser Boss Checkpoint</span>
                 </button>
               )}
             </nav>
           </div>
 
-          {/* Quick Practical Lab & AI Tutor Gateway Card */}
+          {/* Quick Practical Lab & AI Tutor Warp Zone Card */}
           {onLaunchPracticalLesson && (
-            <div className="sidebar-lab-card">
-              <div className="card-badge">
-                <Sparkles size={12} color="#00f2ff" />
-                <span>QUALUTION AI IDE TUTOR</span>
+            <div className="sidebar-lab-card mario-warp-card">
+              <div className="mario-pipe-header-art">
+                <img src="/mario/PipeTop.png" alt="Warp Pipe" className="mario-sidebar-pipe-img" />
               </div>
-              <h4 className="card-title">{targetPractical.label}</h4>
-              <p className="card-desc">{targetPractical.description}</p>
+              <div className="card-badge mario-warp-badge">
+                <Sparkles size={12} color="#ffd700" />
+                <span>WARP ZONE // IDE TUTOR</span>
+              </div>
+              <h4 className="card-title mario-warp-title">{targetPractical.label}</h4>
+              <p className="card-desc mario-warp-desc">{targetPractical.description}</p>
               <button
                 type="button"
-                className="btn-sidebar-launch"
-                onClick={() => onLaunchPracticalLesson(targetPractical.lessonId)}
+                className="btn-sidebar-launch mario-warp-launch-btn"
+                onClick={() => {
+                  play8BitSound('powerup');
+                  onLaunchPracticalLesson(targetPractical.lessonId);
+                }}
                 data-testid="theory-sidebar-launch-tutor-btn"
               >
-                <span>Open in IDE & AI Tutor</span>
+                <span>ENTER WARP PIPE</span>
                 <ExternalLink size={13} />
               </button>
             </div>
@@ -542,13 +706,13 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
           {/* Quantum Terminology Popover Dictionary Card */}
           {activeGlossaryTerm && (
-            <div className="sidebar-glossary-card">
-              <div className="glossary-header">
-                <Sparkles size={14} color="#00f2ff" />
-                <span>{QUANTUM_GLOSSARY[activeGlossaryTerm]?.title || 'Quantum Term'}</span>
+            <div className="sidebar-glossary-card mario-glossary-card">
+              <div className="glossary-header mario-glossary-header">
+                <img src="/mario/MysteryBlock.png" alt="?" className="mario-glossary-icon" />
+                <span>{QUANTUM_GLOSSARY[activeGlossaryTerm]?.title || 'Quantum Item'}</span>
                 <button
                   type="button"
-                  className="glossary-close"
+                  className="glossary-close mario-close-btn"
                   onClick={() => setActiveGlossaryTerm(null)}
                 >
                   ✕
@@ -558,11 +722,10 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                 {QUANTUM_GLOSSARY[activeGlossaryTerm]?.definition}
               </p>
               {QUANTUM_GLOSSARY[activeGlossaryTerm]?.formula && (
-                <div className="glossary-formula markdown-body">
-                  <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                    {`$$${QUANTUM_GLOSSARY[activeGlossaryTerm].formula}$$`}
-                  </ReactMarkdown>
-                </div>
+                <MemoizedMarkdown
+                  className="glossary-formula markdown-body mario-formula-mini"
+                  content={`$$${QUANTUM_GLOSSARY[activeGlossaryTerm].formula}$$`}
+                />
               )}
             </div>
           )}
@@ -570,116 +733,114 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
         {/* ── RIGHT MAIN ARTICLE CONTENT STAGE ── */}
         <div className="theory-reader-main-stage">
-          {/* 1. HERO HEADER CARD */}
-          <header className="theory-hero-header">
-            <div className="hero-top-meta">
-              <span className="hero-sprint-pill">
-                <Sparkles size={12} />
-                <span>{lesson.sprintTitle}</span>
+          {/* 1. HERO HEADER CARD (SUPER MARIO STAGE INTRO) */}
+          <header className="theory-hero-header mario-hero-stage-card">
+            <div className="mario-hero-banner-bar">
+              <span className="mario-hero-level-chip">
+                ★ SUPER QUALUTION BROS. · WORLD 1-{lesson.lessonNumber} ★
               </span>
-              <span className="hero-step-pill">
-                LESSON {String(lesson.lessonNumber).padStart(2, '0')} OF {THEORETICAL_SPRINT_1_LESSONS.length}
-              </span>
-              <span className="hero-tag-pill">{lesson.tag}</span>
+              <span className="mario-hero-time-chip">TIME 400</span>
             </div>
 
-            <h1 className="hero-lesson-title" data-testid="theory-lesson-title">
+            <div className="hero-top-meta mario-hero-top-meta">
+              <span className="hero-sprint-pill mario-sprint-chip">
+                <img src="/mario/Starman.png" alt="Star" className="mario-star-chip-icon" />
+                <span>{lesson.sprintTitle}</span>
+              </span>
+              <span className="hero-step-pill mario-step-chip">
+                STAGE 0{lesson.lessonNumber} OF 11
+              </span>
+              <span className="hero-tag-pill mario-tag-chip">{lesson.tag}</span>
+            </div>
+
+            <h1 className="hero-lesson-title mario-stage-title" data-testid="theory-lesson-title">
               {lesson.title}
             </h1>
 
-            <p className="hero-lesson-desc">{lesson.description}</p>
+            <p className="hero-lesson-desc mario-stage-desc">{lesson.description}</p>
 
-            {/* Learning Objectives Box */}
-            <div className="hero-objectives-card">
-              <div className="objectives-header">
-                <BookOpen size={16} color="var(--accent-cyan, #00f2ff)" />
-                <span>Learning Objectives</span>
+            {/* Learning Objectives Box (Mushroom Kingdom Quest Scroll) */}
+            <div className="hero-objectives-card mario-quest-scroll">
+              <div className="objectives-header mario-quest-header">
+                <img src="/mario/MagicMushroom.png" alt="Mushroom" className="mario-obj-head-icon" />
+                <span className="mario-arcade-font">MISSION OBJECTIVES</span>
               </div>
 
-              <div className="objectives-grid">
+              <div className="objectives-grid mario-objectives-grid">
                 {lesson.learningObjectives.map((obj, idx) => (
-                  <div key={idx} className="objective-item">
-                    <CheckCircle2 size={15} className="obj-icon" />
+                  <div key={idx} className="objective-item mario-obj-item">
+                    <img src="/mario/Coin.png" alt="•" className="mario-obj-coin" />
                     <span>{obj}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* AI IDE Quantum Tutor Launch Banner */}
+            {/* AI IDE Quantum Tutor Launch Banner (Warp Zone Style) */}
             {onLaunchPracticalLesson && (
-              <div className="hero-ai-tutor-banner">
+              <div className="hero-ai-tutor-banner mario-hero-warp-banner">
                 <div className="banner-left">
-                  <div className="banner-badge">
-                    <Sparkles size={13} color="#00f2ff" />
-                    <span>QUALUTION AI IDE TUTOR</span>
+                  <div className="banner-badge mario-warp-pill">
+                    <Sparkles size={13} color="#ffd700" />
+                    <span>WARP ZONE // ERWIN'S QUANTUM LAB</span>
                   </div>
-                  <h3 className="banner-title">{targetPractical.label}</h3>
-                  <p className="banner-desc">{targetPractical.description}</p>
+                  <h3 className="banner-title mario-banner-title">{targetPractical.label}</h3>
+                  <p className="banner-desc mario-banner-desc">{targetPractical.description}</p>
                 </div>
                 <button
                   type="button"
-                  className="btn-hero-launch-tutor"
-                  onClick={() => onLaunchPracticalLesson(targetPractical.lessonId)}
+                  className="btn-hero-launch-tutor mario-hero-warp-btn"
+                  onClick={() => {
+                    play8BitSound('powerup');
+                    onLaunchPracticalLesson(targetPractical.lessonId);
+                  }}
                   data-testid="theory-hero-launch-tutor-btn"
                 >
-                  <Zap size={14} />
-                  <span>Open in IDE & Learn with AI Tutor</span>
+                  <img src="/mario/PipeTop.png" alt="Pipe" className="mario-hero-pipe-icon" />
+                  <span>WARP TO LAB & AI TUTOR</span>
                   <ExternalLink size={14} />
                 </button>
               </div>
             )}
           </header>
 
-          {/* 2. LIVE TEACHING BOARD (if a board lesson exists for this concept) */}
-          {(() => {
-            const boardLesson = getBoardLessonForConcept(lesson.id);
-            if (!boardLesson) return null;
-            return (
-              <TheoryBoard
-                key={boardLesson.id}
-                lesson={boardLesson}
-                onTransitionToWorkbench={onLaunchPracticalLesson}
-                onComplete={() => {
-                  // Auto-mark lesson completed when board lesson finishes
-                  const updated = markLessonCompleted(lesson.id, lesson.xpReward);
-                  setCompletedLessons(updated);
-                }}
-              />
-            );
-          })()}
-
-          {/* 2b. VISUAL LESSON (VIDEO DEMO IF AVAILABLE) */}
+          {/* VIDEO LESSON (LEFT AS SUCH PER USER REQUEST) */}
           {lesson.video && (
             <VideoLesson video={lesson.video} lessonTitle={lesson.title} />
           )}
 
-          {/* 3. MAIN THEORETICAL SECTIONS & FORMULAS */}
+          {/* 3. MAIN THEORETICAL SECTIONS & FORMULAS (MARIO STAGES) */}
           <main className="theory-sections-list" role="main">
-            {lesson.sections.map((section) => (
-              <article key={section.id} id={section.id} className="theory-section-card">
-                <h2 className="section-heading">{section.title}</h2>
+            {lesson.sections.map((section, sIdx) => (
+              <article key={section.id} id={section.id} className="theory-section-card mario-stage-section-card">
+                <div className="mario-stage-header-stripe">
+                  <div className="mario-section-badge-group">
+                    <img src="/mario/MysteryBlock.png" alt="?" className="mario-stage-qblock" />
+                    <span className="mario-stage-label">CHECKPOINT 1-{sIdx + 1}</span>
+                  </div>
+                  <h2 className="section-heading mario-section-heading">{section.title}</h2>
+                </div>
 
                 <div className="section-body">
                   {section.content.map((p, pIdx) => (
-                    <div key={pIdx} className="section-paragraph markdown-body">
-                      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                        {p}
-                      </ReactMarkdown>
-                    </div>
+                    <MemoizedMarkdown
+                      key={pIdx}
+                      className="section-paragraph markdown-body mario-markdown-body"
+                      content={p}
+                    />
                   ))}
 
-                  {/* Mathematical Formula Card with KaTeX Rendering */}
+                  {/* Mathematical Formula Card with KaTeX Rendering (Arcade High-Score Register) */}
                   {section.formula && (
-                    <div className="theory-formula-card">
-                      <div className="formula-top-bar">
-                        <div className="formula-badge">
-                          <Sparkles size={12} color="#00f2ff" />
-                          <span>MATHEMATICAL FORMULATION</span>
+                    <div className="theory-formula-card mario-formula-scoreboard">
+                      <div className="formula-top-bar mario-formula-topbar">
+                        <div className="formula-badge mario-formula-badge">
+                          <img src="/mario/Coin.png" alt="★" className="mario-formula-coin" />
+                          <span>QUANTUM MATHEMATICAL FORMULATION</span>
                         </div>
                         <button
                           type="button"
-                          className="btn-copy-formula"
+                          className="btn-copy-formula mario-copy-btn"
                           onClick={() => copyFormulaText(section.id, section.formula!)}
                           title="Copy LaTeX formula"
                         >
@@ -688,45 +849,55 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                           ) : (
                             <Copy size={12} />
                           )}
-                          <span>{copiedFormulaId === section.id ? 'Copied' : 'Copy LaTeX'}</span>
+                          <span>{copiedFormulaId === section.id ? 'COPIED!' : 'COPY LATEX'}</span>
                         </button>
                       </div>
 
-                      <div className="formula-katex-display markdown-body">
-                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                          {`$$${section.formula}$$`}
-                        </ReactMarkdown>
-                      </div>
+                      <MemoizedMarkdown
+                        className="formula-katex-display markdown-body mario-katex-container"
+                        content={`$$${section.formula}$$`}
+                      />
 
                       {section.formulaCaption && (
-                        <div className="formula-caption">
+                        <div className="formula-caption mario-formula-caption">
                           {section.formulaCaption}
                         </div>
                       )}
                     </div>
                   )}
 
-                  {/* Glassmorphism Callout Box */}
+                  {/* Mario Callout Boxes */}
                   {section.callout && (
-                    <div className={`theory-callout-card ${section.callout.type}`}>
-                      <div className="callout-icon-box">
-                        {section.callout.type === 'insight' && <Lightbulb size={20} className="icon-insight" />}
-                        {section.callout.type === 'tip' && <Sparkles size={20} className="icon-tip" />}
-                        {section.callout.type === 'warning' && <AlertCircle size={20} className="icon-warning" />}
-                        {section.callout.type === 'info' && <HelpCircle size={20} className="icon-info" />}
+                    <div className={`theory-callout-card mario-callout-card ${section.callout.type}`}>
+                      <div className="callout-icon-box mario-callout-icon-box">
+                        {section.callout.type === 'insight' && (
+                          <img src="/mario/MysteryBlock.png" alt="?" className="mario-callout-img" />
+                        )}
+                        {section.callout.type === 'tip' && (
+                          <img src="/mario/MagicMushroom.png" alt="🍄" className="mario-callout-img" />
+                        )}
+                        {section.callout.type === 'warning' && (
+                          <img src="/mario/Goomba_Flat.png" alt="⚠️" className="mario-callout-img" />
+                        )}
+                        {section.callout.type === 'info' && (
+                          <img src="/mario/Coin.png" alt="ℹ️" className="mario-callout-img" />
+                        )}
                       </div>
                       <div className="callout-content">
-                        <h4 className="callout-title">{section.callout.title}</h4>
-                        <p className="callout-text">{section.callout.text}</p>
+                        <h4 className="callout-title mario-callout-title">{section.callout.title}</h4>
+                        <p className="callout-text mario-callout-text">{section.callout.text}</p>
                       </div>
                     </div>
                   )}
 
-                  {/* Key Takeaway Banner */}
+                  {/* Key Takeaway Star Banner */}
                   {section.keyTakeaway && (
-                    <div className="theory-takeaway-card">
-                      <div className="takeaway-badge">KEY TAKEAWAY</div>
-                      <p className="takeaway-text">{section.keyTakeaway}</p>
+                    <div className="theory-takeaway-card mario-takeaway-banner">
+                      <div className="takeaway-badge mario-takeaway-badge">
+                        <img src="/mario/Starman.png" alt="★" className="mario-takeaway-star" />
+                        <span>STAGE TAKEAWAY</span>
+                      </div>
+                      <p className="takeaway-text mario-takeaway-text">{section.keyTakeaway}</p>
                     </div>
                   )}
                 </div>
@@ -734,21 +905,22 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
             ))}
           </main>
 
-          {/* 4. CLASSICAL BIT VS QUBIT COMPARISON TABLE (FOR LESSON 1) */}
+          {/* 4. CLASSICAL GOOMBA VS QUANTUM SUPER MARIO BATTLE STATS TABLE */}
           {lesson.id === 's1-theory-what-is-quantum' && (
-            <div className="theory-comparison-card">
-              <div className="comp-header">
-                <Layers size={16} color="var(--accent-cyan, #00f2ff)" />
-                <h3>Architectural Comparison: Classical Bit vs. Quantum Qubit</h3>
+            <div className="theory-comparison-card mario-battle-stats-card">
+              <div className="comp-header mario-battle-header">
+                <img src="/mario/Starman.png" alt="★" className="mario-battle-head-icon" />
+                <h3 className="mario-arcade-font">⚔️ 8-BIT BATTLE STATS: CLASSICAL BIT VS. QUANTUM QUBIT</h3>
               </div>
 
-              <div className="comp-table-wrapper">
-                <table className="quantum-comparison-table">
+              <div className="comp-table-wrapper mario-table-wrapper">
+                <table className="quantum-comparison-table mario-battle-table">
                   <thead>
                     <tr>
                       <th>Dimension</th>
-                      <th>Classical Bit</th>
-                      <th>Quantum Qubit ($|\\psi\\rangle$)</th>
+                      <th>Classical Goomba Bit (0 or 1)</th>
+                      <th>Super Quantum Mario Qubit ($|\psi\rangle$)</th>
+                      <th>Quantum Advantage Multiplier</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -756,42 +928,57 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                       <td><strong>State Space</strong></td>
                       <td>Discrete binary set &#123;0, 1&#125;</td>
                       <td>
-                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                          {'Continuous 2D complex Hilbert space ($\\mathbb{C}^2$)'}
-                        </ReactMarkdown>
+                        <MemoizedMarkdown content={'Continuous 2D complex Hilbert space ($\\mathbb{C}^2$)'} />
                       </td>
+                      <td><span className="mario-stat-boost">Continuous $\infty$</span></td>
                     </tr>
                     <tr>
                       <td><strong>Superposition</strong></td>
                       <td>Impossible (strictly 0 OR 1)</td>
                       <td>
-                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                          {'Linear superposition $|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle$'}
-                        </ReactMarkdown>
+                        <MemoizedMarkdown content={'Linear combination: $|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle$'} />
                       </td>
+                      <td><span className="mario-stat-boost">Coexistent States</span></td>
                     </tr>
                     <tr>
                       <td><strong>$n$-Unit Information</strong></td>
-                      <td>$n$ classical bits store 1 state out of $2^n$</td>
+                      <td>$n$ bits hold 1 state out of $2^n$ at any millisecond</td>
                       <td>
-                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                          {'$n$ qubits hold $2^n$ complex probability amplitudes simultaneously'}
-                        </ReactMarkdown>
+                        <MemoizedMarkdown content={'$n$ qubits hold $2^n$ complex amplitudes simultaneously'} />
                       </td>
+                      <td><span className="mario-stat-boost">$2^n$ Exponential Multiverse</span></td>
                     </tr>
                     <tr>
-                      <td><strong>Operation Type</strong></td>
-                      <td>Boolean logic gates (AND, OR, NOT)</td>
-                      <td>Reversible unitary matrix transformations &amp; wave interference</td>
+                      <td><strong>Gate Physics</strong></td>
+                      <td>Boolean logic (AND, OR, NOT) — Irreversible</td>
+                      <td>
+                        <MemoizedMarkdown content={'Unitary operators ($U^\\dagger U = I$) — Strictly Reversible'} />
+                      </td>
+                      <td><span className="mario-stat-boost">Zero Information Loss</span></td>
                     </tr>
                     <tr>
                       <td><strong>Measurement</strong></td>
-                      <td>Deterministic voltage reading</td>
+                      <td>Deterministic voltage reading ($0$V or $5$V)</td>
                       <td>
-                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                          {"Probabilities governed by Born's Rule ($P(x) = |\\alpha_x|^2$)"}
-                        </ReactMarkdown>
+                        <MemoizedMarkdown content={"Wavefunction collapse via Born's Rule ($P(x) = |\\alpha_x|^2$)"} />
                       </td>
+                      <td><span className="mario-stat-boost">Probabilistic Wave Nature</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Core Weapon</strong></td>
+                      <td>Sequential serial clock cycling</td>
+                      <td>
+                        <MemoizedMarkdown content={'Wave interference: cancel errors, amplify right answer'} />
+                      </td>
+                      <td><span className="mario-stat-boost">Constructive Interference</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>$n = 300$ Capacity</strong></td>
+                      <td>300 binary digits ($\sim 38$ bytes of RAM)</td>
+                      <td>
+                        <MemoizedMarkdown content={'$2^{300} > 10^{90}$ complex amplitudes simultaneously'} />
+                      </td>
+                      <td><span className="mario-stat-boost">Exceeds Universe Atoms!</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -801,42 +988,45 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
           {/* 5. PRACTICAL LAB CONNECTION BANNER */}
           {lesson.practicalConnection && onLaunchPracticalLesson && (
-            <div id="sec-practical-connection" className="theory-practical-gateway-card" data-testid="theory-practical-banner">
-              <div className="gateway-badge">
-                <Zap size={14} />
-                <span>HANDS-ON QUANTUM LAB GATEWAY</span>
+            <div id="sec-practical-connection" className="theory-practical-gateway-card mario-gateway-banner" data-testid="theory-practical-banner">
+              <div className="gateway-badge mario-gateway-pill">
+                <img src="/mario/PipeTop.png" alt="Pipe" className="mario-banner-pipe" />
+                <span>WARP ZONE // HANDS-ON QUANTUM LAB</span>
               </div>
-              <h3 className="gateway-title">{lesson.practicalConnection.label}</h3>
-              <p className="gateway-desc">{lesson.practicalConnection.description}</p>
+              <h3 className="gateway-title mario-gateway-title">{lesson.practicalConnection.label}</h3>
+              <p className="gateway-desc mario-gateway-desc">{lesson.practicalConnection.description}</p>
               <button
                 type="button"
-                className="btn-launch-practical"
-                onClick={() => onLaunchPracticalLesson(lesson.practicalConnection!.lessonId)}
+                className="btn-launch-practical mario-gateway-btn"
+                onClick={() => {
+                  play8BitSound('powerup');
+                  onLaunchPracticalLesson(lesson.practicalConnection!.lessonId);
+                }}
                 data-testid="theory-launch-lab-btn"
               >
                 <Zap size={15} />
-                <span>Launch in Quantum Studio Lab</span>
+                <span>LAUNCH IN QUANTUM STUDIO LAB</span>
                 <ExternalLink size={15} />
               </button>
             </div>
           )}
 
-          {/* 6. CONCEPT CHECKPOINT / FORMAL ASSESSMENT */}
-          <div id="sec-quiz-assessment" className="theory-quiz-container">
+          {/* 6. CONCEPT CHECKPOINT / BOWSER BOSS CHALLENGE */}
+          <div id="sec-quiz-assessment" className="theory-quiz-container mario-checkpoint-section">
             {/* A. Single Question Check (Lessons 1-9) */}
             {lesson.quiz && (
-              <section className="theory-single-quiz-card" data-testid="theory-single-quiz">
-                <div className="quiz-card-header">
-                  <div className="quiz-tag">
-                    <HelpCircle size={14} />
-                    <span>CONCEPT CHECKPOINT</span>
+              <section className="theory-single-quiz-card mario-single-quiz-card" data-testid="theory-single-quiz">
+                <div className="quiz-card-header mario-quiz-header">
+                  <div className="quiz-tag mario-quiz-tag">
+                    <img src="/mario/MysteryBlock.png" alt="?" className="mario-quiz-tag-icon" />
+                    <span>👑 BOWSER BOSS CHECKPOINT // WORLD 1-1</span>
                   </div>
-                  <h3 className="quiz-question-text">{lesson.quiz.question}</h3>
+                  <h3 className="quiz-question-text mario-quiz-q-text">{lesson.quiz.question}</h3>
                 </div>
 
-                <div className="quiz-options-list">
+                <div className="quiz-options-list mario-quiz-options-list">
                   {lesson.quiz.options.map((opt, optIdx) => {
-                    let optClass = 'quiz-option-btn';
+                    let optClass = 'quiz-option-btn mario-quiz-opt-btn';
                     if (selectedSingleAnswer === optIdx) optClass += ' selected';
                     if (isSingleQuizSubmitted) {
                       if (optIdx === lesson.quiz?.correctIndex) optClass += ' correct';
@@ -852,7 +1042,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                         disabled={isSingleQuizSubmitted}
                         data-testid={`theory-quiz-opt-${optIdx}`}
                       >
-                        <span className="opt-badge">{String.fromCharCode(65 + optIdx)}</span>
+                        <span className="opt-badge mario-opt-badge">{String.fromCharCode(65 + optIdx)}</span>
                         <span className="opt-text">{opt}</span>
                       </button>
                     );
@@ -862,25 +1052,25 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                 {/* Single Quiz Feedback */}
                 {isSingleQuizSubmitted && (
                   <div
-                    className={`quiz-feedback-banner ${
+                    className={`quiz-feedback-banner mario-feedback-banner ${
                       selectedSingleAnswer === lesson.quiz.correctIndex ? 'success' : 'error'
                     }`}
                     data-testid="theory-quiz-feedback"
                   >
-                    <div className="feedback-title-row">
+                    <div className="feedback-title-row mario-feedback-title">
                       {selectedSingleAnswer === lesson.quiz.correctIndex ? (
                         <>
-                          <CheckCircle2 size={18} color="#10b981" />
-                          <span>Correct! +{lesson.xpReward} XP Earned</span>
+                          <img src="/mario/Starman.png" alt="★" className="mario-feedback-icon" />
+                          <span>COURSE CLEAR! +{lesson.xpReward} XP & 1-UP EARNED!</span>
                         </>
                       ) : (
                         <>
-                          <AlertCircle size={18} color="#ef4444" />
-                          <span>Incorrect. Review the explanation below:</span>
+                          <img src="/mario/Goomba_Flat.png" alt="X" className="mario-feedback-icon" />
+                          <span>TOO BAD! REVIEW THE EXPLANATION BELOW:</span>
                         </>
                       )}
                     </div>
-                    <p className="feedback-body">{lesson.quiz.explanation}</p>
+                    <p className="feedback-body mario-feedback-body">{lesson.quiz.explanation}</p>
                   </div>
                 )}
               </section>
@@ -888,13 +1078,13 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
             {/* B. Multi-Question Knowledge Check (Lesson 10) or Formal Assessment (Lesson 11) */}
             {activeMultiQuestions.length > 0 && (
-              <section className="theory-multi-quiz-container" data-testid="theory-multi-quiz">
-                <div className="multi-quiz-header">
-                  <div className="quiz-tag">
+              <section className="theory-multi-quiz-container mario-multi-quiz-card" data-testid="theory-multi-quiz">
+                <div className="multi-quiz-header mario-quiz-header">
+                  <div className="quiz-tag mario-quiz-tag">
                     {lesson.isAssessment ? <Award size={14} /> : <BookOpen size={14} />}
-                    <span>{lesson.isAssessment ? 'FORMAL SPRINT ASSESSMENT' : 'KNOWLEDGE CHECK'}</span>
+                    <span>{lesson.isAssessment ? 'WORLD 1 CASTLE FINAL ASSESSMENT' : 'STAGE KNOWLEDGE CHECK'}</span>
                   </div>
-                  <h3>
+                  <h3 className="mario-arcade-font">
                     {lesson.isAssessment
                       ? '10-Question Comprehensive Assessment'
                       : 'Sprint 1 Conceptual Review'}
@@ -910,14 +1100,14 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                   {activeMultiQuestions.map((q, qIdx) => {
                     const selected = multiAnswers[q.id];
                     return (
-                      <div key={q.id} className="multi-q-card" data-testid={`multi-q-${qIdx}`}>
-                        <h4 className="q-title">
-                          <span className="q-num">Q{qIdx + 1}.</span> {q.question}
+                      <div key={q.id} className="multi-q-card mario-multi-q-card" data-testid={`multi-q-${qIdx}`}>
+                        <h4 className="q-title mario-q-title">
+                          <span className="q-num mario-q-num">Q{qIdx + 1}.</span> {q.question}
                         </h4>
 
-                        <div className="q-options">
+                        <div className="q-options mario-quiz-options-list">
                           {q.options.map((opt, optIdx) => {
-                            let optClass = 'quiz-option-btn';
+                            let optClass = 'quiz-option-btn mario-quiz-opt-btn';
                             if (selected === optIdx) optClass += ' selected';
                             if (isMultiSubmitted) {
                               if (optIdx === q.correctIndex) optClass += ' correct';
@@ -933,7 +1123,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                                 disabled={isMultiSubmitted}
                                 data-testid={`multi-opt-${q.id}-${optIdx}`}
                               >
-                                <span className="opt-badge">{String.fromCharCode(65 + optIdx)}</span>
+                                <span className="opt-badge mario-opt-badge">{String.fromCharCode(65 + optIdx)}</span>
                                 <span className="opt-text">{opt}</span>
                               </button>
                             );
@@ -941,7 +1131,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                         </div>
 
                         {isMultiSubmitted && (
-                          <div className={`q-explanation ${selected === q.correctIndex ? 'correct' : 'incorrect'}`}>
+                          <div className={`q-explanation mario-q-explanation ${selected === q.correctIndex ? 'correct' : 'incorrect'}`}>
                             <strong>{selected === q.correctIndex ? '✓ Correct' : '✗ Incorrect'}:</strong> {q.explanation}
                           </div>
                         )}
@@ -954,7 +1144,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                   {!isMultiSubmitted ? (
                     <button
                       type="button"
-                      className="btn-submit-assessment"
+                      className="btn-submit-assessment mario-submit-btn"
                       onClick={handleSubmitMultiQuiz}
                       disabled={!allMultiQuestionsAnswered}
                       data-testid="theory-submit-assessment-btn"
@@ -962,9 +1152,9 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                       <span>
                         {allMultiQuestionsAnswered
                           ? lesson.isAssessment
-                            ? 'Submit Formal Assessment'
-                            : 'Submit Knowledge Check'
-                          : `Answer All ${activeMultiQuestions.length} Questions to Submit (${
+                            ? 'SUBMIT WORLD 1 ASSESSMENT'
+                            : 'SUBMIT KNOWLEDGE CHECK'
+                          : `ANSWER ALL ${activeMultiQuestions.length} QUESTIONS (${
                               Object.keys(multiAnswers).length
                             }/${activeMultiQuestions.length})`}
                       </span>
@@ -972,7 +1162,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                     </button>
                   ) : (
                     <div
-                      className={`assessment-result-banner ${
+                      className={`assessment-result-banner mario-result-banner ${
                         assessmentScore !== null && (lesson.isAssessment ? assessmentScore >= 70 : assessmentScore >= 50)
                           ? 'pass'
                           : 'retry'
@@ -984,7 +1174,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                           <>
                             <Award size={28} color="#10b981" />
                             <div className="result-info">
-                              <h3>Assessment Passed! Score: {assessmentScore}%</h3>
+                              <h3>COURSE CLEAR! SCORE: {assessmentScore}%</h3>
                               <p>Congratulations! You have demonstrated theoretical mastery. +{lesson.xpReward} XP awarded!</p>
                             </div>
                           </>
@@ -992,7 +1182,7 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
                           <>
                             <AlertCircle size={28} color="#ef4444" />
                             <div className="result-info">
-                              <h3>Score: {assessmentScore}% (Passing threshold: 70%)</h3>
+                              <h3>SCORE: {assessmentScore}% (THRESHOLD: 70%)</h3>
                               <p>Review the explanations above and click Retry Assessment to test your understanding again.</p>
                             </div>
                           </>
@@ -1001,12 +1191,12 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
                       <button
                         type="button"
-                        className="btn-retry-assessment"
+                        className="btn-retry-assessment mario-retry-btn"
                         onClick={handleResetMultiQuiz}
                         data-testid="theory-retry-assessment-btn"
                       >
                         <RotateCcw size={14} />
-                        <span>Retry Assessment</span>
+                        <span>RETRY BOSS BATTLE</span>
                       </button>
                     </div>
                   )}
@@ -1016,33 +1206,36 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
 
             {/* Manual Mark Complete Button for Lessons without quiz */}
             {!isCompleted && !lesson.quiz && activeMultiQuestions.length === 0 && (
-              <div className="theory-manual-complete-card">
+              <div className="theory-manual-complete-card mario-manual-card">
                 <button
                   type="button"
-                  className="btn-mark-completed"
+                  className="btn-mark-completed mario-mark-btn"
                   onClick={handleManualComplete}
                   data-testid="theory-mark-complete-btn"
                 >
                   <CheckCircle2 size={16} />
-                  <span>Mark Lesson Completed (+{lesson.xpReward} XP)</span>
+                  <span>MARK STAGE CLEARED (+{lesson.xpReward} PTS)</span>
                 </button>
               </div>
             )}
           </div>
 
-          {/* 7. PREV / NEXT LESSON PAGINATION FOOTER */}
-          <footer className="theory-pagination-footer">
+          {/* 7. PREV / NEXT LESSON PAGINATION FOOTER (STAGE CLEAR MOTIF) */}
+          <footer className="theory-pagination-footer mario-stage-footer">
             <div className="footer-nav-col prev">
               {prevLesson ? (
                 <button
                   type="button"
-                  className="footer-nav-card"
-                  onClick={() => onSelectLesson(prevLesson.id)}
+                  className="footer-nav-card mario-footer-card prev"
+                  onClick={() => {
+                    play8BitSound('jump');
+                    onSelectLesson(prevLesson.id);
+                  }}
                   data-testid="theory-prev-lesson-btn"
                 >
                   <ArrowLeft size={16} />
                   <div className="nav-text-group">
-                    <span className="nav-sub">PREVIOUS LESSON</span>
+                    <span className="nav-sub">◀ PREVIOUS STAGE</span>
                     <span className="nav-title">{prevLesson.title}</span>
                   </div>
                 </button>
@@ -1054,11 +1247,14 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
             <div className="footer-nav-col center">
               <button
                 type="button"
-                className="btn-footer-close"
-                onClick={onClose}
+                className="btn-footer-close mario-footer-close-btn"
+                onClick={() => {
+                  play8BitSound('stomp');
+                  onClose();
+                }}
                 data-testid="theory-footer-close-btn"
               >
-                Back to Track Overview
+                RETURN TO WORLD MAP
               </button>
             </div>
 
@@ -1066,26 +1262,31 @@ export const TheoreticalLessonReader: React.FC<TheoreticalLessonReaderProps> = (
               {nextLesson ? (
                 <button
                   type="button"
-                  className="footer-nav-card"
-                  onClick={() => onSelectLesson(nextLesson.id)}
+                  className="footer-nav-card mario-footer-card next"
+                  onClick={() => {
+                    play8BitSound('jump');
+                    onSelectLesson(nextLesson.id);
+                  }}
                   data-testid="theory-next-lesson-btn"
                 >
                   <div className="nav-text-group text-right">
-                    <span className="nav-sub">NEXT LESSON</span>
+                    <span className="nav-sub">NEXT STAGE ▶</span>
                     <span className="nav-title">{nextLesson.title}</span>
                   </div>
-                  <ArrowRight size={16} />
                 </button>
               ) : (
                 <button
                   type="button"
-                  className="footer-nav-card finish"
-                  onClick={onClose}
+                  className="footer-nav-card finish mario-footer-card finish"
+                  onClick={() => {
+                    play8BitSound('powerup');
+                    onClose();
+                  }}
                   data-testid="theory-finish-track-btn"
                 >
                   <div className="nav-text-group text-right">
-                    <span className="nav-sub">SPRINT 1 COMPLETE</span>
-                    <span className="nav-title">Return to Academy</span>
+                    <span className="nav-sub">WORLD 1 COMPLETE</span>
+                    <span className="nav-title">Return to World Map</span>
                   </div>
                   <Award size={16} />
                 </button>

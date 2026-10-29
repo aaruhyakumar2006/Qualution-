@@ -71,12 +71,16 @@ export function getCircuitSignature(
   // Sort gates deterministically by column then targets
   normalizedGates.sort((a, b) => (a.column - b.column) || ((a.targets[0] ?? 0) - (b.targets[0] ?? 0)));
 
+  const normalizedBackend = (typeof backend === 'string' && backend.toLowerCase() !== 'auto')
+    ? backend.toLowerCase()
+    : 'qiskit_aer';
+
   return JSON.stringify({
     qubits: circuit.qubits,
     classical_bits: circuit.classical_bits,
     measure: circuit.measure,
     shots: shots,
-    backend: (typeof backend === 'string' ? backend : 'qiskit_aer').toLowerCase(),
+    backend: normalizedBackend,
     mode: (typeof mode === 'string' ? mode : 'shots').toLowerCase(),
     gates: normalizedGates,
   });

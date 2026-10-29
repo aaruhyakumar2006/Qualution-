@@ -63,7 +63,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           : 'student';
 
       try {
-        const response = await loginUser(payload);
+        const credentials = {
+          email: payload.email,
+          password: payload.password,
+        };
+        const response = await loginUser(credentials);
         const newToken = response.access_token;
         setToken(newToken);
         localStorage.setItem(TOKEN_KEY, newToken);
@@ -141,6 +145,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setGuestMode(false);
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    if (typeof window !== 'undefined') {
+      try {
+        window.history.pushState({ view: 'landing' }, '', '/');
+        window.location.hash = '';
+        window.dispatchEvent(new Event('popstate'));
+        window.dispatchEvent(new CustomEvent('qualution:logout'));
+      } catch {
+        window.location.href = '/';
+      }
+    }
   };
 
   const enterGuestMode = (role: 'student' | 'teacher' = 'student') => {

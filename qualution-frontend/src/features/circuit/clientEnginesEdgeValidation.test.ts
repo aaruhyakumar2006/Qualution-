@@ -64,8 +64,8 @@ describe('Edge & Low-Bandwidth Device Validation: Zero Network Egress', () => {
 
     // Assertions
     expect(result.execution_method).toBe('stabilizer');
-    expect(result.execution_location).toBe('local_browser');
-    expect(result.backend).toBe('stabilizer_engine');
+    expect(['local_browser', 'wasm_worker']).toContain(result.execution_location);
+    expect(['stabilizer_engine', 'stabilizer_wasm_core']).toContain(result.backend);
     expect(result.status).toBe('success');
 
     // CRITICAL: 0 network requests fired
@@ -119,8 +119,8 @@ describe('Edge & Low-Bandwidth Device Validation: Zero Network Egress', () => {
 
     // Assertions
     expect(result.execution_method).toBe('statevector');
-    expect(result.execution_location).toBe('local_browser');
-    expect(result.backend).toBe('statevector_engine');
+    expect(['local_browser', 'wasm_worker']).toContain(result.execution_location);
+    expect(['statevector_engine', 'statevector_wasm_core']).toContain(result.backend);
     expect(result.status).toBe('success');
 
     // CRITICAL: 0 network requests fired

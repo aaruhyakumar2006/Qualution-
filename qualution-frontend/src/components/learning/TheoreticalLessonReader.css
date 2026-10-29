@@ -1,23 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 /* ==========================================================================
    QUALUTION — THEORETICAL LESSON READER STYLES (FULL-PAGE WORKSPACE)
    Adhering to Deep Space Dark Glassmorphism & High-Contrast Typography
    ========================================================================== */
 
+
 .theory-reader-overlay.full-page-reader {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: #090d16;
-  background-image: 
-    radial-gradient(ellipse at 15% 10%, rgba(15, 98, 254, 0.15), transparent 50%),
-    radial-gradient(ellipse at 85% 90%, rgba(168, 85, 247, 0.12), transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(0, 242, 255, 0.04), transparent 60%);
+  background-color: transparent !important;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
-  color: #e2e8f0;
+  color: #0f172a;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  animation: theoryFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: theoryFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateZ(0);
 }
 
 @keyframes theoryFadeIn {
@@ -37,11 +40,9 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(13, 18, 30, 0.88);
+  background: rgba(13, 18, 30, 0.96);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .topbar-inner {
@@ -319,6 +320,8 @@
 /* ── TWO-COLUMN MAIN WORKSPACE ──────────────────────────────────────── */
 
 .theory-reader-workspace {
+  position: relative;
+  z-index: 2;
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
@@ -1655,10 +1658,10 @@
   color: #0f172a;
 }
 
-[data-theme="light"] .katex-display,
-[data-theme="light"] .katex,
-.light .katex-display,
-.light .katex {
+[data-theme="light"] :not(.mario-formula-scoreboard) > .katex-display,
+[data-theme="light"] :not(.mario-formula-scoreboard) .katex:not(.mario-formula-scoreboard *),
+.light :not(.mario-formula-scoreboard) > .katex-display,
+.light :not(.mario-formula-scoreboard) .katex:not(.mario-formula-scoreboard *) {
   color: #0f172a;
 }
 
@@ -1910,5 +1913,1683 @@
   color: #0d9488;
 }
 
+/* ══════════════════════════════════════════════════════════════════════
+   SUPER QUALUTION BROS. · THEORETICAL LESSON READER RETRO MARIO ARCADE
+   ══════════════════════════════════════════════════════════════════════ */
 
+/* CRT Scanlines Overlay - Disabled for clean white cloud background */
+.mario-scanlines {
+  display: none !important;
+}
 
+.mario-arcade-font {
+  font-family: 'Press Start 2P', monospace !important;
+  letter-spacing: 0.05em;
+}
+
+/* ── Container Overrides: Clean White Cloud Style Background ── */
+.mario-theme-reader,
+[data-theme="light"] .mario-theme-reader,
+[data-theme="dark"] .mario-theme-reader {
+  background: transparent !important;
+  color: #0f172a !important;
+}
+
+/* White Cloud Backdrop & Floating Clouds — Fixed GPU Accelerated Layer */
+.lp-mario-white-backdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  background-color: #ffffff !important;
+  background-image: 
+    radial-gradient(ellipse 90% 40% at 50% 0%, #f0fdf4 0%, transparent 60%),
+    radial-gradient(ellipse 80% 35% at 20% 40%, #fefce8 0%, transparent 50%),
+    radial-gradient(ellipse 80% 35% at 80% 40%, #f0f9ff 0%, transparent 50%),
+    radial-gradient(ellipse 140px 90px at 15% 15%, rgba(255, 255, 255, 0.95) 0%, transparent 70%),
+    radial-gradient(ellipse 220px 110px at 35% 8%, rgba(255, 255, 255, 0.92) 0%, transparent 70%),
+    radial-gradient(ellipse 180px 95px at 75% 14%, rgba(255, 255, 255, 0.94) 0%, transparent 70%),
+    radial-gradient(ellipse 240px 120px at 85% 6%, rgba(255, 255, 255, 0.9) 0%, transparent 70%),
+    linear-gradient(180deg, #dcf0fb 0%, #e8f5fd 25%, #f4f9fe 55%, #ffffff 100%) !important;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.lp-mario-clouds-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.lp-mario-cloud {
+  position: absolute;
+  image-rendering: pixelated;
+  opacity: 0.88;
+}
+
+.cloud-drift-1 {
+  top: 40px;
+  left: 5%;
+  width: 110px;
+  animation: mario-cloud-float 35s linear infinite;
+}
+
+.cloud-drift-2 {
+  top: 120px;
+  left: 35%;
+  width: 140px;
+  animation: mario-cloud-float 45s linear infinite reverse;
+}
+
+.cloud-drift-3 {
+  top: 60px;
+  left: 68%;
+  width: 100px;
+  animation: mario-cloud-float 40s linear infinite;
+}
+
+.cloud-drift-4 {
+  top: 190px;
+  left: 82%;
+  width: 130px;
+  animation: mario-cloud-float 50s linear infinite reverse;
+}
+
+.cloud-drift-5 {
+  top: 250px;
+  left: 18%;
+  width: 90px;
+  opacity: 0.7;
+  animation: mario-cloud-float 38s linear infinite;
+}
+
+@keyframes mario-cloud-float {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(35px); }
+  100% { transform: translateX(0); }
+}
+
+/* ── Top Arcade HUD Bar ──────────────────────────────────────── */
+.mario-arcade-hud {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  background: #000000 !important;
+  border-bottom: 3px solid #ffc700 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8) !important;
+  font-family: 'Press Start 2P', monospace;
+  height: 56px !important;
+  min-height: 56px !important;
+  max-height: 56px !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+}
+
+[data-theme="light"] .mario-arcade-hud,
+.light .mario-arcade-hud {
+  background: #000000 !important;
+  border-bottom: 3px solid #ffc700 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8) !important;
+}
+
+.mario-arcade-hud .topbar-inner {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: 56px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+  box-sizing: border-box !important;
+}
+
+.mario-arcade-hud .topbar-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-shrink: 0 !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
+.mario-arcade-hud .topbar-back-btn,
+.mario-hud-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background: #e52521 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0 #000000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 8.5px !important;
+  height: 32px !important;
+  padding: 0 12px !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+[data-theme="light"] .mario-hud-btn,
+.light .mario-hud-btn,
+[data-theme="light"] .topbar-back-btn.mario-hud-btn,
+.light .topbar-back-btn.mario-hud-btn,
+[data-theme="light"] .topbar-switcher-btn.mario-hud-btn,
+.light .topbar-switcher-btn.mario-hud-btn {
+  background: #e52521 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+.mario-hud-btn:hover {
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 3px 3px 0 #000000 !important;
+  background: #ff3b30 !important;
+}
+
+.mario-hud-btn:active {
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 #000000 !important;
+}
+
+.mario-arcade-hud .topbar-divider {
+  width: 2px !important;
+  height: 22px !important;
+  background: #2a263c !important;
+  margin: 0 4px !important;
+  flex-shrink: 0 !important;
+}
+
+.mario-btn-qblock-icon {
+  width: 14px !important;
+  height: 14px !important;
+  image-rendering: pixelated !important;
+  flex-shrink: 0 !important;
+}
+
+.mario-hud-stage-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+.mario-badge-world {
+  font-size: 9.5px !important;
+  color: #ffd700 !important;
+  text-shadow: 1px 1px 0 #000000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  white-space: nowrap !important;
+}
+
+.mario-badge-tag {
+  font-size: 8px !important;
+  background: rgba(255, 215, 0, 0.15) !important;
+  color: #ffea79 !important;
+  border: 1px solid rgba(255, 215, 0, 0.4) !important;
+  padding: 3px 7px !important;
+  font-family: 'Press Start 2P', monospace !important;
+  white-space: nowrap !important;
+}
+
+/* ── HUD Center Progress ─────────────────────────────────────── */
+.mario-arcade-hud .topbar-center {
+  flex: 0 1 220px !important;
+  min-width: 130px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 1 !important;
+  margin: 0 10px !important;
+}
+
+.mario-progress-box {
+  width: 100% !important;
+  max-width: 220px !important;
+}
+
+.mario-progress-hud-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 7.5px !important;
+  color: #ffd700 !important;
+  margin-bottom: 4px !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 1px 1px 0 #000 !important;
+  white-space: nowrap !important;
+}
+
+.mario-progress-label,
+.mario-progress-val {
+  white-space: nowrap !important;
+  font-family: 'Press Start 2P', monospace !important;
+}
+
+.mario-progress-track {
+  height: 8px !important;
+  background: #1e1b2e !important;
+  border: 2px solid #000 !important;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.6) !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.mario-progress-fill {
+  background: linear-gradient(90deg, #ff9000 0%, #ffd700 50%, #44d62c 100%) !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important;
+  height: 100% !important;
+}
+
+/* ── HUD Right Cluster ───────────────────────────────────────── */
+.mario-arcade-hud .topbar-right,
+.mario-hud-cluster {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  margin-left: auto !important;
+}
+
+.mario-hud-coin-counter {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 10px !important;
+  color: #ffd700 !important;
+  text-shadow: 1px 1px 0 #000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.mario-coin-icon {
+  width: 14px !important;
+  height: 14px !important;
+  image-rendering: pixelated !important;
+  flex-shrink: 0 !important;
+}
+
+.mario-coin-icon.spin {
+  animation: mario-coin-spin 1.2s infinite steps(4);
+}
+
+@keyframes mario-coin-spin {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0.2); }
+  100% { transform: scaleX(1); }
+}
+
+.mario-xp-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(255, 215, 0, 0.12) !important;
+  border: 2px solid #ffc700 !important;
+  height: 32px !important;
+  padding: 0 8px !important;
+  font-size: 8px !important;
+  color: #ffd700 !important;
+  border-radius: 0 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+[data-theme="light"] .mario-xp-badge,
+.light .mario-xp-badge {
+  background: rgba(255, 215, 0, 0.12) !important;
+  border: 2px solid #ffc700 !important;
+  color: #ffd700 !important;
+}
+
+.mario-star-hud-icon {
+  width: 14px !important;
+  height: 14px !important;
+  image-rendering: pixelated !important;
+  flex-shrink: 0 !important;
+  animation: mario-star-shine 1s infinite alternate;
+}
+
+@keyframes mario-star-shine {
+  0% { filter: drop-shadow(0 0 2px #ffc700); }
+  100% { filter: drop-shadow(0 0 8px #fffb00) brightness(1.2); }
+}
+
+.mario-audio-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: #140d2b !important;
+  border: 2px solid #3b3254 !important;
+  color: #e2e8f0 !important;
+  height: 32px !important;
+  padding: 0 8px !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 7.5px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+  transition: all 0.15s ease !important;
+}
+
+[data-theme="light"] .mario-audio-toggle-btn,
+.light .mario-audio-toggle-btn {
+  background: #140d2b !important;
+  border: 2px solid #3b3254 !important;
+  color: #e2e8f0 !important;
+}
+
+.mario-audio-toggle-btn:hover {
+  background: rgba(255, 215, 0, 0.2) !important;
+  border-color: #ffd700 !important;
+  color: #ffd700 !important;
+}
+
+.mario-audio-toggle-btn .audio-label {
+  white-space: nowrap !important;
+}
+
+.mario-theme-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #140d2b !important;
+  border: 2px solid #3b3254 !important;
+  border-radius: 0 !important;
+  height: 32px !important;
+  width: 32px !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+  transition: all 0.15s ease !important;
+}
+
+[data-theme="light"] .mario-theme-btn,
+.light .mario-theme-btn {
+  background: #140d2b !important;
+  border: 2px solid #3b3254 !important;
+}
+
+.mario-theme-btn:hover {
+  border-color: #60a5fa !important;
+  background: #1f1442 !important;
+}
+
+.mario-status-cleared {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: #00a800 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0 #000000 !important;
+  font-size: 8px !important;
+  font-family: 'Press Start 2P', monospace !important;
+  border-radius: 0 !important;
+  height: 32px !important;
+  padding: 0 9px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.mario-status-active {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: #0f62fe !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0 #000000 !important;
+  font-size: 8px !important;
+  font-family: 'Press Start 2P', monospace !important;
+  border-radius: 0 !important;
+  height: 32px !important;
+  padding: 0 9px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 1200px) {
+  .mario-arcade-hud .mario-badge-tag {
+    display: none !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .mario-arcade-hud .topbar-center {
+    display: none !important;
+  }
+  .mario-audio-toggle-btn .audio-label {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mario-xp-badge {
+    display: none !important;
+  }
+}
+
+/* ── Level Select Drawer ─────────────────────────────────────── */
+.mario-drawer-overlay {
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(8px);
+}
+
+.mario-drawer-menu {
+  background: #140d2b !important;
+  border: 4px solid #ffc700 !important;
+  box-shadow: 8px 8px 0 #000 !important;
+  border-radius: 0 !important;
+}
+
+.mario-drawer-header {
+  border-bottom: 3px solid #ffc700 !important;
+  padding: 14px 20px !important;
+}
+
+.mario-drawer-header .drawer-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #ffd700;
+}
+
+.drawer-block-icon {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+}
+
+.mario-close-btn {
+  background: #e52521 !important;
+  color: #fff !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+
+.mario-drawer-item {
+  border: 2px solid #2a2245 !important;
+  border-radius: 0 !important;
+  margin-bottom: 8px !important;
+  background: #1e153b !important;
+  transition: all 0.15s ease !important;
+}
+
+.mario-drawer-item:hover,
+.mario-drawer-item.active {
+  border-color: #ffd700 !important;
+  background: #2b1f52 !important;
+  transform: translateX(4px);
+}
+
+.mario-item-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #ffd700 !important;
+}
+
+.mario-drawer-cleared-star {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #44d62c;
+}
+
+.mario-xp-pill {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #f59e0b;
+}
+
+/* ── Sidebar (Quest Log & Warp Zone) ─────────────────────────── */
+.mario-sidebar-card {
+  background: #140d2b !important;
+  border: 3px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+  margin-bottom: 20px !important;
+}
+
+[data-theme="light"] .mario-sidebar-card {
+  background: #ffffff !important;
+  border: 3px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+}
+
+.mario-card-header {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 10px !important;
+  color: #ffd700 !important;
+  border-bottom: 2px solid #ffc700 !important;
+  padding: 12px 16px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+[data-theme="light"] .mario-card-header {
+  color: #e52521 !important;
+  border-bottom-color: #e52521 !important;
+}
+
+.mario-side-icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.mario-toc-link {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-size: 13px !important;
+  border-radius: 0 !important;
+  border-left: 3px solid transparent !important;
+  transition: all 0.15s ease !important;
+}
+
+.mario-toc-link:hover,
+.mario-toc-link.active {
+  background: rgba(255, 215, 0, 0.1) !important;
+  border-left: 3px solid #ffd700 !important;
+  color: #ffd700 !important;
+}
+
+.mario-toc-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #ffd700;
+  margin-right: 6px;
+}
+
+.mario-pipe-mini-icon,
+.mario-star-mini-icon {
+  width: 14px;
+  height: 14px;
+  image-rendering: pixelated;
+  margin-right: 6px;
+}
+
+/* Warp Zone Card */
+.mario-warp-card {
+  background: linear-gradient(135deg, #022b10 0%, #05481d 100%) !important;
+  border: 3px solid #00a800 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.mario-pipe-header-art {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -10px;
+}
+
+.mario-sidebar-pipe-img {
+  width: 44px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+
+.mario-warp-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid #ffd700 !important;
+  color: #ffd700 !important;
+  border-radius: 0 !important;
+  padding: 4px 8px !important;
+}
+
+.mario-warp-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 11px !important;
+  color: #ffffff !important;
+  margin: 10px 0 6px 0 !important;
+  line-height: 1.4 !important;
+}
+
+.mario-warp-desc {
+  font-size: 12px !important;
+  color: #a7f3d0 !important;
+  line-height: 1.5 !important;
+}
+
+.mario-warp-launch-btn {
+  background: #00a800 !important;
+  color: #ffffff !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 9px !important;
+  border-radius: 0 !important;
+  margin-top: 12px !important;
+  padding: 10px 14px !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mario-warp-launch-btn:hover {
+  background: #00c900 !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #000 !important;
+}
+
+/* Glossary Card */
+.mario-glossary-card {
+  background: #140d2b !important;
+  border: 3px solid #ffc700 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+}
+
+.mario-glossary-header {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 9px !important;
+  color: #ffd700 !important;
+}
+
+.mario-glossary-icon {
+  width: 14px;
+  height: 14px;
+  image-rendering: pixelated;
+  margin-right: 6px;
+}
+
+.mario-formula-mini {
+  background: #090614;
+  border: 1px solid #3b2a6b;
+  padding: 6px;
+  margin-top: 8px;
+}
+
+/* ── Hero Header Stage Card ──────────────────────────────────── */
+.mario-hero-stage-card {
+  background: #140d2b !important;
+  border: 4px solid #000 !important;
+  box-shadow: 6px 6px 0 #000 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin-bottom: 28px !important;
+}
+
+[data-theme="light"] .mario-hero-stage-card {
+  background: #ffffff !important;
+}
+
+.mario-hero-banner-bar {
+  background: #000000;
+  border-bottom: 3px solid #ffc700;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.mario-hero-level-chip {
+  font-size: 10px;
+  color: #ffd700;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.mario-hero-time-chip {
+  font-size: 10px;
+  color: #ffffff;
+}
+
+.mario-hero-top-meta {
+  padding: 20px 24px 0 24px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.mario-sprint-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid #ffc700;
+  color: #ffd700;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 4px 10px;
+}
+
+.mario-star-chip-icon {
+  width: 14px;
+  height: 14px;
+  image-rendering: pixelated;
+}
+
+.mario-step-chip {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #44d62c;
+  background: rgba(68, 214, 44, 0.12);
+  border: 1px solid rgba(68, 214, 44, 0.4);
+  padding: 4px 10px;
+}
+
+.mario-tag-chip {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  padding: 4px 10px;
+}
+
+.mario-stage-title {
+  padding: 12px 24px 0 24px;
+  font-family: 'Press Start 2P', system-ui, sans-serif !important;
+  font-size: 24px !important;
+  line-height: 1.4 !important;
+  color: #ffd700 !important;
+  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000 !important;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="light"] .mario-stage-title {
+  color: #e52521 !important;
+}
+
+.mario-stage-desc {
+  padding: 10px 24px 16px 24px;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="light"] .mario-stage-desc {
+  color: #334155 !important;
+}
+
+/* Quest Scroll (Learning Objectives) */
+.mario-quest-scroll {
+  margin: 0 24px 24px 24px !important;
+  background: #090517 !important;
+  border: 3px solid #ffc700 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+  padding: 18px !important;
+}
+
+[data-theme="light"] .mario-quest-scroll {
+  background: #fdf6e2 !important;
+  border: 3px solid #b58900 !important;
+}
+
+.mario-quest-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: #ffd700 !important;
+  border-bottom: 2px dashed #ffc700;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+[data-theme="light"] .mario-quest-header {
+  color: #b58900 !important;
+  border-bottom-color: #b58900;
+}
+
+.mario-obj-head-icon {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+}
+
+.mario-objectives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.mario-obj-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f1f5f9;
+}
+
+[data-theme="light"] .mario-obj-item {
+  color: #1e293b;
+}
+
+.mario-obj-coin {
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+/* Hero Warp Zone Banner */
+.mario-hero-warp-banner {
+  margin: 0 24px 24px 24px !important;
+  background: linear-gradient(135deg, #022b10 0%, #05481d 100%) !important;
+  border: 3px solid #00a800 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+}
+
+.mario-warp-pill {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #ffd700;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.mario-banner-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 13px !important;
+  color: #ffffff !important;
+}
+
+.mario-banner-desc {
+  font-size: 13px !important;
+  color: #a7f3d0 !important;
+}
+
+.mario-hero-warp-btn {
+  background: #00a800 !important;
+  color: #ffffff !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 10px !important;
+  padding: 12px 18px !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.mario-hero-warp-btn:hover {
+  background: #00c900 !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #000 !important;
+}
+
+.mario-hero-pipe-icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+/* ── Theory Section Cards (Level Stages) ─────────────────────── */
+.mario-stage-section-card {
+  background: #140d2b !important;
+  border: 3px solid #000 !important;
+  box-shadow: 5px 5px 0 #000 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin-bottom: 32px !important;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 350px;
+}
+
+[data-theme="light"] .mario-stage-section-card {
+  background: #ffffff !important;
+}
+
+.mario-stage-header-stripe {
+  background: #000000;
+  border-bottom: 3px solid #ffc700;
+  padding: 14px 22px;
+}
+
+.mario-section-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.mario-stage-qblock {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.mario-stage-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #ffd700;
+  letter-spacing: 0.05em;
+}
+
+.mario-section-heading {
+  font-family: 'Press Start 2P', system-ui, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+}
+
+.mario-markdown-body {
+  padding: 20px 24px 6px 24px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+
+[data-theme="light"] .mario-markdown-body,
+.light .mario-markdown-body {
+  color: #1e293b !important;
+}
+
+.mario-markdown-body p {
+  margin-bottom: 14px;
+}
+
+.mario-markdown-body strong {
+  color: #ffd700;
+  font-weight: 700;
+}
+
+[data-theme="light"] .mario-markdown-body strong,
+.light .mario-markdown-body strong {
+  color: #0f172a !important;
+}
+
+.mario-markdown-body .katex,
+.mario-markdown-body .katex * {
+  color: #38bdf8 !important;
+  font-weight: 600;
+}
+
+[data-theme="light"] .mario-markdown-body .katex,
+[data-theme="light"] .mario-markdown-body .katex *,
+.light .mario-markdown-body .katex,
+.light .mario-markdown-body .katex * {
+  color: #0284c7 !important;
+  font-weight: 600;
+}
+
+/* ── Formula Scoreboard ──────────────────────────────────────── */
+.mario-formula-scoreboard {
+  margin: 20px 24px !important;
+  background: #060914 !important;
+  border: 3px solid #00f2ff !important;
+  box-shadow: 5px 5px 0 #000000 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+[data-theme="light"] .mario-formula-scoreboard,
+.light .mario-formula-scoreboard {
+  background: #060914 !important;
+  border: 3px solid #00f2ff !important;
+  box-shadow: 5px 5px 0 #000000 !important;
+}
+
+.mario-formula-topbar {
+  background: #000000 !important;
+  border-bottom: 2px solid #00f2ff !important;
+  padding: 10px 18px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+[data-theme="light"] .mario-formula-topbar,
+.light .mario-formula-topbar {
+  background: #000000 !important;
+  border-bottom: 2px solid #00f2ff !important;
+}
+
+.mario-formula-badge {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 8.5px !important;
+  color: #00f2ff !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.6) !important;
+}
+
+.mario-formula-coin {
+  width: 14px !important;
+  height: 14px !important;
+  image-rendering: pixelated !important;
+  flex-shrink: 0 !important;
+}
+
+.mario-copy-btn {
+  background: #111a36 !important;
+  border: 1px solid #00f2ff !important;
+  color: #00f2ff !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 8px !important;
+  padding: 5px 12px !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.15s ease !important;
+}
+
+.mario-copy-btn:hover {
+  background: #00f2ff !important;
+  color: #000000 !important;
+  border-color: #00f2ff !important;
+}
+
+.mario-katex-container {
+  padding: 24px 20px !important;
+  font-size: 20px !important;
+  background: #060914 !important;
+  color: #ffd700 !important;
+  overflow-x: auto !important;
+  text-align: center !important;
+}
+
+.mario-katex-container p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* ── GUARANTEED ULTRA-HIGH VISIBILITY FOR ALL KATEX MATH IN FORMULA SCOREBOARD ── */
+.mario-formula-scoreboard .katex,
+.mario-formula-scoreboard .katex *,
+.mario-formula-scoreboard .katex-display,
+.mario-formula-scoreboard .katex-html,
+.mario-formula-scoreboard .base,
+.mario-formula-scoreboard .mord,
+.mario-formula-scoreboard .mbin,
+.mario-formula-scoreboard .mrel,
+.mario-formula-scoreboard .mopen,
+.mario-formula-scoreboard .mclose,
+.mario-formula-scoreboard .mpunct,
+.mario-formula-scoreboard .minner,
+.mario-formula-scoreboard .mop,
+.mario-formula-scoreboard .mathnormal,
+.mario-formula-scoreboard .mathbf,
+.mario-formula-scoreboard .mathrm,
+.mario-formula-scoreboard .amsrm,
+[data-theme="light"] .mario-formula-scoreboard .katex,
+[data-theme="light"] .mario-formula-scoreboard .katex *,
+[data-theme="light"] .mario-formula-scoreboard .katex-display,
+[data-theme="light"] .mario-formula-scoreboard .formula-katex-display,
+[data-theme="light"] .mario-formula-scoreboard .mario-katex-container,
+[data-theme="light"] .mario-formula-scoreboard .mario-katex-container *,
+.light .mario-formula-scoreboard .katex,
+.light .mario-formula-scoreboard .katex * {
+  color: #ffd700 !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.45), 0 0 2px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Delimiters, brackets, and matrix braces in high-contrast cyan */
+.mario-formula-scoreboard .mopen,
+.mario-formula-scoreboard .mclose,
+.mario-formula-scoreboard .delimsizing,
+.mario-formula-scoreboard .delimcenter,
+[data-theme="light"] .mario-formula-scoreboard .mopen,
+[data-theme="light"] .mario-formula-scoreboard .mclose,
+[data-theme="light"] .mario-formula-scoreboard .delimsizing,
+[data-theme="light"] .mario-formula-scoreboard .delimcenter,
+.light .mario-formula-scoreboard .mopen,
+.light .mario-formula-scoreboard .mclose {
+  color: #00f2ff !important;
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.6) !important;
+}
+
+/* Fraction lines and square roots in golden border */
+.mario-formula-scoreboard .frac-line,
+[data-theme="light"] .mario-formula-scoreboard .frac-line,
+.light .mario-formula-scoreboard .frac-line {
+  border-bottom-color: #ffd700 !important;
+}
+
+.mario-formula-caption {
+  background: #0a0e20 !important;
+  border-top: 1px solid rgba(0, 242, 255, 0.25) !important;
+  padding: 10px 20px !important;
+  font-size: 13px !important;
+  color: #38bdf8 !important;
+  font-style: italic !important;
+  text-align: center !important;
+  letter-spacing: 0.02em !important;
+}
+
+[data-theme="light"] .mario-formula-caption,
+.light .mario-formula-caption {
+  background: #0a0e20 !important;
+  color: #38bdf8 !important;
+  border-top: 1px solid rgba(0, 242, 255, 0.25) !important;
+}
+
+/* ── Mario Callout Cards ─────────────────────────────────────── */
+.mario-callout-card {
+  margin: 18px 24px !important;
+  border: 3px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px !important;
+}
+
+.mario-callout-card.insight {
+  background: #1a103c !important;
+  border-left: 6px solid #ffd700 !important;
+}
+
+.mario-callout-card.tip {
+  background: #0a2612 !important;
+  border-left: 6px solid #44d62c !important;
+}
+
+.mario-callout-card.warning {
+  background: #380a0a !important;
+  border-left: 6px solid #e52521 !important;
+}
+
+.mario-callout-card.info {
+  background: #08203c !important;
+  border-left: 6px solid #60a5fa !important;
+}
+
+.mario-callout-img {
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.mario-callout-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 10px !important;
+  color: #ffffff !important;
+  margin: 0 0 6px 0 !important;
+}
+
+.mario-callout-text {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  color: #e2e8f0 !important;
+  margin: 0 !important;
+}
+
+/* Takeaway Banner */
+.mario-takeaway-banner {
+  margin: 18px 24px 24px 24px !important;
+  background: #1e1338 !important;
+  border: 3px solid #ffc700 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+  padding: 14px 20px !important;
+}
+
+.mario-takeaway-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #ffd700;
+  margin-bottom: 6px;
+}
+
+.mario-takeaway-star {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  animation: mario-star-shine 0.8s infinite alternate;
+}
+
+.mario-takeaway-text {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  color: #f8fafc !important;
+  font-weight: 500;
+}
+
+/* ── Battle Stats Table ──────────────────────────────────────── */
+.mario-battle-stats-card {
+  background: #140d2b !important;
+  border: 4px solid #000 !important;
+  box-shadow: 6px 6px 0 #000 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+  margin-bottom: 32px !important;
+  padding: 0 !important;
+}
+
+[data-theme="light"] .mario-battle-stats-card {
+  background: #ffffff !important;
+}
+
+.mario-battle-header {
+  background: #000000;
+  border-bottom: 3px solid #ffc700;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mario-battle-header h3 {
+  font-size: 12px;
+  color: #ffd700;
+  margin: 0;
+}
+
+.mario-battle-head-icon {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+}
+
+.mario-table-wrapper {
+  overflow-x: auto;
+}
+
+.mario-battle-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.mario-battle-table th {
+  background: #0b071a;
+  border: 2px solid #000;
+  padding: 12px 16px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #60a5fa;
+  text-align: left;
+}
+
+.mario-battle-table td {
+  border: 1px solid #20173e;
+  padding: 14px 16px;
+  line-height: 1.5;
+}
+
+[data-theme="light"] .mario-battle-table td {
+  border: 1px solid #e2e8f0;
+}
+
+.mario-battle-table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mario-stat-boost {
+  display: inline-block;
+  background: rgba(68, 214, 44, 0.15);
+  border: 1px solid #44d62c;
+  color: #44d62c;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 4px 8px;
+}
+
+/* ── Bowser Boss Checkpoint Quiz ─────────────────────────────── */
+.mario-checkpoint-section {
+  margin-top: 24px;
+}
+
+.mario-single-quiz-card {
+  background: #140d2b !important;
+  border: 4px solid #000 !important;
+  box-shadow: 6px 6px 0 #000 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+[data-theme="light"] .mario-single-quiz-card {
+  background: #ffffff !important;
+}
+
+.mario-quiz-header {
+  background: #000000;
+  border-bottom: 3px solid #e52521;
+  padding: 16px 22px;
+}
+
+.mario-quiz-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #e52521;
+  margin-bottom: 10px;
+}
+
+.mario-quiz-tag-icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+.mario-quiz-q-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #ffffff;
+  margin: 0;
+  font-weight: 600;
+}
+
+.mario-quiz-options-list {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mario-quiz-opt-btn {
+  background: #1c153b !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  border-radius: 0 !important;
+  padding: 14px 18px !important;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #f1f5f9 !important;
+  font-size: 14px !important;
+  cursor: pointer;
+  transition: all 0.15s ease !important;
+  text-align: left;
+}
+
+[data-theme="light"] .mario-quiz-opt-btn {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.mario-quiz-opt-btn:hover:not(:disabled) {
+  background: #2a1f54 !important;
+  border-color: #ffd700 !important;
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 #000 !important;
+}
+
+.mario-opt-badge {
+  background: #000000 !important;
+  color: #ffd700 !important;
+  border: 1px solid #ffd700 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 10px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mario-quiz-opt-btn.correct {
+  background: #0a3314 !important;
+  border-color: #44d62c !important;
+}
+
+.mario-quiz-opt-btn.incorrect {
+  background: #3b0e0e !important;
+  border-color: #ef4444 !important;
+}
+
+.mario-feedback-banner {
+  margin: 0 22px 22px 22px;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0 #000;
+  padding: 16px 20px;
+}
+
+.mario-feedback-banner.success {
+  background: #0c3817;
+  border-left: 6px solid #44d62c;
+}
+
+.mario-feedback-banner.error {
+  background: #3a0d0d;
+  border-left: 6px solid #ef4444;
+}
+
+.mario-feedback-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #ffd700;
+  margin-bottom: 8px;
+}
+
+.mario-feedback-icon {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+}
+
+.mario-feedback-body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+/* Multi-quiz Mario styles */
+.mario-multi-quiz-card {
+  background: #140d2b !important;
+  border: 4px solid #000 !important;
+  box-shadow: 6px 6px 0 #000 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.mario-multi-q-card {
+  background: #1a1238 !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  border-radius: 0 !important;
+  margin: 16px 22px !important;
+  padding: 16px !important;
+}
+
+.mario-q-title {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #ffffff;
+  margin: 0 0 14px 0;
+}
+
+.mario-q-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #ffd700;
+}
+
+.mario-q-explanation {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 2px solid #000;
+  font-size: 12px;
+}
+
+.mario-q-explanation.correct {
+  background: #082910;
+  color: #a7f3d0;
+  border-color: #44d62c;
+}
+
+.mario-q-explanation.incorrect {
+  background: #330b0b;
+  color: #fca5a5;
+  border-color: #ef4444;
+}
+
+.mario-submit-btn {
+  background: #e52521 !important;
+  color: #ffffff !important;
+  border: 3px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 11px !important;
+  padding: 14px 24px !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+
+.mario-submit-btn:hover:not(:disabled) {
+  background: #ff3b30 !important;
+  transform: translate(-1px, -1px);
+}
+
+.mario-result-banner {
+  border: 3px solid #000;
+  box-shadow: 5px 5px 0 #000;
+  border-radius: 0 !important;
+  padding: 20px !important;
+}
+
+.mario-retry-btn {
+  background: #0f62fe !important;
+  color: #ffffff !important;
+  border: 2px solid #000 !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 10px !important;
+  padding: 10px 18px !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+
+/* Manual Complete Card */
+.mario-manual-card {
+  margin-top: 24px;
+}
+
+.mario-mark-btn {
+  background: #00a800 !important;
+  color: #ffffff !important;
+  border: 3px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 11px !important;
+  padding: 14px 24px !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Pagination Footer (Stage Clear Motif) ───────────────────── */
+.mario-stage-footer {
+  border-top: 3px solid #000 !important;
+  padding-top: 28px !important;
+  margin-top: 40px !important;
+}
+
+.mario-footer-card {
+  background: #140d2b !important;
+  border: 3px solid #000 !important;
+  box-shadow: 4px 4px 0 #000 !important;
+  border-radius: 0 !important;
+  padding: 14px 18px !important;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mario-footer-card:hover {
+  background: #231747 !important;
+  border-color: #ffd700 !important;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #000 !important;
+}
+
+.mario-footer-card .nav-sub {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 8px !important;
+  color: #ffd700 !important;
+}
+
+.mario-footer-card .nav-title {
+  font-size: 13px !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.mario-footer-close-btn {
+  background: #000000 !important;
+  border: 2px solid #3b4252 !important;
+  color: #94a3b8 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 9px !important;
+  padding: 12px 18px !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+
+.mario-footer-close-btn:hover {
+  border-color: #ffd700 !important;
+  color: #ffd700 !important;
+}
+
+.mario-footer-run-sprite {
+  width: 22px;
+  height: 22px;
+  image-rendering: pixelated;
+  animation: mario-run-bounce 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes mario-run-bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}

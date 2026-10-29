@@ -751,7 +751,7 @@ export const CircuitCanvas: React.FC<CircuitCanvasProps> = ({
                        <button
                          type="button"
                          className="btn-inspector-action"
-                         style={{ padding: '4px 10px', background: isInspectMode ? '#6b7280' : '#eab308', color: '#1a1a1a', borderRadius: '4px', fontSize: '12px', border: 'none', cursor: isInspectMode ? 'not-allowed' : 'pointer', marginRight: '8px' }}
+                         style={{ padding: '4px 10px', background: isInspectMode ? '#6b7280' : '#4589ff', color: '#ffffff', borderRadius: '4px', fontSize: '12px', border: 'none', cursor: isInspectMode ? 'not-allowed' : 'pointer', marginRight: '8px' }}
                          onClick={() => !isInspectMode && onUngroupGate(inspectedGate.id!)}
                          disabled={isInspectMode}
                          title={isInspectMode ? "Disabled in Inspect Mode" : "Ungroup"}

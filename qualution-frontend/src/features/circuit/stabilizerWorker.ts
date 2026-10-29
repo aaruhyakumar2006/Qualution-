@@ -2,19 +2,22 @@
  * stabilizerWorker.ts
  *
  * Dedicated Web Worker runner for non-blocking stabilizer circuit simulation.
- * Ensures the main UI thread stays completely fluid (60fps) even on 100+ qubit circuits.
- *
- * Provides both the worker script message handler and a resilient client wrapper
- * with automatic fallback to direct execution in non-DOM/test environments.
+ * Uses high-performance Rust/WASM Aaronson-Gottesman stabilizer engine with graceful
+ * fallback to TypeScript simulation.
+ * Ensures the main UI thread stays completely fluid (60fps) even on 1000+ qubit circuits.
  */
 
 import { simulateStabilizerCircuit, type StabilizerSimulationOptions } from './stabilizerEngine';
 import type { CanonicalCircuit, CircuitRequest, UnifiedExecutionResult } from './types';
+import initWasm, {
+  simulate_stabilizer_circuit as simulateWasmStabilizer,
+} from '../../wasm/qualution-core/pkg/qualution_core.js';
+import wasmUrl from '../../wasm/qualution-core/pkg/qualution_core_bg.wasm?url';
 
 export interface StabilizerWorkerRequest {
   id: string;
   circuit: CanonicalCircuit | CircuitRequest;
-  options?: StabilizerSimulationOptions;
+  options?: StabilizerSimulationOptions & { useWasm?: boolean };
 }
 
 export interface StabilizerWorkerResponse {
@@ -23,13 +26,34 @@ export interface StabilizerWorkerResponse {
   error?: string;
 }
 
+let wasmInitPromise: Promise<any> | null = null;
+async function ensureWasmReady() {
+  if (!wasmInitPromise) {
+    wasmInitPromise = initWasm(wasmUrl);
+  }
+  return wasmInitPromise;
+}
+
 // ── Web Worker Script Entry Point ─────────────────────────────────────
 // When executed inside a Web Worker context, listen for incoming simulation requests
 if (typeof self !== 'undefined' && typeof (self as any).importScripts !== 'undefined') {
-  self.onmessage = (event: MessageEvent<StabilizerWorkerRequest>) => {
+  self.onmessage = async (event: MessageEvent<StabilizerWorkerRequest>) => {
     const { id, circuit, options } = event.data;
     try {
-      const result = simulateStabilizerCircuit(circuit, options);
+      let result: UnifiedExecutionResult;
+      const shots = options?.shots ?? circuit.shots ?? 1024;
+
+      try {
+        await ensureWasmReady();
+        result = simulateWasmStabilizer(circuit, shots);
+      } catch (wasmErr) {
+        console.warn(
+          '[StabilizerWorker] Rust/WASM execution failed or unavailable, falling back to TypeScript engine:',
+          wasmErr
+        );
+        result = simulateStabilizerCircuit(circuit, options);
+      }
+
       self.postMessage({ id, result } satisfies StabilizerWorkerResponse);
     } catch (err: any) {
       self.postMessage({
@@ -94,19 +118,25 @@ function getOrCreateWorker(): Worker | null {
 }
 
 /**
- * Executes a stabilizer circuit inside a Web Worker.
+ * Executes a stabilizer circuit inside a Web Worker using Rust/WASM.
  * If Web Workers are unavailable (e.g. Node/Vitest or disabled by browser policy),
- * falls back cleanly and synchronously to direct simulateStabilizerCircuit.
+ * falls back cleanly to direct execution.
  */
 export async function runStabilizerInWorker(
   circuit: CanonicalCircuit | CircuitRequest,
-  options: StabilizerSimulationOptions = {}
+  options: StabilizerSimulationOptions & { useWasm?: boolean } = {}
 ): Promise<UnifiedExecutionResult> {
   const worker = getOrCreateWorker();
 
   if (!worker) {
     // Graceful direct fallback
-    return simulateStabilizerCircuit(circuit, options);
+    try {
+      await ensureWasmReady();
+      const shots = options.shots ?? circuit.shots ?? 1024;
+      return simulateWasmStabilizer(circuit, shots);
+    } catch {
+      return simulateStabilizerCircuit(circuit, options);
+    }
   }
 
   const id = `sim-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;

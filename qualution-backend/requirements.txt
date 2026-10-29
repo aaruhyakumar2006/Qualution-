@@ -1,6 +1,9 @@
 fastapi
 uvicorn
 pydantic
+pydantic-settings
+apscheduler
+asyncpg
 qiskit
 qiskit-aer
 pennylane

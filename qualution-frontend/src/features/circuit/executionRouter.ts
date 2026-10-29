@@ -11,6 +11,17 @@ import { simulateStatevectorCircuit } from './statevectorEngine';
 import { simulateMpsCircuit, type MpsSimulationOptions } from './mpsEngine';
 import { simulateViaCloud, type CloudSimulationOptions } from './cloudEngine';
 import { normalizeExecutionResult } from './resultNormalizer';
+import {
+  executeStabilizerRouted,
+  executeStatevectorRouted,
+  isWasmAvailable,
+  initWasmCore,
+  setForceWasmFailure,
+  resetWasmFailureOverride,
+  getQuantumEnginePreference,
+  setQuantumEnginePreference,
+  type QuantumEngineBackendPreference,
+} from './wasmManager';
 
 
 
@@ -298,6 +309,15 @@ export async function executeRoutedCircuit(
   circuit: CanonicalCircuit,
   options?: ExecuteCircuitOptions
 ): Promise<UnifiedExecutionResult> {
+  // Lazy-load WASM core module on first simulation if not yet initialized
+  if (!isWasmAvailable()) {
+    try {
+      await initWasmCore();
+    } catch {
+      // Non-blocking error handled by fallback path
+    }
+  }
+
   const decision = routeCircuit(circuit, {
     deviceMemoryGb: options?.deviceMemoryGb,
     requires_full_state: options?.requires_full_state,
@@ -305,9 +325,9 @@ export async function executeRoutedCircuit(
 
   let rawResult: UnifiedExecutionResult;
   if (decision.method === 'stabilizer') {
-    rawResult = simulateStabilizerCircuit(circuit, { shots: options?.shots });
+    rawResult = executeStabilizerRouted(circuit, { shots: options?.shots });
   } else if (decision.method === 'statevector') {
-    rawResult = simulateStatevectorCircuit(circuit, { shots: options?.shots });
+    rawResult = executeStatevectorRouted(circuit, { shots: options?.shots });
   } else if (decision.method === 'mps') {
     rawResult = await simulateMpsCircuit(circuit, options);
   } else {
@@ -323,6 +343,17 @@ export async function executeRoutedCircuit(
   return normalizeExecutionResult(rawResult, decision.method);
 }
 
-export { simulateViaCloud };
+export {
+  simulateViaCloud,
+  executeStabilizerRouted,
+  executeStatevectorRouted,
+  isWasmAvailable,
+  initWasmCore,
+  setForceWasmFailure,
+  resetWasmFailureOverride,
+  getQuantumEnginePreference,
+  setQuantumEnginePreference,
+  type QuantumEngineBackendPreference,
+};
 
 

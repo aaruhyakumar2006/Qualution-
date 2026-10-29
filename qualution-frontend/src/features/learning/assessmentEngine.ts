@@ -75,16 +75,16 @@ export function diagnoseGroverCircuit(circuit: CircuitRequest): string | null {
   const zGates = gates.filter((g) => g.gate.toLowerCase() === 'z' && g.targets.length === 1);
 
   if (!hasInitH0 || !hasInitH1) {
-    return "Missing initial Hadamard: Grover's search requires equal superposition across all N=4 states (|s⟩) before applying the Oracle. Place an H gate on wire q[0] and q[1] at column 0.";
+    return "Before the Oracle can mark anything, every state needs an equal chance of being the answer. Right now, what state is q[0] and q[1] in at column 0 — and what gate is famous for turning a definite |0⟩ into exactly that equal mix?"
   }
   if (hasCx && !hasCz) {
-    return "Naked CNOT detected: The Oracle must mark target state |11⟩ with a phase inversion (-1), but a standard CX flips the target bit rather than flipping phase. Use a Controlled-Z (CZ) gate, or sandwich the CNOT with Hadamards (H-CX-H).";
+    return "The Oracle's job is to mark |11⟩ invisibly — without changing any measurement probabilities, only the sign. What does a CNOT actually do to the target qubit? Does that leave the probabilities unchanged?"
   }
   if (zGates.length > 0 && !hasCz) {
-    return "Single-qubit Z gate marks |01⟩ or |10⟩ instead of specifically marking target |11⟩. Use a 2-qubit Controlled-Z (CZ) so the phase flips only when BOTH qubits are 1.";
+    return "A single-qubit Z gate flips the phase of |1⟩ on that wire alone. Think about which computational basis states will actually get a phase flip here — does that match only |11⟩, or other states too?"
   }
   if (xGates.length < 4) {
-    return "Missing X gates in diffuser: The diffusion operator reflects about the equal state |s⟩, which requires converting |s⟩ to |00⟩ using H and X. Without X, amplitudes reflect around |11⟩ instead of the mean, driving probability to |00⟩.";
+    return "The Grover diffuser reflects all amplitudes about their average. For that reflection to boost the marked state, the circuit needs to temporarily shift perspective to |00⟩. Which single-qubit gate flips |0⟩ ↔ |1⟩ — and how many of those do you think you'd need for a 2-qubit system?"
   }
   return null;
 }
@@ -121,7 +121,7 @@ export function evaluateAssessment(
     if (missingGates.length > 0) {
       passed = false;
       details.push(`Missing required quantum operator(s): ${missingGates.map((g) => g.toUpperCase()).join(', ')}.`);
-      hints.push(`Place the missing ${missingGates.map((g) => g.toUpperCase()).join(' & ')} gate(s) onto the appropriate wire(s).`);
+      hints.push(`Your circuit is missing the ${missingGates.map((g) => g.toUpperCase()).join(' & ')} operator(s). Think about what role each of those gates plays in the target quantum state — which qubits need to interact for that operation to make sense?`);
     } else {
       details.push(`Required gates: ${criteria.requiredGates.map((g) => g.toUpperCase()).join(', ')} present.`);
     }
@@ -204,7 +204,7 @@ export function evaluateAssessment(
         passed = false;
         details.push(`Unexpected leakage into state |${state}⟩: ${(prob * 100).toFixed(1)}% (should be 0%).`);
         totalProbabilityScore -= prob;
-        hints.push(`Check the control and target wire indices of your two-qubit gates to eliminate leakage into |${state}⟩.`);
+        hints.push(`Probability is leaking into |${state}⟩, which should not appear in the target state. For a two-qubit gate, which qubit acts as the control and which as the target? What happens to the outcome if those roles are swapped?`);
       }
     }
   }
@@ -220,15 +220,15 @@ export function evaluateAssessment(
     const zGates = gates.filter((g) => g.gate.toLowerCase() === 'z' && g.targets.length === 1);
 
     if (!hasInitH0 || !hasInitH1) {
-      hints.unshift("Missing initial Hadamard: Grover's search requires equal superposition across all N=4 states (|s⟩) before applying the Oracle. Place an H gate on wire q[0] and q[1] at column 0.");
+      hints.unshift("Grover's algorithm needs every possible answer to start with the same chance. Right now, what is the state of your input qubits before the oracle? What gate would give you that equal-probability starting point?");
     } else if (hasCx && !hasCz) {
-      hints.unshift("Naked CNOT detected: The Oracle must mark target state |11⟩ with a phase inversion (-1), but a standard CX flips the target bit rather than flipping phase. Use a Controlled-Z (CZ) gate, or sandwich the CNOT with Hadamards (H-CX-H).");
+      hints.unshift("The oracle is supposed to be a 'phase oracle' — it must change a sign, not a bit. What does a CX gate actually do to the target qubit's value? Is that reversible in a way that keeps all measurement outcomes unchanged?");
     } else if (zGates.length > 0 && !hasCz) {
-      hints.unshift("Single-qubit Z gate marks |01⟩ or |10⟩ instead of specifically marking target |11⟩. Use a 2-qubit Controlled-Z (CZ) so the phase flips only when BOTH qubits are 1.");
+      hints.unshift("A single-qubit Z flips phase on one wire. In a 2-qubit system, how many computational basis states get their phase flipped by that — and should only one of those states be the marked one?");
     } else if (xGates.length < 4) {
-      hints.unshift("Missing X gates in diffuser: The diffusion operator reflects about the equal state |s⟩, which requires converting |s⟩ to |00⟩ using H and X. Without X, amplitudes reflect around |11⟩ instead of the mean, driving probability to |00⟩.");
+      hints.unshift("The diffuser reflects amplitudes about their mean. For it to work correctly, it needs to map the current state to |00⟩ and back. How many qubits do you have, and for each one — what gate swaps |0⟩ and |1⟩?");
     } else {
-      hints.unshift("Diffusion sequence check: For 2 qubits, ensure the full sequence H ⊗ H (init) → CZ (oracle) → H ⊗ H → X ⊗ X → CZ → X ⊗ X → H ⊗ H (diffusion).");
+      hints.unshift("The gate sequence looks nearly right. Trace through the circuit step by step: after the initial superposition, does each stage — oracle, then diffusion — end up on the right wires and in the right order?");
     }
   }
 

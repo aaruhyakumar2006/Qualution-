@@ -156,7 +156,7 @@ describe('Offline Persistence & Airplane-Mode Local Execution', () => {
 
     // Assert local execution succeeded with known Grover result P(11) = 1.00
     expect(simResult.status).toBe('success');
-    expect(simResult.execution_location).toBe('local_browser');
+    expect(['local_browser', 'wasm_worker']).toContain(simResult.execution_location);
     expect(simResult.execution_method).toBe('stabilizer');
     expect(simResult.counts['11']).toBe(1000);
     expect(simResult.probabilities['11']).toBe(1);

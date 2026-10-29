@@ -465,6 +465,30 @@ body {
   overflow: hidden;
 }
 
+/* ── Portal Scroll Unlock ──────────────────────────────────── */
+/* Applied by TeacherPortalPage & StudentPortalPage on mount    */
+body.teacher-portal-active,
+body.teacher-portal-active #root,
+body.student-portal-active,
+body.student-portal-active #root,
+body:has(.student-portal-root),
+body:has(.student-portal-root) #root,
+#root:has(.student-portal-root) {
+  overflow: auto !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* ── Landing Page Scroll Unlock ────────────────────────────── */
+body:has(.lp-container),
+body:has(.lp-container) #root {
+  overflow: auto !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
 /* ── Scrollbars ───────────────────────────────────────────── */
 ::-webkit-scrollbar       { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }

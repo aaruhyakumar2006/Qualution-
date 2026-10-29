@@ -11,14 +11,18 @@ const STORAGE_CERTIFICATES_KEY = 'qualution_user_certificates';
  * Standard course verified skills breakdown.
  */
 export const VERIFIED_COURSE_SKILLS: CertificateSkillSummary[] = [
-  { name: 'Quantum Superposition & Born Rule', category: 'Foundations', level: 'Mastery' },
-  { name: 'Multi-Qubit Bell Entanglement', category: 'Foundations', level: 'Mastery' },
-  { name: 'Grover\'s Amplitude Amplification', category: 'Algorithms', level: 'Advanced' },
-  { name: 'Phase Kickback & Oracle Synthesis', category: 'Algorithms', level: 'Mastery' },
-  { name: 'Quantum Fourier Transform (QFT)', category: 'Algorithms', level: 'Advanced' },
-  { name: 'Clifford / Stabilizer Simulation', category: 'Hardware', level: 'Mastery' },
-  { name: 'Variational Quantum Eigensolver (VQE)', category: 'Variational', level: 'Advanced' },
-  { name: 'Adaptive QPU Execution Routing', category: 'Hardware', level: 'Mastery' },
+  // Tier 1: Beginner Foundations
+  { name: 'Dirac Notation, Qubits & Orthonormal Basis', category: 'Beginner Foundations', level: 'Mastery' },
+  { name: 'Pauli-X Gate & Quantum Superposition (Hadamard)', category: 'Beginner Foundations', level: 'Mastery' },
+  { name: 'Measurement Probability & Born Rule Collapse', category: 'Beginner Foundations', level: 'Mastery' },
+  // Tier 2: Intermediate Circuit Design & Algorithms
+  { name: 'Universal Gate Set (S/T Rotations) & Depth Analysis', category: 'Intermediate Circuits', level: 'Mastery' },
+  { name: 'Two-Qubit Bell State Entanglement (|Φ⁺⟩)', category: 'Intermediate Circuits', level: 'Mastery' },
+  { name: "Grover's Search Algorithm & Phase Kickback Oracle", category: 'Intermediate Algorithms', level: 'Mastery' },
+  // Tier 3: Advanced Supremacy & Variational
+  { name: 'Variational Quantum Eigensolver (VQE) Energy Minimization', category: 'Advanced Variational', level: 'Mastery' },
+  { name: 'QAOA Combinatorial Optimization & Graph Cuts', category: 'Advanced Algorithms', level: 'Mastery' },
+  { name: 'Quantum Phase Estimation & Shor\'s Factoring Architecture', category: 'Advanced Algorithms', level: 'Mastery' },
 ];
 
 /**
@@ -181,7 +185,9 @@ export const OFFICIAL_CERTIFICATE: QuantumCertificate = {
   verificationUrl: 'https://qualution.ai/?verify=QL-QC-2026-8228-B6#certificate',
   completedLessonsCount: 12,
   circuitsCount: 42,
+  circuitsDesignedCount: 42,
   totalXpEarned: 4850,
+  verifiedSkills: VERIFIED_COURSE_SKILLS,
   skillsSummary: VERIFIED_COURSE_SKILLS,
   signatories: {
     primary: {
@@ -202,12 +208,135 @@ export const OFFICIAL_CERTIFICATE: QuantumCertificate = {
 /**
  * Get or automatically create a certificate for a student profile.
  */
+/**
+ * Three course tracks required for official diploma graduation.
+ */
+export const BEGINNER_LESSON_IDS = [
+  's1-initialize-measure',
+  's1-x-gate',
+  's1-hadamard-superposition',
+  's1-single-qubit-challenge',
+];
+
+export const INTERMEDIATE_LESSON_IDS = [
+  'lesson-5-gate-library',
+  'lesson-6-circuit-complexity',
+  's2-bell-state-entanglement',
+  'lesson-8-grovers-search',
+];
+
+export const ADVANCED_LESSON_IDS = [
+  'lesson-9-vqe-intro',
+  'lesson-10-qaoa-optimization',
+  'lesson-11-phase-estimation',
+  'lesson-12-shor-period-finding',
+];
+
+export interface TrackGraduationStatus {
+  trackId: 'beginner' | 'intermediate' | 'advanced';
+  title: string;
+  totalModules: number;
+  completedModules: number;
+  isComplete: boolean;
+  missingLessonIds: string[];
+}
+
+export interface FullCurriculumGraduation {
+  isGraduated: boolean;
+  beginner: TrackGraduationStatus;
+  intermediate: TrackGraduationStatus;
+  advanced: TrackGraduationStatus;
+  totalCompleted: number;
+  totalRequired: number;
+  completionPercentage: number;
+  message: string;
+}
+
+export function evaluateCurriculumGraduation(completedLessonIds: string[] = []): FullCurriculumGraduation {
+  let simulateAll = false;
+  if (typeof window !== 'undefined') {
+    try {
+      simulateAll = localStorage.getItem('qualution_simulate_graduation') === 'true';
+    } catch {
+      simulateAll = false;
+    }
+  }
+
+  const bComp = simulateAll ? BEGINNER_LESSON_IDS.length : BEGINNER_LESSON_IDS.filter((id) => completedLessonIds.includes(id)).length;
+  const iComp = simulateAll ? INTERMEDIATE_LESSON_IDS.length : INTERMEDIATE_LESSON_IDS.filter((id) => completedLessonIds.includes(id)).length;
+  const aComp = simulateAll ? ADVANCED_LESSON_IDS.length : ADVANCED_LESSON_IDS.filter((id) => completedLessonIds.includes(id)).length;
+
+  const isB = bComp >= BEGINNER_LESSON_IDS.length;
+  const isI = iComp >= INTERMEDIATE_LESSON_IDS.length;
+  const isA = aComp >= ADVANCED_LESSON_IDS.length;
+
+  const isGraduated = isB && isI && isA;
+  const totalRequired = BEGINNER_LESSON_IDS.length + INTERMEDIATE_LESSON_IDS.length + ADVANCED_LESSON_IDS.length;
+  const totalCompleted = bComp + iComp + aComp;
+  const completionPercentage = Math.round((totalCompleted / totalRequired) * 100);
+
+  return {
+    isGraduated,
+    beginner: {
+      trackId: 'beginner',
+      title: 'Track 1: Beginner Foundations',
+      totalModules: BEGINNER_LESSON_IDS.length,
+      completedModules: bComp,
+      isComplete: isB,
+      missingLessonIds: BEGINNER_LESSON_IDS.filter((id) => !completedLessonIds.includes(id) && !simulateAll),
+    },
+    intermediate: {
+      trackId: 'intermediate',
+      title: 'Track 2: Intermediate Circuit Design & Algorithms',
+      totalModules: INTERMEDIATE_LESSON_IDS.length,
+      completedModules: iComp,
+      isComplete: isI,
+      missingLessonIds: INTERMEDIATE_LESSON_IDS.filter((id) => !completedLessonIds.includes(id) && !simulateAll),
+    },
+    advanced: {
+      trackId: 'advanced',
+      title: 'Track 3: Advanced & Variational Quantum Algorithms',
+      totalModules: ADVANCED_LESSON_IDS.length,
+      completedModules: aComp,
+      isComplete: isA,
+      missingLessonIds: ADVANCED_LESSON_IDS.filter((id) => !completedLessonIds.includes(id) && !simulateAll),
+    },
+    totalCompleted,
+    totalRequired,
+    completionPercentage,
+    message: isGraduated
+      ? 'All 3 course tracks (Beginner, Intermediate, Advanced) are completed! The official diploma is conferred.'
+      : 'Completion of Beginner, Intermediate, and Advanced courses is required to unlock your verified diploma.',
+  };
+}
+
+/**
+ * Get or automatically create a certificate for a student profile.
+ * Only returns a valid certificate if forceEligible is true or all 3 tiers are complete.
+ */
 export function getOrCreateStudentCertificate(
   studentName: string,
   studentEmail: string,
   score: number = 92,
-  grade: string = 'A+'
-): QuantumCertificate {
+  grade: string = 'A+',
+  forceEligible: boolean = false
+): QuantumCertificate | null {
+  if (!forceEligible) {
+    let completed: string[] = [];
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = localStorage.getItem('qualution_completed_lessons');
+        if (raw) completed = JSON.parse(raw);
+      } catch {
+        completed = [];
+      }
+    }
+    const graduation = evaluateCurriculumGraduation(completed);
+    if (!graduation.isGraduated) {
+      return null;
+    }
+  }
+
   const existing = getStoredCertificates().find(
     (c) => c.recipientEmail.toLowerCase() === studentEmail.toLowerCase() ||
            c.recipientName.toLowerCase() === studentName.toLowerCase()
@@ -223,6 +352,7 @@ export function getOrCreateStudentCertificate(
     recipientEmail: studentEmail || OFFICIAL_CERTIFICATE.recipientEmail,
     overallScore: score,
     overallGrade: grade,
+    courseTitle: 'Full Quantum Computing Curriculum (Beginner, Intermediate & Advanced)',
   };
   saveCertificate(cert);
   return cert;
@@ -271,6 +401,7 @@ export function verifyCertificate(query: string): CertificateVerificationResult 
 
 /**
  * Evaluates whether a student has completed enough course material to unlock the certificate.
+ * REQUIRES completion of Beginner, Intermediate, and Advanced tiers.
  */
 export function checkCourseCompletionEligibility(
   completedLessonIds: string[],
@@ -282,21 +413,13 @@ export function checkCourseCompletionEligibility(
   percentage: number;
   reason: string;
 } {
-  const requiredCount = 8; // Completion threshold across the 12 modules
-  const hasGrover = completedLessonIds.includes('lesson-8-grovers-search');
-  const hasCapstone = completedLessonIds.includes('lesson-12-adaptive-execution');
-  const count = completedLessonIds.length;
-
-  const isEligible = count >= requiredCount || hasGrover || hasCapstone || studentScore >= 80;
-  const percentage = Math.min(100, Math.round((Math.max(count, isEligible ? requiredCount : count) / requiredCount) * 100));
+  const graduation = evaluateCurriculumGraduation(completedLessonIds);
 
   return {
-    isEligible,
-    completedCount: Math.max(count, isEligible ? requiredCount : count),
-    requiredCount,
-    percentage: isEligible ? 100 : percentage,
-    reason: isEligible
-      ? 'All curriculum mastery thresholds and quantum algorithm requirements satisfied.'
-      : `Complete ${requiredCount - count} more module(s) or pass the Grover's Search capstone to unlock your official diploma.`,
+    isEligible: graduation.isGraduated,
+    completedCount: graduation.totalCompleted,
+    requiredCount: graduation.totalRequired,
+    percentage: graduation.completionPercentage,
+    reason: graduation.message,
   };
 }

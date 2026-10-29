@@ -75,6 +75,17 @@ export class LessonRegistry {
     ) {
       return this.lessons.get('lesson-8-grovers-search') || null;
     }
+    if (
+      cleanId === 'hadamard' ||
+      cleanId === 'hadamard-superposition' ||
+      cleanId === 'lesson-2-superposition-hadamard' ||
+      cleanId === 'lesson-2' ||
+      cleanId === 's1-hadamard' ||
+      cleanId === 'hadamard-lesson' ||
+      cleanId === 'superposition'
+    ) {
+      return this.lessons.get('s1-hadamard-superposition') || null;
+    }
     const match = this.lessons.get(cleanId);
     if (!match) {
       for (const [key, lesson] of this.lessons.entries()) {

@@ -3,7 +3,7 @@ import { CircuitCanvasOptimized } from '../components/circuit/CircuitCanvasOptim
 import type { CircuitRequest, Gate } from '../features/circuit/types';
 import { IBM_OPERATIONS_PALETTE } from '../features/circuit/state';
 import { Play, Loader } from 'lucide-react';
-import { circuitApi } from '../api/circuitApi';
+import { runCircuit } from '../api/circuitApi';
 import '../pages/IDEPage.css';
 
 const DEFAULT_CIRCUIT: CircuitRequest = {
@@ -49,7 +49,7 @@ export const IDEPageOptimized: React.FC = () => {
       // For large circuits, disable expensive visualizations
       const isLarge = circuit.qubits > 20;
 
-      const response = await circuitApi.runCircuit({
+      const response = await runCircuit({
         circuit,
         mode: 'shots',
         backend: 'auto', // Let backend choose optimal backend

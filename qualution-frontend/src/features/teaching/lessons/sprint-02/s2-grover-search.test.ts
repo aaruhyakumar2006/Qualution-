@@ -239,7 +239,7 @@ describe('Sprint 2: Grover Algorithm Live AI Tutor (14-Step Master Journey)', ()
     expect(ctrl.getState().isAudioMuted).toBe(true);
 
     // Replay restarts at Step 0
-    await ctrl.jumpToStep(5);
+    await ctrl.jumpToStep(5, { force: true });
     expect(ctrl.getState().currentStepIndex).toBe(5);
     await ctrl.replay();
     expect(ctrl.getState().currentStepIndex).toBe(0);

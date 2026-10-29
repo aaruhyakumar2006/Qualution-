@@ -11,8 +11,7 @@
     "build": "npm --prefix qualution-frontend run build",
     "test": "npm --prefix qualution-frontend run test",
     "test:backend": "python -m pytest qualution-backend\\tests",
-    "dev:lesson": "npm --prefix lesson-classical-vs-qubit run dev",
-    "build:lesson": "npm --prefix lesson-classical-vs-qubit run build"
+    "types:supabase": "npm --prefix qualution-frontend run types:supabase"
   },
   "devDependencies": {
     "playwright": "^1.62.1"

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Press+Start+2P&family=Silkscreen&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* ═══════════════════════════════════════════════════════════════
    QUALUTION QUANTUM ACADEMY — LANDING PAGE MATCHED AESTHETICS
@@ -1708,6 +1708,7 @@
   line-height: 1.1;
   background: var(--lp-title-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -2136,4 +2137,1097 @@
     padding: 0.45rem 0.85rem;
     font-size: 0.78rem;
   }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MARIO-STYLE INTERACTIVE HERO  ·  pixel/gold theme  ·  unique
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── hero shell ── */
+.mario-hero {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 560px;
+  background: linear-gradient(180deg, #0a1628 0%, #0d2040 40%, #1a3a6e 70%, #2d5a9e 100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* scanlines */
+.mario-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Mario HUD bar ── */
+.mario-hud {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 0.75rem 2rem;
+  background: rgba(0,0,0,0.55);
+  border-bottom: 2px solid rgba(255,199,0,0.2);
+  flex-wrap: wrap;
+}
+.mario-hud-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.mario-hud-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.mario-hud-val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  color: #ffc700;
+  text-shadow: 0 0 10px rgba(255,199,0,0.7);
+}
+.mario-hud-time {
+  color: #34d399;
+  text-shadow: 0 0 10px rgba(52,211,153,0.7);
+}
+
+/* ── sky / clouds ── */
+.mario-sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.mario-cloud {
+  position: absolute;
+  font-size: 3.5rem;
+  opacity: 0.55;
+  filter: drop-shadow(0 4px 12px rgba(255,255,255,0.15));
+  color: #fff;
+}
+.mario-cloud-1 { top: 18%; left: -120px; animation: mario-cloud-drift 40s linear infinite; }
+.mario-cloud-2 { top: 32%; left: -80px;  animation: mario-cloud-drift 55s linear infinite 8s; font-size: 2.4rem; }
+.mario-cloud-3 { top: 12%; left: -60px;  animation: mario-cloud-drift 48s linear infinite 20s; font-size: 2rem; }
+@keyframes mario-cloud-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 200px)); }
+}
+
+/* ── hero text ── */
+.mario-hero-text {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2.5rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: mario-drop-in 0.7s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes mario-drop-in {
+  0%   { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.mario-world-tag {
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.68rem;
+  color: #ffc700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  padding: 0.28rem 1rem;
+  border: 1px solid rgba(255,199,0,0.35);
+  border-radius: 4px;
+  background: rgba(255,199,0,0.07);
+  animation: mario-tag-glow 3s ease-in-out infinite;
+}
+@keyframes mario-tag-glow {
+  0%,100% { box-shadow: none; }
+  50%      { box-shadow: 0 0 16px rgba(255,199,0,0.3); }
+}
+.mario-hero-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+  line-height: 1.5;
+  text-transform: uppercase;
+  margin: 0;
+  background: linear-gradient(108deg, #fff9c4 0%, #ffc700 25%, #ffffff 50%, #ffd700 75%, #fff9c4 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: mario-title-shimmer 4s linear infinite;
+  filter: drop-shadow(0 4px 0 rgba(120,60,0,0.8));
+}
+@keyframes mario-title-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.mario-hero-sub {
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+.mario-hero-btns {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* gold pixel button */
+.mario-btn-primary {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  color: #000;
+  background: linear-gradient(180deg, #ffe84d 0%, #ffc700 55%, #e6a800 100%);
+  border: 3px solid #000;
+  border-radius: 6px;
+  padding: 0.75rem 1.6rem;
+  box-shadow: 0 5px 0 #6b4400, 0 8px 18px rgba(255,199,0,0.25);
+  cursor: pointer;
+  transition: all 0.1s;
+  letter-spacing: 0.06em;
+}
+.mario-btn-primary:hover  { transform: translateY(-3px); box-shadow: 0 8px 0 #6b4400, 0 14px 24px rgba(255,199,0,0.4); }
+.mario-btn-primary:active { transform: translateY(3px);  box-shadow: 0 2px 0 #6b4400; }
+
+/* ghost button */
+.mario-btn-ghost {
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.2);
+  color: #e2e8f0;
+  padding: 0.72rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.mario-btn-ghost:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.4); color: #fff; }
+
+/* ── level ground area ── */
+.mario-level {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 220px;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* ── ? / gate blocks ── */
+.mario-block {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(180deg, #ffe84d 0%, #ffc700 55%, #e6a800 100%);
+  border: 3px solid #000;
+  border-radius: 4px;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.4), inset 0 -3px 0 rgba(0,0,0,0.3), 0 4px 0 #6b4400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.08s, box-shadow 0.08s;
+  z-index: 12;
+}
+.mario-block:hover {
+  transform: translateY(-4px);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.4), inset 0 -3px 0 rgba(0,0,0,0.3), 0 8px 0 #6b4400, 0 0 20px var(--blk-color, #ffc700);
+}
+.mario-block:active,
+.mario-block-popped {
+  transform: translateY(4px);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.4), inset 0 -3px 0 rgba(0,0,0,0.3), 0 1px 0 #6b4400;
+  background: linear-gradient(180deg, #b8860b 0%, #8b6914 100%);
+  cursor: default;
+}
+.mario-block-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: #000;
+  text-align: center;
+  line-height: 1.2;
+  pointer-events: none;
+}
+.mario-block-popped .mario-block-label { color: #555; }
+
+/* XP coin pop */
+.mario-coin-pop {
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: #ffc700;
+  text-shadow: 0 0 8px #ffc700, 1px 1px 0 #000;
+  pointer-events: none;
+  animation: mario-coin-fly 0.85s ease-out forwards;
+  white-space: nowrap;
+  z-index: 20;
+}
+@keyframes mario-coin-fly {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  60%  { opacity: 1; transform: translateX(-50%) translateY(-40px) scale(1.3); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-70px) scale(0.8); }
+}
+
+/* ── pixel pipes ── */
+.mario-pipe {
+  position: absolute;
+  bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 11;
+}
+.mario-pipe-cap {
+  width: 52px;
+  height: 18px;
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+  border: 3px solid #000;
+  border-radius: 3px 3px 0 0;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.25);
+}
+.mario-pipe-body {
+  width: 42px;
+  height: 60px;
+  background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+  border: 3px solid #000;
+  border-top: none;
+  box-shadow: inset 3px 0 0 rgba(255,255,255,0.15);
+}
+
+/* ── running character ── */
+.mario-runner {
+  position: absolute;
+  bottom: 36px;
+  left: -60px;
+  z-index: 13;
+  animation: mario-run 12s linear infinite;
+}
+@keyframes mario-run {
+  0%   { left: -60px; }
+  100% { left: calc(100% + 60px); }
+}
+.mario-runner-sprite {
+  font-size: 2rem;
+  animation: mario-bounce 0.4s ease-in-out infinite alternate;
+  display: block;
+}
+@keyframes mario-bounce {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+/* ── ground bricks ── */
+.mario-ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  display: flex;
+  z-index: 10;
+}
+.mario-brick {
+  flex: 1;
+  height: 100%;
+  background: linear-gradient(180deg, #c2410c 0%, #9a3412 100%);
+  border: 1.5px solid #000;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.15), inset 0 -2px 0 rgba(0,0,0,0.3);
+}
+.mario-brick:nth-child(even) {
+  background: linear-gradient(180deg, #b45309 0%, #92400e 100%);
+}
+
+/* ── live ticker ── */
+.mario-ticker {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.2rem;
+  background: rgba(0,0,0,0.8);
+  border-top: 2px solid rgba(255,199,0,0.2);
+  width: 100%;
+  justify-content: center;
+}
+.mario-ticker-text {
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.62rem;
+  color: #ffc700;
+  transition: opacity 0.35s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 600px;
+}
+
+@media (max-width: 640px) {
+  .mario-hero-title { font-size: 1.1rem; }
+  .mario-hud { gap: 1.5rem; }
+  .mario-level { height: 180px; }
+  .mario-block { width: 38px; height: 38px; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MARIO INTEGRATION FOR CURRICULUM & CHALLENGES
+   ══════════════════════════════════════════════════════════════ */
+.mario-coin-icon-inline {
+  width: 15px;
+  height: 15px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 4px;
+  filter: drop-shadow(0 0 4px #ffd700);
+}
+
+.mario-track-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.mario-track-world-icon {
+  width: 26px;
+  height: 26px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.mario-world-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.52rem;
+  background: #000;
+  color: #ffd700;
+  border: 1.5px solid #ffd700;
+  border-radius: 3px;
+  padding: 2px 6px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+}
+
+.mario-xp-pill {
+  color: #ffd700 !important;
+  font-weight: 700;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SUPER MARIO WORLD — FULL PAGE RETRO ARCADE THEME OVERRIDES
+   Unifies the entire LearnPage from Header to Footer
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. Global Page Background & Retro CRT Scanlines */
+.learn-page-landing-style {
+  background-color: #030712 !important;
+  background-image:
+    radial-gradient(ellipse 90% 50% at 50% 10%, #1e3a8a 0%, transparent 70%),
+    radial-gradient(ellipse 70% 40% at 20% 60%, rgba(34, 197, 94, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 40% at 80% 60%, rgba(239, 68, 68, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #020617 0%, #030712 100%) !important;
+  image-rendering: pixelated;
+}
+
+.lp-laser-accent-line {
+  display: none !important;
+}
+
+.lp-grid-backdrop {
+  background-image:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)) !important;
+  background-size: 100% 4px, 6px 100% !important;
+  opacity: 0.9 !important;
+}
+
+/* 2. Super Mario Arcade Header Navigation */
+.lp-academy-nav {
+  background: rgba(2, 6, 23, 0.96) !important;
+  border-bottom: 3px solid #ffc700 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.lp-brand-main {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.9rem !important;
+  color: #ef4444 !important;
+  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(239, 68, 68, 0.6) !important;
+  letter-spacing: 0.04em !important;
+}
+
+.lp-brand-tag {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.55rem !important;
+  background: #ffd700 !important;
+  color: #000 !important;
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0 #78350f !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+}
+
+.lp-nav-item {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.55rem !important;
+  color: #94a3b8 !important;
+  transition: all 0.15s ease !important;
+}
+
+.lp-nav-item:hover {
+  color: #ffd700 !important;
+  transform: translateY(-2px) !important;
+  text-shadow: 1px 1px 0 #000 !important;
+}
+
+.lp-nav-lab-button {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.55rem !important;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 60%, #14532d 100%) !important;
+  border: 2px solid #000 !important;
+  border-radius: 5px !important;
+  box-shadow: 0 3px 0 #052e16 !important;
+  color: #ffffff !important;
+  text-shadow: 1px 1px 0 #000 !important;
+  padding: 0.45rem 0.85rem !important;
+  transition: transform 0.1s !important;
+}
+
+.lp-nav-lab-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 0 #052e16, 0 0 12px rgba(34, 197, 94, 0.5) !important;
+}
+
+.lp-nav-xp-pill {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.58rem !important;
+  background: #111827 !important;
+  border: 2px solid #ffd700 !important;
+  border-radius: 5px !important;
+  color: #ffd700 !important;
+  box-shadow: 0 3px 0 #78350f !important;
+  padding: 0.35rem 0.75rem !important;
+}
+
+.lp-auth-login-btn,
+.lp-auth-signup-btn {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.52rem !important;
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 3px 0 #000 !important;
+  transition: transform 0.1s !important;
+}
+
+.lp-auth-signup-btn {
+  background: #ffd700 !important;
+  color: #000 !important;
+  box-shadow: 0 3px 0 #78350f !important;
+}
+
+.lp-auth-login-btn:hover,
+.lp-auth-signup-btn:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* 3. "What You'll Learn" Competency Matrix -> Super Mario Power-Ups */
+.lp-competency-section {
+  position: relative !important;
+  z-index: 10 !important;
+  max-width: 1260px !important;
+  margin: 2rem auto !important;
+  padding: 2rem !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 4px solid #000 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 0 #1e293b, inset 0 0 0 3px #ffd700 !important;
+}
+
+.lp-competency-section .lp-sub-heading {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.85rem !important;
+  color: #ffd700 !important;
+  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255, 215, 0, 0.4) !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.lp-competency-item {
+  background: #020814 !important;
+  border: 2px solid #334155 !important;
+  border-radius: 6px !important;
+  padding: 0.85rem 1rem !important;
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 0.72rem !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 3px 0 #000 !important;
+  transition: all 0.15s ease !important;
+}
+
+.lp-competency-item:hover {
+  border-color: #ffd700 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 0 #78350f !important;
+}
+
+.lp-check-wrapper {
+  background: #ffd700 !important;
+  border: 2px solid #000 !important;
+  border-radius: 4px !important;
+  color: #000 !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.lp-check-glyph {
+  color: #000 !important;
+  stroke-width: 3.5 !important;
+}
+
+/* 4. Requirements & Description -> Mario Message Signboard */
+.lp-details-section {
+  max-width: 1260px !important;
+  margin: 2rem auto !important;
+  padding: 0 1.5rem !important;
+}
+
+.lp-details-container {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  gap: 1.5rem !important;
+}
+
+.lp-details-block {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  border: 4px solid #000 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 6px 0 #020617, inset 0 0 0 2px #38bdf8 !important;
+  padding: 1.5rem !important;
+}
+
+.lp-details-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.78rem !important;
+  color: #38bdf8 !important;
+  text-shadow: 2px 2px 0 #000 !important;
+  margin-bottom: 1rem !important;
+}
+
+.lp-details-list li,
+.lp-details-block p {
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 0.68rem !important;
+  color: #cbd5e1 !important;
+  line-height: 1.6 !important;
+}
+
+/* 5. FAQ Section -> Mystery Block Q&A */
+.lp-faq-section {
+  max-width: 1260px !important;
+  margin: 2.5rem auto !important;
+  padding: 0 1.5rem !important;
+}
+
+.lp-faq-section .lp-sub-heading {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.85rem !important;
+  color: #ffd700 !important;
+  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255, 215, 0, 0.4) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.lp-faq-card {
+  background: #090e17 !important;
+  border: 3px solid #000 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 0 #78350f, inset 0 0 0 2px #f59e0b !important;
+  margin-bottom: 0.8rem !important;
+  overflow: hidden !important;
+  transition: all 0.15s ease !important;
+}
+
+.lp-faq-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 0 #78350f, inset 0 0 0 2px #ffd700 !important;
+}
+
+.lp-faq-question-btn {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.62rem !important;
+  color: #f8fafc !important;
+  padding: 1rem 1.2rem !important;
+  background: transparent !important;
+}
+
+.lp-faq-question-btn:hover {
+  color: #ffd700 !important;
+}
+
+.lp-faq-answer-block {
+  padding: 0.8rem 1.2rem 1.2rem !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-top: 2px dashed rgba(245, 158, 11, 0.4) !important;
+}
+
+.lp-faq-answer-block p {
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 0.68rem !important;
+  color: #94a3b8 !important;
+  line-height: 1.6 !important;
+}
+
+/* 6. Retro Arcade NES Platform Footer */
+.lp-platform-footer {
+  margin-top: 4rem !important;
+  background: #020617 !important;
+  border-top: 4px solid #000 !important;
+  box-shadow: inset 0 4px 0 #ffd700 !important;
+  padding: 2rem 1.5rem !important;
+}
+
+.lp-footer-container {
+  max-width: 1260px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+}
+
+.lp-footer-left span {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.72rem !important;
+  color: #ffd700 !important;
+  text-shadow: 2px 2px 0 #000 !important;
+}
+
+.lp-footer-copy {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.52rem !important;
+  color: #64748b !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Floating Back-to-Top Button */
+.lp-back-to-top-btn {
+  background: #ffc700 !important;
+  color: #000 !important;
+  border: 3px solid #000 !important;
+  box-shadow: 0 4px 0 #78350f !important;
+  border-radius: 6px !important;
+}
+
+.lp-back-to-top-btn:hover {
+  transform: translateY(-3px) !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SUPER MARIO WORLD — NICE WHITE OVERWORLD THEME
+   Replaces dark AcidSquares with clean retro white/light cloudscape
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. Global Page Background */
+.learn-page-landing-style,
+[data-theme="light"] .learn-page-landing-style,
+[data-theme="dark"] .learn-page-landing-style {
+  background-color: #ffffff !important;
+  background-image: 
+    radial-gradient(ellipse 90% 40% at 50% 0%, #f0fdf4 0%, transparent 60%),
+    radial-gradient(ellipse 80% 35% at 20% 40%, #fefce8 0%, transparent 50%),
+    radial-gradient(ellipse 80% 35% at 80% 40%, #f0f9ff 0%, transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%) !important;
+  color: #0f172a !important;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 2. Super Mario White Overworld Backdrop */
+.lp-mario-white-backdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.lp-mario-clouds-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 420px;
+}
+
+.lp-mario-cloud {
+  position: absolute;
+  image-rendering: pixelated;
+  opacity: 0.85;
+}
+
+.cloud-drift-1 {
+  top: 30px;
+  left: 5%;
+  width: 90px;
+  animation: mario-cloud-float 35s linear infinite;
+}
+
+.cloud-drift-2 {
+  top: 80px;
+  left: 35%;
+  width: 110px;
+  animation: mario-cloud-float 45s linear infinite reverse;
+}
+
+.cloud-drift-3 {
+  top: 40px;
+  left: 65%;
+  width: 80px;
+  animation: mario-cloud-float 40s linear infinite;
+}
+
+.cloud-drift-4 {
+  top: 110px;
+  left: 85%;
+  width: 95px;
+  animation: mario-cloud-float 50s linear infinite reverse;
+}
+
+.cloud-drift-5 {
+  top: 140px;
+  left: 18%;
+  width: 70px;
+  opacity: 0.6;
+  animation: mario-cloud-float 38s linear infinite;
+}
+
+@keyframes mario-cloud-float {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(30px); }
+  100% { transform: translateX(0); }
+}
+
+.lp-mario-hills-horizon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  pointer-events: none;
+  opacity: 0.55;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 2rem;
+}
+
+.lp-mario-bg-hill {
+  width: 140px;
+  image-rendering: pixelated;
+}
+
+.lp-mario-bg-bush {
+  width: 70px;
+  image-rendering: pixelated;
+  margin-bottom: 5px;
+}
+
+/* 3. Clean White/Gold Mario Header */
+.lp-academy-nav {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 3px solid #ffc700 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.lp-brand-main {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.88rem !important;
+  color: #dc2626 !important;
+  text-shadow: 2px 2px 0 #000, 0 0 6px rgba(220, 38, 38, 0.3) !important;
+}
+
+.lp-brand-tag {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.55rem !important;
+  background: #ffd700 !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0 #78350f !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+
+.lp-nav-item {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.55rem !important;
+  color: #334155 !important;
+  transition: all 0.15s ease !important;
+}
+
+.lp-nav-item:hover {
+  color: #dc2626 !important;
+  text-shadow: none !important;
+  transform: translateY(-2px) !important;
+}
+
+.lp-nav-xp-pill {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.58rem !important;
+  background: #ffffff !important;
+  border: 2px solid #000000 !important;
+  border-radius: 6px !important;
+  color: #000000 !important;
+  box-shadow: 0 3px 0 #ffd700 !important;
+  padding: 0.4rem 0.8rem !important;
+}
+
+.lp-nav-lab-button {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.55rem !important;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 60%, #15803d 100%) !important;
+  border: 2px solid #000000 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 3px 0 #052e16 !important;
+  color: #ffffff !important;
+  padding: 0.45rem 0.85rem !important;
+}
+
+.lp-nav-lab-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 0 #052e16, 0 0 10px rgba(34, 197, 94, 0.4) !important;
+}
+
+/* 4. Mario World Map Container on White Background */
+.mario-world-map-section {
+  position: relative;
+  z-index: 10;
+  margin: 1.5rem auto 3rem;
+  padding: 0 1.5rem;
+}
+
+.mario-map-canvas-frame {
+  border: 4px solid #000000 !important;
+  box-shadow: 0 12px 0 #000000, 0 20px 40px rgba(0, 0, 0, 0.16) !important;
+  border-radius: 14px !important;
+}
+
+
+
+/* 5. Competency Matrix (Mario Power-Ups on White) */
+.lp-competency-section {
+  position: relative !important;
+  z-index: 10 !important;
+  max-width: 1260px !important;
+  margin: 2.5rem auto !important;
+  padding: 2rem !important;
+  background: #ffffff !important;
+  border: 4px solid #000000 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 0 #000000, 0 14px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+.lp-competency-section .lp-sub-heading {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.85rem !important;
+  color: #dc2626 !important;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15) !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.lp-competency-item {
+  background: #f8fafc !important;
+  border: 2px solid #000000 !important;
+  border-radius: 8px !important;
+  padding: 0.9rem 1.1rem !important;
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 0.72rem !important;
+  color: #0f172a !important;
+  box-shadow: 0 3px 0 #cbd5e1 !important;
+  transition: all 0.15s ease !important;
+}
+
+.lp-competency-item:hover {
+  border-color: #ffd700 !important;
+  background: #fffbeb !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 0 #f59e0b !important;
+}
+
+.lp-check-wrapper {
+  background: #22c55e !important;
+  border: 2px solid #000000 !important;
+  border-radius: 4px !important;
+  color: #ffffff !important;
+}
+
+.lp-check-glyph {
+  color: #ffffff !important;
+  stroke-width: 3.5 !important;
+}
+
+/* 6. World Rules & Prerequisites Signboard */
+.lp-details-section {
+  position: relative !important;
+  z-index: 10 !important;
+  max-width: 1260px !important;
+  margin: 2.5rem auto !important;
+  padding: 0 1.5rem !important;
+}
+
+.lp-details-container {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  gap: 1.5rem !important;
+}
+
+.lp-details-block {
+  background: #fffbeb !important;
+  border: 4px solid #000000 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 0 #78350f, inset 0 0 0 2px #f59e0b !important;
+  padding: 1.6rem !important;
+}
+
+.lp-details-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.78rem !important;
+  color: #b45309 !important;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1) !important;
+  margin-bottom: 1rem !important;
+}
+
+.lp-details-list li,
+.lp-details-block p {
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 0.68rem !important;
+  color: #334155 !important;
+  line-height: 1.7 !important;
+}
+
+/* 7. FAQ Mystery Block Cards */
+.lp-faq-section {
+  position: relative !important;
+  z-index: 10 !important;
+  max-width: 1260px !important;
+  margin: 3rem auto !important;
+  padding: 0 1.5rem !important;
+}
+
+.lp-faq-section .lp-sub-heading {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.85rem !important;
+  color: #d97706 !important;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.lp-faq-card {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 5px 0 #f59e0b, 0 8px 20px rgba(0, 0, 0, 0.06) !important;
+  margin-bottom: 0.9rem !important;
+  overflow: hidden !important;
+}
+
+.lp-faq-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 7px 0 #d97706 !important;
+}
+
+.lp-faq-question-btn {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.62rem !important;
+  color: #0f172a !important;
+  padding: 1.1rem 1.3rem !important;
+  background: #ffffff !important;
+}
+
+.lp-faq-question-btn:hover {
+  color: #d97706 !important;
+}
+
+.lp-faq-answer-block {
+  padding: 0.9rem 1.3rem 1.3rem !important;
+  background: #fffbeb !important;
+  border-top: 2px dashed #f59e0b !important;
+}
+
+.lp-faq-answer-block p {
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 0.68rem !important;
+  color: #334155 !important;
+  line-height: 1.7 !important;
+}
+
+/* 8. Retro Arcade White Platform Footer */
+.lp-platform-footer {
+  margin-top: 4rem !important;
+  background: #ffffff !important;
+  border-top: 4px solid #000000 !important;
+  box-shadow: inset 0 4px 0 #ffd700, 0 -6px 20px rgba(0, 0, 0, 0.05) !important;
+  padding: 2.2rem 1.5rem !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.lp-footer-container {
+  max-width: 1260px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 1.2rem !important;
+}
+
+.lp-footer-left span {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.72rem !important;
+  color: #dc2626 !important;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15) !important;
+}
+
+.lp-footer-hud span {
+  color: #78350f !important;
+  background: #fef3c7 !important;
+  border: 1.5px solid #000000 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+}
+
+.lp-footer-copy {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.52rem !important;
+  color: #64748b !important;
 }

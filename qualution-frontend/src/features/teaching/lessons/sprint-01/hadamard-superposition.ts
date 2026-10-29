@@ -35,9 +35,9 @@ export const s1HadamardSuperpositionLesson: LessonScript = {
       stepNumber: 1,
       title: 'Starting State |0⟩',
       explanation:
-        'The qubit begins in the canonical ground state |0⟩. In this lesson, we will apply the Hadamard gate (H) to explore quantum superposition.',
+        'The qubit begins in the canonical ground state |0⟩. In this lesson, we will explore quantum superposition using the Hadamard gate.',
       narrationText:
-        'Welcome to Lesson 3. Our qubit starts in the ground state |0⟩. We are about to apply the Hadamard gate to create quantum superposition.',
+        'Welcome to Lesson 3. Our qubit starts in the ground state |0⟩. Let us explore how quantum superposition works.',
       actions: [
         { type: 'initialize_qubits', qubits: 1, classicalBits: 1 },
         { type: 'reset_circuit' },
@@ -56,9 +56,9 @@ export const s1HadamardSuperpositionLesson: LessonScript = {
       stepNumber: 2,
       title: 'Apply Hadamard Gate (H)',
       explanation:
-        'We place a Hadamard gate onto wire q[0]. Conceptually, H transforms |0⟩ into an equal linear superposition: |+⟩ = (|0⟩ + |1⟩) / √2. The qubit now has equal probability amplitudes for outcomes 0 and 1.',
+        'The Hadamard gate is placed onto wire q[0]. Conceptually, H transforms |0⟩ into an equal linear superposition: |+⟩ = (|0⟩ + |1⟩) / √2. The qubit now has equal probability amplitudes for outcomes 0 and 1.',
       narrationText:
-        'We now place an H gate on wire q[0]. The Hadamard gate rotates |0⟩ into an equal superposition of |0⟩ and |1⟩.',
+        'Applying the Hadamard gate on wire q[0] rotates |0⟩ into an equal superposition of |0⟩ and |1⟩.',
       actions: [
         { type: 'add_gate', gate: 'h', targets: [0], column: 0, gateId: 'h-gate-demo-1' },
         { type: 'highlight_gate', gateId: 'h-gate-demo-1' },

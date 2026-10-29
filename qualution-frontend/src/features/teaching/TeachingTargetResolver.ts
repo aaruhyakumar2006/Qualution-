@@ -169,6 +169,19 @@ export class TeachingTargetResolver {
         document.querySelector(`.teaching-math-formula-card`)) as HTMLElement;
     }
 
+    // 12. Placed Gate Resolution (e.g., 'placed-gate-h-gate-demo-1', 'placed-gate-h-0', etc.)
+    if (!element && targetId && targetId.toLowerCase().startsWith('placed-gate-')) {
+      const pureGateId = targetId.replace(/placed-gate-/i, '');
+      element = (
+        document.querySelector(`[data-teaching-target="${targetId}"]`) ||
+        document.querySelector(`[data-gate-id="${pureGateId}"]`) ||
+        document.querySelector(`[data-testid="${targetId}"]`) ||
+        document.querySelector(`[data-testid^="placed-gate-${pureGateId.toLowerCase()}-"]`) ||
+        document.querySelector(`[data-testid^="placed-gate-${pureGateId.toLowerCase()}"]`) ||
+        document.querySelector(`[data-testid*="${pureGateId}"]`)
+      ) as HTMLElement;
+    }
+
     if (!element) {
       const isTesting = typeof (globalThis as any).process !== 'undefined' && (globalThis as any).process?.env?.NODE_ENV === 'test';
       if (isTesting) {
